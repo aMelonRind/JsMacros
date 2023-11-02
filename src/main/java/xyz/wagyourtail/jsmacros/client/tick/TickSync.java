@@ -19,4 +19,8 @@ public class TickSync {
         this.notifyAll();
     }
 
+    public synchronized int getTickCount() {
+        return tc;
+    }
+
 }

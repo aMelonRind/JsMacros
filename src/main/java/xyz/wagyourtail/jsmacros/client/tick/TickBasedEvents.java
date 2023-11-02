@@ -72,7 +72,7 @@ public class TickBasedEvents {
         FClient.tickSynchronizer.tick();
         serverListPinger.tick();
 
-        new EventTick().trigger();
+        new EventTick(counter).trigger();
 
         if (++counter % 10 == 0) {
             JsMacros.core.services.tickReloadListener();

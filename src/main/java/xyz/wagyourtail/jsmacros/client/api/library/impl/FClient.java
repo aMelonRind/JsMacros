@@ -60,6 +60,10 @@ public class FClient extends PerExecLibrary {
      */
     public static TickSync tickSynchronizer = new TickSync();
 
+    public int getTickCount() {
+        return tickSynchronizer.getTickCount();
+    }
+
     public FClient(BaseScriptContext<?> context) {
         super(context);
     }
