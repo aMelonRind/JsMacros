@@ -2,16 +2,21 @@ package xyz.wagyourtail.jsmacros.client.api.helpers.world;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.NotNull;
 import xyz.wagyourtail.jsmacros.client.api.classes.math.Pos3D;
+import xyz.wagyourtail.jsmacros.client.api.helpers.GuestAccessor;
 import xyz.wagyourtail.jsmacros.client.api.helpers.world.entity.EntityHelper;
 import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
+
+import java.util.Set;
 
 /**
  * @author Wagyourtail
  * @since 1.2.6
  */
 @SuppressWarnings("unused")
-public class BlockPosHelper extends BaseHelper<BlockPos> {
+public class BlockPosHelper extends BaseHelper<BlockPos> implements GuestAccessor {
+    private static final Set<String> accessorKeys = Set.of("0", "1", "2", "x", "y", "z");
 
     public BlockPosHelper(BlockPos b) {
         super(b);
@@ -19,6 +24,22 @@ public class BlockPosHelper extends BaseHelper<BlockPos> {
 
     public BlockPosHelper(int x, int y, int z) {
         super(new BlockPos(x, y, z));
+    }
+
+    @Override
+    public Object get(@NotNull String key, final Object undef) {
+        return switch (key) {
+            case "0", "x" -> getX();
+            case "1", "y" -> getY();
+            case "2", "z" -> getZ();
+            default -> undef;
+        };
+    }
+
+    @NotNull
+    @Override
+    public Set<String> keySet() {
+        return accessorKeys;
     }
 
     /**
