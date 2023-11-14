@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.wagyourtail.SynchronizedWeakHashSet;
 import xyz.wagyourtail.jsmacros.client.api.event.impl.EventQuitGame;
 import xyz.wagyourtail.jsmacros.client.api.helpers.PacketByteBufferHelper;
 import xyz.wagyourtail.jsmacros.client.config.ClientConfigV2;
@@ -23,6 +24,7 @@ import xyz.wagyourtail.wagyourgui.BaseScreen;
 
 import java.io.File;
 import java.util.ServiceLoader;
+import java.util.concurrent.Semaphore;
 
 public class JsMacros {
     public static final String MOD_ID = "jsmacros";
@@ -31,6 +33,15 @@ public class JsMacros {
     public static BaseScreen prevScreen;
     protected static final File configFolder = ServiceLoader.load(ConfigFolder.class).findFirst().orElseThrow().getFolder();
     protected static final ModLoader modLoader = ServiceLoader.load(ModLoader.class).findFirst().orElseThrow();
+    protected static final SynchronizedWeakHashSet<Semaphore> semaphores = new SynchronizedWeakHashSet<>();
+
+    public static void addSemaphore(Semaphore wait) {
+        semaphores.add(wait);
+    }
+
+    public static void releaseAllSemaphores() {
+        for (Semaphore wait : semaphores) if (semaphores.remove(wait)) wait.release();
+    }
 
     public static final Core<Profile, EventRegistry> core = Core.createInstance(EventRegistry::new, Profile::new, configFolder.getAbsoluteFile(), new File(configFolder, "Macros"), LOGGER);
 

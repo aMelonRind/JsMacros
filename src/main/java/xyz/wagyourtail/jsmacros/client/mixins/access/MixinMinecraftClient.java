@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.access.IMinecraftClient;
 import xyz.wagyourtail.jsmacros.client.api.classes.InteractionProxy;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw2D;
@@ -104,6 +105,11 @@ class MixinMinecraftClient implements IMinecraftClient {
     @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;integratedServerRunning:Z", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER), method = "disconnect(Lnet/minecraft/client/gui/screen/Screen;)V")
     public void onDisconnect(Screen s, CallbackInfo ci) {
         InteractionProxy.reset();
+    }
+
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;cancelTasks()V"), method = "disconnect(Lnet/minecraft/client/gui/screen/Screen;)V")
+    public void onCancelTasks(Screen s, CallbackInfo ci) {
+        JsMacros.releaseAllSemaphores();
     }
 
     @Inject(at = @At("HEAD"), method = "handleBlockBreaking", cancellable = true)

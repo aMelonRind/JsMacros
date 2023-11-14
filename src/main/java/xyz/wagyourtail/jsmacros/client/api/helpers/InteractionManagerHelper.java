@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletEnumType;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
+import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.access.IClientPlayerInteractionManager;
 import xyz.wagyourtail.jsmacros.client.access.IMinecraftClient;
 import xyz.wagyourtail.jsmacros.client.api.classes.InteractionProxy;
@@ -275,6 +276,7 @@ public class InteractionManagerHelper {
             ((IMinecraftClient) mc).jsmacros_doAttack();
         } else {
             Semaphore wait = new Semaphore(await ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 ((IMinecraftClient) mc).jsmacros_doAttack();
                 wait.release();
@@ -309,6 +311,7 @@ public class InteractionManagerHelper {
             mc.player.swingHand(Hand.MAIN_HAND);
         } else {
             Semaphore wait = new Semaphore(await ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 mc.interactionManager.attackEntity(mc.player, entity.getRaw());
                 assert mc.player != null;
@@ -378,6 +381,7 @@ public class InteractionManagerHelper {
             mc.player.swingHand(Hand.MAIN_HAND);
         } else {
             Semaphore wait = new Semaphore(await ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 mc.interactionManager.attackBlock(new BlockPos(x, y, z), Direction.values()[direction]);
                 assert mc.player != null;
@@ -564,6 +568,7 @@ public class InteractionManagerHelper {
             ((IMinecraftClient) mc).jsmacros_doItemUse();
         } else {
             Semaphore wait = new Semaphore(await ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 ((IMinecraftClient) mc).jsmacros_doItemUse();
                 wait.release();
@@ -604,6 +609,7 @@ public class InteractionManagerHelper {
             }
         } else {
             Semaphore wait = new Semaphore(await ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 ActionResult result = mc.interactionManager.interactEntity(mc.player, entity.getRaw(), hand);
                 assert mc.player != null;
@@ -642,6 +648,7 @@ public class InteractionManagerHelper {
             }
         } else {
             Semaphore wait = new Semaphore(await ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 ActionResult result = mc.interactionManager.interactItem(mc.player, hand);
                 assert mc.player != null;
@@ -719,6 +726,7 @@ public class InteractionManagerHelper {
             }
         } else {
             Semaphore wait = new Semaphore(await ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 ActionResult result = mc.interactionManager.interactBlock(mc.player, hand,
                         new BlockHitResult(new Vec3d(x, y, z), Direction.values()[direction], new BlockPos(x, y, z), false)
@@ -758,6 +766,7 @@ public class InteractionManagerHelper {
             InteractionProxy.Interact.setOverride(true);
         } else {
             Semaphore wait = new Semaphore(awaitFirstClick ? 0 : 1);
+            JsMacros.addSemaphore(wait);
             mc.execute(() -> {
                 InteractionProxy.Interact.setOverride(true);
                 wait.release();

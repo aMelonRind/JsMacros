@@ -36,6 +36,7 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
+import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.access.IBossBarHud;
 import xyz.wagyourtail.jsmacros.client.access.IPlayerListHud;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
@@ -466,12 +467,13 @@ public class FWorld extends BaseLibrary {
         if (mc.world == null) return ImmutableList.of();
         List<Entity>[] entities = new List[]{ null };
         Semaphore wait = new Semaphore(0);
+        JsMacros.addSemaphore(wait);
         mc.execute(() -> {
             entities[0] = ImmutableList.copyOf(mc.world.getEntities());
             wait.release();
         });
         wait.acquire();
-        return entities[0];
+        return entities[0] == null ? ImmutableList.of() : entities[0];
     }
 
     /**
