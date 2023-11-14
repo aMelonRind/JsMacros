@@ -56,4 +56,8 @@ public class TickSync {
         }
     }
 
+    public synchronized int getTickCount() {
+        return tc;
+    }
+
 }

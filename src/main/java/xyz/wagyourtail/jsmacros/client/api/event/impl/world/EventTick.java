@@ -9,6 +9,12 @@ import xyz.wagyourtail.jsmacros.core.event.Event;
  */
 @Event(value = "Tick", oldName = "TICK")
 public class EventTick extends BaseEvent {
+    public final String count;
+
+    public EventTick(long count) {
+        this.count = String.valueOf(count);
+    }
+
     @Override
     public String toString() {
         return String.format("%s:{}", this.getEventName());
