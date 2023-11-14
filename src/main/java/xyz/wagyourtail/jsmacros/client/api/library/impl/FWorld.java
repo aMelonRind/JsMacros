@@ -49,6 +49,7 @@ import xyz.wagyourtail.jsmacros.client.api.helpers.world.entity.EntityHelper;
 import xyz.wagyourtail.jsmacros.client.api.helpers.world.entity.PlayerEntityHelper;
 import xyz.wagyourtail.jsmacros.core.Core;
 import xyz.wagyourtail.jsmacros.core.MethodWrapper;
+import xyz.wagyourtail.jsmacros.core.config.CoreConfigV2;
 import xyz.wagyourtail.jsmacros.core.library.BaseLibrary;
 import xyz.wagyourtail.jsmacros.core.library.Library;
 
@@ -56,6 +57,8 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -388,7 +391,7 @@ public class FWorld extends BaseLibrary {
     /**
      * @return all entities in the render distance.
      */
-    public List<EntityHelper<?>> getEntities() {
+    public List<EntityHelper<?>> getEntities() throws InterruptedException {
         return getEntitiesInternal(entity -> true);
     }
 
@@ -398,7 +401,7 @@ public class FWorld extends BaseLibrary {
      * @since 1.8.4
      */
     @DocletReplaceParams("...types: EntityId[]")
-    public List<EntityHelper<?>> getEntities(String... types) {
+    public List<EntityHelper<?>> getEntities(String... types) throws InterruptedException {
         Set<String> uniqueTypes = Arrays.stream(types).map(RegistryHelper::parseNameSpace).collect(Collectors.toUnmodifiableSet());
         Predicate<Entity> typePredicate = entity -> uniqueTypes.contains(Registries.ENTITY_TYPE.getId(entity.getType()).toString());
         return getEntitiesInternal(typePredicate);
@@ -409,7 +412,7 @@ public class FWorld extends BaseLibrary {
      * @return a list of entities within the specified distance to the player.
      * @since 1.8.4
      */
-    public List<EntityHelper<?>> getEntities(double distance) {
+    public List<EntityHelper<?>> getEntities(double distance) throws InterruptedException {
         assert mc.player != null;
         Predicate<Entity> distancePredicate = e -> e.distanceTo(mc.player) <= distance;
         return getEntitiesInternal(distancePredicate);
@@ -422,7 +425,7 @@ public class FWorld extends BaseLibrary {
      * @since 1.8.4
      */
     @DocletReplaceParams("distance: double, ...types: EntityId[]")
-    public List<EntityHelper<?>> getEntities(double distance, String... types) {
+    public List<EntityHelper<?>> getEntities(double distance, String... types) throws InterruptedException {
         Set<String> uniqueTypes = Arrays.stream(types).map(RegistryHelper::parseNameSpace).collect(Collectors.toUnmodifiableSet());
         assert mc.player != null;
         Predicate<Entity> distancePredicate = e -> e.distanceTo(mc.player) <= distance;
@@ -435,10 +438,10 @@ public class FWorld extends BaseLibrary {
      * @return a list of entities that match the specified filter.
      * @since 1.8.4
      */
-    public List<EntityHelper<?>> getEntities(MethodWrapper<EntityHelper<?>, ?, ?, ?> filter) {
+    public List<EntityHelper<?>> getEntities(MethodWrapper<EntityHelper<?>, ?, ?, ?> filter) throws InterruptedException {
         assert mc.world != null;
         List<EntityHelper<?>> entities = new ArrayList<>();
-        for (Entity e : ImmutableList.copyOf(mc.world.getEntities())) {
+        for (Entity e : getEntitiesInternal()) {
             EntityHelper<?> entity = EntityHelper.create(e);
             if (filter.test(entity)) {
                 entities.add(entity);
@@ -447,15 +450,28 @@ public class FWorld extends BaseLibrary {
         return entities;
     }
 
-    private List<EntityHelper<?>> getEntitiesInternal(Predicate<Entity> filter) {
+    private List<EntityHelper<?>> getEntitiesInternal(Predicate<Entity> filter) throws InterruptedException {
         assert mc.world != null;
         List<EntityHelper<?>> entities = new ArrayList<>();
-        for (Entity e : ImmutableList.copyOf(mc.world.getEntities())) {
+        for (Entity e : getEntitiesInternal()) {
             if (filter.test(e)) {
                 entities.add(EntityHelper.create(e));
             }
         }
         return entities;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Entity> getEntitiesInternal() throws InterruptedException {
+        if (mc.world == null) return ImmutableList.of();
+        List<Entity>[] entities = new List[]{ null };
+        Semaphore wait = new Semaphore(0);
+        mc.execute(() -> {
+            entities[0] = ImmutableList.copyOf(mc.world.getEntities());
+            wait.release();
+        });
+        wait.acquire();
+        return entities[0];
     }
 
     /**
