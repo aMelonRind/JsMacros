@@ -3,9 +3,7 @@ package xyz.wagyourtail.jsmacros.client.api.classes.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 import xyz.wagyourtail.doclet.DocletIgnore;
@@ -612,6 +610,22 @@ public class Draw3D implements Registrable<Draw3D> {
     }
 
     /**
+     *
+     * @param base
+     * @param entity
+     * @return
+     * @since 2.0.0
+     */
+    public EntityFollowWrapper addEntityFollower(RenderElement3D<?> base, EntityHelper<?> entity) {
+        synchronized (elements) {
+            this.elements.remove(base);
+        }
+        EntityFollowWrapper wrapper = new EntityFollowWrapper(base, entity);
+        reAddElement(wrapper);
+        return wrapper;
+    }
+
+    /**
      * @return a new {@link Box.Builder} instance.
      * @since 1.8.4
      */
@@ -708,7 +722,7 @@ public class Draw3D implements Registrable<Draw3D> {
         matrixStack.translate(-camPos.x, -camPos.y, -camPos.z);
 
         EntityTraceLine.dirty = false;
-
+        EntityFollowWrapper.dirty = false;
 
         synchronized (elements) {
             //sort elements by type (should be O(n) after first time)
@@ -728,6 +742,12 @@ public class Draw3D implements Registrable<Draw3D> {
         if (EntityTraceLine.dirty) {
             synchronized (elements) {
                 elements.removeIf(e -> e instanceof EntityTraceLine etl && etl.shouldRemove);
+            }
+        }
+
+        if (EntityFollowWrapper.dirty) {
+            synchronized (elements) {
+                elements.removeIf(e -> e instanceof EntityFollowWrapper efw && efw.shouldRemove);
             }
         }
 

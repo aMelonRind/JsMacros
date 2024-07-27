@@ -19,9 +19,10 @@ import java.util.stream.Collectors;
 class MixinInGameHud {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z"), method = "method_55807")
     public void renderHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        float delta = tickCounter.getTickDelta(true);
         for (IDraw2D<Draw2D> h : ImmutableSet.copyOf(FHud.overlays).stream().sorted(Comparator.comparingInt(IDraw2D::getZIndex)).collect(Collectors.toList())) {
             try {
-                h.render(context);
+                h.render(context, delta);
             } catch (Throwable ignored) {
             }
         }

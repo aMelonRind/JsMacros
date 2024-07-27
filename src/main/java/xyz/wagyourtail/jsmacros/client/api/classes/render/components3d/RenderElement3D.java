@@ -1,10 +1,13 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render.components3d;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import org.jetbrains.annotations.NotNull;
 import xyz.wagyourtail.doclet.DocletIgnore;
 
 public interface RenderElement3D<T extends RenderElement3D<?>> extends Comparable<RenderElement3D<?>> {
+
+    MinecraftClient mc = MinecraftClient.getInstance();
 
     @DocletIgnore
     void render(DrawContext drawContext, float tickDelta);

@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Drawable;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletIgnore;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
+import xyz.wagyourtail.jsmacros.client.api.classes.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components.*;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components3d.Surface;
 import xyz.wagyourtail.jsmacros.client.api.helpers.TextHelper;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
  * @see IDraw2D
  * @since 1.0.5
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused"})
 public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
     protected final Set<RenderElement> elements = new LinkedHashSet<>();
     public IntSupplier widthSupplier;
@@ -566,6 +567,23 @@ public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
         return this;
     }
 
+    /**
+     * wraps the element, so it renders on screen with projected world position
+     * @since 2.0.0
+     */
+    public WorldPosWrapper addWorldPosWrapped(Pos3D pos, RenderElement base) {
+        removeElement(base);
+        return reAddElement(new WorldPosWrapper(pos, base));
+    }
+
+    /**
+     * wraps the element, so it renders on screen with projected world position
+     * @since 2.0.0
+     */
+    public WorldPosWrapper addWorldPosWrapped(double x, double y, double z, RenderElement base) {
+        return addWorldPosWrapped(new Pos3D(x, y, z), base);
+    }
+
     public void init() {
         synchronized (elements) {
             elements.clear();
@@ -591,15 +609,23 @@ public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
 
     @Override
     @DocletIgnore
-    public void render(DrawContext drawContext) {
+    public void render(DrawContext drawContext, float tickDelta) {
         if (drawContext == null || !visible) {
             return;
         }
 
+        WorldPosWrapper.dirty = false;
+
         synchronized (elements) {
             Iterator<RenderElement> iter = getElementsByZIndex();
             while (iter.hasNext()) {
-                iter.next().render(drawContext, 0, 0, 0);
+                iter.next().render(drawContext, 0, 0, tickDelta);
+            }
+        }
+
+        if (WorldPosWrapper.dirty) {
+            synchronized (elements) {
+                elements.removeIf(e -> e instanceof WorldPosWrapper wpw && wpw.shouldRemove);
             }
         }
     }

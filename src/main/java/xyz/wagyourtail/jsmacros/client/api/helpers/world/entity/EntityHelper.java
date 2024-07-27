@@ -370,6 +370,16 @@ public class EntityHelper<T extends Entity> extends BaseHelper<T> {
     }
 
     /**
+     * Checks if the entity is still alive and in the same world as player.
+     *
+     * @return
+     * @since 2.0.0
+     */
+    public boolean isReallyAlive() {
+        return base.isAlive() && base.getWorld() == MinecraftClient.getInstance().world;
+    }
+
+    /**
      * @return UUID of the entity, random* if not a player, otherwise the player's uuid.
      * @since 1.6.5
      */

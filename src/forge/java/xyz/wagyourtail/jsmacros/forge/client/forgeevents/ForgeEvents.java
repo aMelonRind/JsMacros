@@ -84,9 +84,10 @@ public class ForgeEvents {
     }
 
     public static void renderHudListener(DrawContext drawContext, RenderTickCounter partialTicks) {
+        float delta = partialTicks.getTickDelta(true);
         for (IDraw2D<Draw2D> h : ImmutableSet.copyOf(FHud.overlays).stream().sorted(Comparator.comparingInt(IDraw2D::getZIndex)).collect(Collectors.toList())) {
             try {
-                h.render(drawContext);
+                h.render(drawContext, delta);
             } catch (Throwable ignored) {
             }
         }

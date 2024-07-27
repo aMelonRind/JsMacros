@@ -13,14 +13,17 @@ import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.wagyourtail.jsmacros.client.access.IScreenInternal;
 import xyz.wagyourtail.jsmacros.client.api.classes.InteractionProxy;
+import xyz.wagyourtail.jsmacros.client.api.classes.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.ScriptScreen;
+import xyz.wagyourtail.jsmacros.client.api.classes.render.components.WorldPosWrapper;
 import xyz.wagyourtail.jsmacros.client.api.library.impl.FHud;
 
 import java.lang.reflect.Constructor;
@@ -52,15 +55,16 @@ public class MixinGameRenderer {
     }
 
     @Inject(at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=hand"), method = "renderWorld")
-    public void render(RenderTickCounter tickCounter, CallbackInfo ci, @Local(ordinal = 1) Matrix4f matrix4f2) {
+    public void render(RenderTickCounter tickCounter, CallbackInfo ci, @Local(ordinal = 0) Matrix4f matrix4f, @Local(ordinal = 1) Matrix4f matrix4f2) {
         client.getProfiler().swap("jsmacros_draw3d");
         MatrixStack ms = new MatrixStack();
         ms.multiplyPositionMatrix(matrix4f2);
         try {
+            float delta = tickCounter.getTickDelta(true);
             DrawContext drawContext = DRAW_CONTEXT_CONSTRUCTOR.newInstance(client, ms, client.getBufferBuilders().getEntityVertexConsumers());
             for (Draw3D d : ImmutableSet.copyOf(FHud.renders)) {
                 try {
-                    d.render(drawContext, tickCounter.getLastDuration());
+                    d.render(drawContext, delta);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -69,6 +73,12 @@ public class MixinGameRenderer {
             e.printStackTrace();
         }
         client.getProfiler().pop();
+        if (client.world != null) {
+            WorldPosWrapper.positionMatrix = matrix4f2;
+            WorldPosWrapper.projectionMatrix = matrix4f;
+            WorldPosWrapper.fov90len = client.getWindow().getScaledHeight() * 0.5f * matrix4f.m11();
+            WorldPosWrapper.cameraPos = new Pos3D(client.gameRenderer.getCamera().getPos());
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "updateCrosshairTarget", cancellable = true)

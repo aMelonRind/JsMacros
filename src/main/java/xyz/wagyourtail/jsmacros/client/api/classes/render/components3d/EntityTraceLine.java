@@ -4,22 +4,22 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
+import xyz.wagyourtail.doclet.DocletIgnore;
 import xyz.wagyourtail.jsmacros.client.api.classes.math.Pos2D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
 import xyz.wagyourtail.jsmacros.client.api.helpers.world.entity.EntityHelper;
-
-import static xyz.wagyourtail.jsmacros.client.api.classes.render.components.RenderElement.mc;
 
 /**
  * @author aMelonRind
  * @since 1.9.0
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public class EntityTraceLine extends TraceLine {
+    @DocletIgnore
     public static boolean dirty = false;
 
     @Nullable
-    public Entity entity;
+    public EntityHelper<?> entity;
     public double yOffset = 0.5;
     public boolean shouldRemove = false;
 
@@ -39,7 +39,7 @@ public class EntityTraceLine extends TraceLine {
      */
     public EntityTraceLine setEntity(@Nullable EntityHelper<?> entity) {
         if (entity == null) return this;
-        this.entity = entity.getRaw();
+        this.entity = entity;
         shouldRemove = false;
         return this;
     }
@@ -55,15 +55,16 @@ public class EntityTraceLine extends TraceLine {
 
     @Override
     public void render(DrawContext drawContext, float tickDelta) {
-        if (shouldRemove || entity == null || entity.isRemoved() || entity.getWorld() != mc.world) {
+        if (shouldRemove || entity == null || !entity.isReallyAlive()) {
             shouldRemove = true;
             dirty = true;
             return;
         }
 
-        Vec3d vec = (entity.prevX == 0.0 && entity.prevY == 0.0 && entity.prevZ == 0.0)
-                ? entity.getPos()
-                : entity.getLerpedPos(tickDelta);
+        Entity e = entity.getRaw();
+        Vec3d vec = (e.prevX == 0.0 && e.prevY == 0.0 && e.prevZ == 0.0)
+                ? e.getPos()
+                : e.getLerpedPos(tickDelta);
         pos.x = vec.x;
         pos.y = vec.y + yOffset;
         pos.z = vec.z;
