@@ -15,6 +15,7 @@ import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw2D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.IDraw2D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.ScriptScreen;
+import xyz.wagyourtail.jsmacros.client.api.classes.render.components.WorldPosWrapper;
 import xyz.wagyourtail.jsmacros.client.api.library.impl.FHud;
 import xyz.wagyourtail.jsmacros.client.tick.TickBasedEvents;
 import xyz.wagyourtail.jsmacros.forge.client.api.classes.CommandBuilderForge;
@@ -102,15 +103,22 @@ public class ForgeEvents {
             return;
         }
         client.getProfiler().swap("jsmacros_draw3d");
+        float delta = e.getPartialTick().getTickDelta(true);
         for (Draw3D d : ImmutableSet.copyOf(FHud.renders)) {
             try {
                 DrawContext drawContext = DRAW_CONTEXT_CONSTRUCTOR.newInstance(client, e.getPoseStack(), client.getBufferBuilders().getEntityVertexConsumers());
-                d.render(drawContext, e.getPartialTick().getLastDuration());
+                d.render(drawContext, delta);
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
         client.getProfiler().pop();
+
+        if (client.world != null) {
+            WorldPosWrapper.positionMatrix = e.getModelViewMatrix();
+            WorldPosWrapper.projectionMatrix = e.getProjectionMatrix();
+            WorldPosWrapper.cameraPos = client.gameRenderer.getCamera().getPos().toVector3f();
+        }
     }
 
     public static void onTick(ClientTickEvent.Post event) {

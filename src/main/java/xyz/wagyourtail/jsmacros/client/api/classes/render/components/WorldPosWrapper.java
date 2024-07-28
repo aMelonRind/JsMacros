@@ -23,10 +23,7 @@ public class WorldPosWrapper implements RenderElement {
     @DocletIgnore
     public static Matrix4f projectionMatrix = new Matrix4f();
     @DocletIgnore
-    public static float fov90len = 540;
-    /** internal static variable for passing arguments */
-    @DocletIgnore
-    public static Pos3D cameraPos = new Pos3D(0, 0, 0);
+    public static Vector3f cameraPos = new Vector3f();
     /**
      * the global variable for scale threshold, will affect newly created wrapper
      */
@@ -88,7 +85,7 @@ public class WorldPosWrapper implements RenderElement {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         if (mc.world == null) return;
-        Pos3D dPos = pos.sub(cameraPos);
+        Vector3f vec = new Vector3f((float) pos.x, (float) pos.y, (float) pos.z).sub(cameraPos);
         EntityHelper<?> entity = followedEntity;
         if (entity != null) {
             if (shouldRemove || !entity.isReallyAlive()) {
@@ -96,10 +93,10 @@ public class WorldPosWrapper implements RenderElement {
                 dirty = true;
                 return;
             }
-            dPos = dPos.add(new Pos3D(entity.getRaw().getLerpedPos(delta)));
+            vec = vec.add(entity.getRaw().getLerpedPos(delta).toVector3f());
         }
 
-        Vector3f vec = positionMatrix.transformPosition(new Vector3f((float) dPos.x, (float) dPos.y, (float) dPos.z));
+        vec = positionMatrix.transformPosition(vec);
         float z = vec.z();
         if (z > 0) return;
         vec = projectionMatrix.transformProject(vec)

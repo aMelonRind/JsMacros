@@ -13,14 +13,12 @@ import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.wagyourtail.jsmacros.client.access.IScreenInternal;
 import xyz.wagyourtail.jsmacros.client.api.classes.InteractionProxy;
-import xyz.wagyourtail.jsmacros.client.api.classes.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.ScriptScreen;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components.WorldPosWrapper;
@@ -73,11 +71,11 @@ public class MixinGameRenderer {
             e.printStackTrace();
         }
         client.getProfiler().pop();
+
         if (client.world != null) {
             WorldPosWrapper.positionMatrix = matrix4f2;
             WorldPosWrapper.projectionMatrix = matrix4f;
-            WorldPosWrapper.fov90len = client.getWindow().getScaledHeight() * 0.5f * matrix4f.m11();
-            WorldPosWrapper.cameraPos = new Pos3D(client.gameRenderer.getCamera().getPos());
+            WorldPosWrapper.cameraPos = client.gameRenderer.getCamera().getPos().toVector3f();
         }
     }
 
