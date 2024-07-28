@@ -586,7 +586,8 @@ public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
 
     public void init() {
         synchronized (elements) {
-            elements.clear();
+            // WorldPosWrapper's position are bind to the world, no need to be cleared and reinitialized
+            elements.removeIf(e -> !(e instanceof WorldPosWrapper));
         }
         if (onInit != null) {
             try {
