@@ -20,6 +20,7 @@ public abstract class BaseEventRegistry {
     public final Set<String> cancellableEvents = new HashSet<>();
     public final Set<String> joinableEvents = new HashSet<>();
     public final Map<String, Class<? extends EventFilterer>> filterableEvents = new HashMap<>();
+    public final Map<String, Class<? extends BaseEvent>> event2Class = new HashMap<>();
 
     public BaseEventRegistry(Core runner) {
         this.runner = runner;
@@ -141,6 +142,7 @@ public abstract class BaseEventRegistry {
             }
             oldEvents.put(clazz.getSimpleName(), e.value());
             events.add(e.value());
+            event2Class.put(e.value(), clazz);
             if (e.cancellable()) {
                 cancellableEvents.add(e.value());
                 joinableEvents.add(e.value());

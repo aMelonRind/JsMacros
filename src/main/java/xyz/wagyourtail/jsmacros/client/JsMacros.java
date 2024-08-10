@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.wagyourtail.jsmacros.client.api.event.CompiledCommons;
 import xyz.wagyourtail.jsmacros.client.api.event.impl.EventQuitGame;
 import xyz.wagyourtail.jsmacros.client.api.helpers.PacketByteBufferHelper;
 import xyz.wagyourtail.jsmacros.client.config.ClientConfigV2;
@@ -19,6 +20,7 @@ import xyz.wagyourtail.jsmacros.client.event.EventRegistry;
 import xyz.wagyourtail.jsmacros.client.gui.screens.KeyMacrosScreen;
 import xyz.wagyourtail.jsmacros.client.movement.MovementQueue;
 import xyz.wagyourtail.jsmacros.core.Core;
+import xyz.wagyourtail.jsmacros.core.event.EventFilters;
 import xyz.wagyourtail.wagyourgui.BaseScreen;
 
 import java.io.File;
@@ -41,6 +43,7 @@ public class JsMacros {
         } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
+        EventFilters.setCompiledCommons(CompiledCommons.class);
 
         // HINT TO EXTENSION DEVS: Use this init to add your shit before any scripts are actually run
     }
@@ -48,6 +51,8 @@ public class JsMacros {
     public static void onInitializeClient() {
         // this comes later, we want to do core's deferred init here
         core.deferredInit();
+        // this loads after services starts... there might be some problem that'll cause NullPointerException in compiled event filterers.
+        CompiledCommons.loadLibraries();
 
         prevScreen = new KeyMacrosScreen(null);
 

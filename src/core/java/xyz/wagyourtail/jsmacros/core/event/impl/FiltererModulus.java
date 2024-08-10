@@ -17,11 +17,6 @@ public class FiltererModulus implements EventFilterer {
     }
 
     @Override
-    public boolean canFilter(String event) {
-        return true;
-    }
-
-    @Override
     public boolean test(BaseEvent event) {
         if (++count >= quotient) {
             count = 0;

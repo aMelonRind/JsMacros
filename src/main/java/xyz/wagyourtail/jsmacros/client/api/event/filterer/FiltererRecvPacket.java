@@ -11,6 +11,7 @@ import xyz.wagyourtail.jsmacros.core.event.EventFilterer;
  * @author aMelonRind
  * @since 1.9.1
  */
+@Deprecated
 @SuppressWarnings("unused")
 public class FiltererRecvPacket implements EventFilterer {
     @Nullable

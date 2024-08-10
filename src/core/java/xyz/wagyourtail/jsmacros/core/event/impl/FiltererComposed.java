@@ -3,8 +3,10 @@ package xyz.wagyourtail.jsmacros.core.event.impl;
 import xyz.wagyourtail.jsmacros.core.event.BaseEvent;
 import xyz.wagyourtail.jsmacros.core.event.EventFilterer;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author aMelonRind
@@ -65,13 +67,9 @@ public class FiltererComposed implements EventFilterer.Compound {
         return this;
     }
 
-    public void checkCyclicRef(Compound base) {
-        Compound.super.checkCyclicRef(base);
-        for (List<EventFilterer> c : components) {
-            for (EventFilterer f : c) {
-                if (f instanceof Compound fc) fc.checkCyclicRef(base);
-            }
-        }
+    @Override
+    public Stream<EventFilterer> getChildren() {
+        return components.stream().flatMap(Collection::stream);
     }
 
 }

@@ -2,6 +2,7 @@ package xyz.wagyourtail.jsmacros.core.library.impl;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
@@ -354,9 +355,12 @@ public class FJsMacros extends PerExecLibrary {
         if (!Core.getInstance().eventRegistry.events.contains(event)) {
             throw new IllegalArgumentException(String.format("Event \"%s\" not found, if it's a custom event register it with 'event.registerEvent()' first.", event));
         }
-        if (filterer != null && !filterer.canFilter(event)) {
+        if (filterer == null) {
+            filterer = EventFilters.CONSTANT_TRUE;
+        } else if (!filterer.canFilter(event)) {
             throw new IllegalArgumentException(String.format("Provided filterer (%s) cannot be used to filter %s event!", filterer.getClass().getSimpleName(), event));
         }
+        EventFilterer finalFilterer = filterer;
         Thread th = Thread.currentThread();
         String creatorName = th.getName();
         IEventListener listener = new ScriptEventListener() {
@@ -366,9 +370,15 @@ public class FJsMacros extends PerExecLibrary {
                 return joined;
             }
 
+            @NotNull
+            @Override
+            public EventFilterer getFilterer() {
+                return finalFilterer;
+            }
+
             @Override
             public EventContainer<?> trigger(BaseEvent e) {
-                if (filterer != null && !filterer.test(e)) return null;
+                if (!getFilterer().test(e)) return null;
                 EventContainer<?> p = new EventContainer<>(callback.getCtx());
                 Thread ot = callback.overrideThread();
                 Thread th = Core.getInstance().threadPool.runTask(() -> {
@@ -807,10 +817,20 @@ public class FJsMacros extends PerExecLibrary {
     }
 
     /**
+     * use this to create java-side fast event filterers.
+     * @since 2.0.0
+     */
+    public EventFilters eventFilters() {
+        return new EventFilters();
+    }
+
+    /**
      * create an event filterer.<br>
      * this exists to reduce lag when listening to frequently triggered events.
      * @since 1.9.1
+     * @deprecated moved to JsMacros.eventFilters().compile(...)
      */
+    @Deprecated
     @DocletReplaceTypeParams("E extends keyof EventFilterers")
     @DocletReplaceParams("event: E")
     @DocletReplaceReturn("EventFilterers[E]")
@@ -834,7 +854,9 @@ public class FJsMacros extends PerExecLibrary {
      * create a composed event filterer.<br>
      * this filterer combines multiple filterers together with and/or logic.
      * @since 1.9.1
+     * @deprecated moved to JsMacros.eventFilters()
      */
+    @Deprecated
     public FiltererComposed createComposedEventFilterer(EventFilterer initial) {
         return new FiltererComposed(initial);
     }
@@ -843,7 +865,9 @@ public class FJsMacros extends PerExecLibrary {
      * create a modulus event filterer.<br>
      * this filterer only let every nth event pass through.
      * @since 1.9.1
+     * @deprecated moved to JsMacros.eventFilters()
      */
+    @Deprecated
     public FiltererModulus createModulusEventFilterer(int quotient) {
         return new FiltererModulus(quotient);
     }
@@ -853,7 +877,9 @@ public class FJsMacros extends PerExecLibrary {
      * this checks if the base is already inverted.<br>
      * e.g. {@code filterer == invert(invert(filterer))} would be {@code true}.
      * @since 1.9.1
+     * @deprecated moved to JsMacros.eventFilters()
      */
+    @Deprecated
     public EventFilterer invertEventFilterer(EventFilterer base) {
         return FiltererInverted.invert(base);
     }
@@ -905,6 +931,12 @@ public class FJsMacros extends PerExecLibrary {
         MethodWrapper<BaseEvent, EventContainer<?>, Object, ?> getWrapper();
 
         BaseScriptContext<?> getCtx();
+
+        @NotNull
+        default EventFilterer getFilterer() {
+            return EventFilters.CONSTANT_TRUE;
+        }
+
     }
 
     public static class EventAndContext<E extends BaseEvent> {

@@ -18,6 +18,7 @@ import java.util.Objects;
  * @author aMelonRind
  * @since 1.9.1
  */
+@Deprecated
 @SuppressWarnings("unused")
 public class FiltererBlockUpdate implements EventFilterer {
     @Nullable

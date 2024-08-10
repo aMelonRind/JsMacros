@@ -3,6 +3,8 @@ package xyz.wagyourtail.jsmacros.core.event.impl;
 import xyz.wagyourtail.jsmacros.core.event.BaseEvent;
 import xyz.wagyourtail.jsmacros.core.event.EventFilterer;
 
+import java.util.stream.Stream;
+
 /**
  * @author aMelonRind
  * @since 1.9.1
@@ -31,9 +33,8 @@ public class FiltererInverted implements EventFilterer.Compound {
     }
 
     @Override
-    public void checkCyclicRef(Compound base) {
-        Compound.super.checkCyclicRef(base);
-        if (this.base instanceof Compound c) c.checkCyclicRef(base);
+    public Stream<EventFilterer> getChildren() {
+        return Stream.of(base);
     }
 
 }
