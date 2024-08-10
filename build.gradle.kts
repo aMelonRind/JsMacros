@@ -33,6 +33,15 @@ repositories {
     maven("https://jitpack.io")
     mavenCentral()
 }
+subprojects {
+    afterEvaluate {
+        configurations
+            .matching { it.name.contains("compile", ignoreCase = true) }
+            .configureEach {
+                exclude(group = "org.lwjgl", module = "lwjgl-freetype")
+            }
+    }
+}
 
 val core by sourceSets.creating {
     compileClasspath += configurations.implementation.get()
