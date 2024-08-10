@@ -7,6 +7,7 @@ import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.jsmacros.core.Core;
 import xyz.wagyourtail.jsmacros.core.event.impl.FiltererComposed;
 import xyz.wagyourtail.jsmacros.core.event.impl.FiltererInverted;
+import xyz.wagyourtail.jsmacros.core.event.impl.FiltererLimited;
 import xyz.wagyourtail.jsmacros.core.event.impl.FiltererModulus;
 import xyz.wagyourtail.jsmacros.core.library.impl.classes.proxypackage.filters.Neighbor;
 
@@ -74,6 +75,15 @@ public class EventFilters {
      */
     public EventFilterer invert(EventFilterer base) {
         return FiltererInverted.invert(base);
+    }
+
+    /**
+     * Create a limited event filterer.<br>
+     * This filterer only lets the first n event pass through.
+     * @since 2.0.0
+     */
+    public FiltererLimited limited(int limit) {
+        return new FiltererLimited(limit);
     }
 
     /**
