@@ -139,6 +139,7 @@ public class Profile extends BaseProfile {
     public void initRegistries() {
         super.initRegistries();
 
+        // if you're in IDEA, double shift -> actions -> sort lines
         runner.eventRegistry.addEvent(EventAirChange.class);
         runner.eventRegistry.addEvent(EventArmorChange.class);
         runner.eventRegistry.addEvent(EventAttackBlock.class);
@@ -147,20 +148,20 @@ public class Profile extends BaseProfile {
         runner.eventRegistry.addEvent(EventBossbar.class);
         runner.eventRegistry.addEvent(EventChunkLoad.class);
         runner.eventRegistry.addEvent(EventChunkUnload.class);
-        runner.eventRegistry.addEvent(EventContainerUpdate.class);
         runner.eventRegistry.addEvent(EventClickSlot.class);
+        runner.eventRegistry.addEvent(EventContainerUpdate.class);
         runner.eventRegistry.addEvent(EventDamage.class);
-        runner.eventRegistry.addEvent(EventHeal.class);
         runner.eventRegistry.addEvent(EventDeath.class);
         runner.eventRegistry.addEvent(EventDimensionChange.class);
         runner.eventRegistry.addEvent(EventDisconnect.class);
         runner.eventRegistry.addEvent(EventDropSlot.class);
+        runner.eventRegistry.addEvent(EventEXPChange.class);
         runner.eventRegistry.addEvent(EventEntityDamaged.class);
         runner.eventRegistry.addEvent(EventEntityHealed.class);
         runner.eventRegistry.addEvent(EventEntityLoad.class);
         runner.eventRegistry.addEvent(EventEntityUnload.class);
-        runner.eventRegistry.addEvent(EventEXPChange.class);
         runner.eventRegistry.addEvent(EventFallFlying.class);
+        runner.eventRegistry.addEvent(EventHeal.class);
         runner.eventRegistry.addEvent(EventHealthChange.class);
         runner.eventRegistry.addEvent(EventHeldItemChange.class);
         runner.eventRegistry.addEvent(EventHungerChange.class);
@@ -168,8 +169,6 @@ public class Profile extends BaseProfile {
         runner.eventRegistry.addEvent(EventInteractEntity.class);
         runner.eventRegistry.addEvent(EventItemDamage.class);
         runner.eventRegistry.addEvent(EventItemPickup.class);
-        runner.eventRegistry.addEvent(EventRecvPacket.class);
-        runner.eventRegistry.addEvent(EventSendPacket.class);
         runner.eventRegistry.addEvent(EventJoinServer.class);
         runner.eventRegistry.addEvent(EventKey.class);
         runner.eventRegistry.addEvent(EventLaunchGame.class);
@@ -177,15 +176,16 @@ public class Profile extends BaseProfile {
         runner.eventRegistry.addEvent(EventNameChange.class);
         runner.eventRegistry.addEvent(EventOpenContainer.class);
         runner.eventRegistry.addEvent(EventOpenScreen.class);
-        runner.eventRegistry.addEvent(EventRecvPacket.class);
-        runner.eventRegistry.addEvent(EventSendPacket.class);
+        runner.eventRegistry.addEvent(EventParticle.class);
         runner.eventRegistry.addEvent(EventPlayerJoin.class);
         runner.eventRegistry.addEvent(EventPlayerLeave.class);
         runner.eventRegistry.addEvent(EventQuitGame.class);
         runner.eventRegistry.addEvent(EventRecvMessage.class);
-        runner.eventRegistry.addEvent(EventRiding.class);
+        runner.eventRegistry.addEvent(EventRecvPacket.class);
         runner.eventRegistry.addEvent(EventResourcePackLoaded.class);
+        runner.eventRegistry.addEvent(EventRiding.class);
         runner.eventRegistry.addEvent(EventSendMessage.class);
+        runner.eventRegistry.addEvent(EventSendPacket.class);
         runner.eventRegistry.addEvent(EventSignEdit.class);
         runner.eventRegistry.addEvent(EventSlotUpdate.class);
         runner.eventRegistry.addEvent(EventSound.class);

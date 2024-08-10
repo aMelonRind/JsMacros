@@ -221,7 +221,14 @@ public abstract class MixinClientPlayNetworkHandler extends ClientCommonNetworkH
         }
     }
 
-
+    @Inject(at = @At("HEAD"), method = "onParticle", cancellable = true)
+    public void onParticle(ParticleS2CPacket packet, CallbackInfo ci) {
+        EventParticle event = new EventParticle(packet);
+        event.trigger();
+        if (event.isCanceled()) {
+            ci.cancel();
+        }
+    }
 
     protected MixinClientPlayNetworkHandler(MinecraftClient arg, ClientConnection arg2, ClientConnectionState arg3) {
         super(arg, arg2, arg3);
