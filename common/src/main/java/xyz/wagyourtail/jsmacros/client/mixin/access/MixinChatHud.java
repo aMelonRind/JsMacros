@@ -1,6 +1,8 @@
 package xyz.wagyourtail.jsmacros.client.mixin.access;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
@@ -32,7 +34,13 @@ public abstract class MixinChatHud implements IChatHud {
 
     @Override
     public void jsmacros_addMessageBypass(Component message) {
-        addMessage(message, null, GuiMessageTag.system());
+        if (RenderSystem.isOnRenderThread()) {
+            addMessage(message, null, GuiMessageTag.system());
+        } else {
+            Minecraft.getInstance().execute(() -> {
+                addMessage(message, null, GuiMessageTag.system());
+            });
+        }
     }
 
     @Unique
