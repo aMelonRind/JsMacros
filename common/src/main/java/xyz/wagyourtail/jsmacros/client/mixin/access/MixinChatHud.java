@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.mixin.access;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
@@ -14,9 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import xyz.wagyourtail.jsmacros.client.access.IChatHud;
 
 import java.util.List;
@@ -56,13 +53,11 @@ public abstract class MixinChatHud implements IChatHud {
     // TODO: (1.21.11) addMessageToQueue used to call .add(0, msg) but now uses addFirst so we reimplement the method
     //  here instead. But this doesn't make much sense to me? JSM can force all messages in the chat to be at a specific
     //  position? I can't think of a use for that...
-    @Inject(method = "addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V", at = @At("HEAD"))
-    public void overrideMessagePos(GuiMessage guiMessage, CallbackInfo ci) {
-        this.allMessages.add(jsmacros$positionOverride.get(), guiMessage);
-
-        while (this.allMessages.size() > 100) {
-            this.allMessages.removeLast();
-        }
+    //
+    // it could attach additional info next to the associated message.
+    @Redirect(method = "addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
+    public <E> void overrideMessagePos(List<GuiMessage> instance, E guiMessage) {
+        this.allMessages.add(jsmacros$positionOverride.get(), (GuiMessage) guiMessage);
     }
 
 
