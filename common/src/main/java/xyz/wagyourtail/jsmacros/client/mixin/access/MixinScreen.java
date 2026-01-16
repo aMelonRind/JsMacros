@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components.*;
 import xyz.wagyourtail.jsmacros.client.api.helper.screen.*;
 import xyz.wagyourtail.jsmacros.access.CustomClickEvent;
@@ -482,31 +483,37 @@ public abstract class MixinScreen extends AbstractContainerEventHandler implemen
     }
 
     @Override
+    @DocletReplaceParams("x: int, y: int, id: CanOmitNamespace<ItemId>")
     public Item addItem(int x, int y, String id) {
         return addItem(x, y, 0, id, true, 1, 0);
     }
 
     @Override
+    @DocletReplaceParams("x: int, y: int, zIndex: int, id: CanOmitNamespace<ItemId>")
     public Item addItem(int x, int y, int zIndex, String id) {
         return addItem(x, y, zIndex, id, true, 1, 0);
     }
 
     @Override
+    @DocletReplaceParams("x: int, y: int, id: CanOmitNamespace<ItemId>, overlay: boolean")
     public Item addItem(int x, int y, String id, boolean overlay) {
         return addItem(x, y, 0, id, overlay, 1, 0);
     }
 
     @Override
+    @DocletReplaceParams("x: int, y: int, zIndex: int, id: CanOmitNamespace<ItemId>, overlay: boolean")
     public Item addItem(int x, int y, int zIndex, String id, boolean overlay) {
         return addItem(x, y, zIndex, id, overlay, 1, 0);
     }
 
     @Override
+    @DocletReplaceParams("x: int, y: int, id: CanOmitNamespace<ItemId>, overlay: boolean, scale: double, rotation: double")
     public Item addItem(int x, int y, String id, boolean overlay, double scale, double rotation) {
         return addItem(x, y, 0, id, overlay, scale, rotation);
     }
 
     @Override
+    @DocletReplaceParams("x: int, y: int, zIndex: int, id: CanOmitNamespace<ItemId>, overlay: boolean, scale: double, rotation: double")
     public Item addItem(int x, int y, int zIndex, String id, boolean overlay, double scale, double rotation) {
         Item i = new Item(x, y, zIndex, id, overlay, scale, (float) rotation).setParent(this);
         synchronized (elements) {

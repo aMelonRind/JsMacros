@@ -597,7 +597,7 @@ public class FWorld extends BaseLibrary {
      * @since 1.1.2
      */
     @Nullable
-    @DocletReplaceReturn("Dimension | null")
+    @DocletReplaceReturn("Dimension | string & {} | null")
     public String getDimension() {
         ClientLevel world = mc.level;
         if (world == null) return null;

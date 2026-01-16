@@ -22,6 +22,7 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.Nullable;
+import xyz.wagyourtail.doclet.DocletIgnore;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
@@ -310,6 +311,7 @@ public class ItemStackHelper extends BaseHelper<ItemStack> {
      */
     @DocletReplaceReturn("ItemId")
     @Deprecated
+    @DocletIgnore
     public String getItemID() {
         return getItemId();
     }

@@ -117,7 +117,7 @@ public class ClickableWidgetHelper<B extends ClickableWidgetHelper<B, T>, T exte
 
     /**
      * @return current button text.
-     * @since 1.2.3, renamed fro {@code getText} in 1.3.1
+     * @since 1.2.3, renamed from {@code getText} in 1.3.1
      */
     public TextHelper getLabel() {
         return TextHelper.wrap(base.getMessage());
