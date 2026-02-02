@@ -82,7 +82,7 @@ public class WorldPosWrapper implements RenderElement {
     @Override
     public void render(@NonNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         if (mc.level == null) return;
-        Vec3 dPos = pos.convert(Vec3::new).subtract(mc.gameRenderer.getMainCamera().position());
+        Vec3 dPos = pos.toMojangDoubleVector().subtract(mc.gameRenderer.getMainCamera().position());
         EntityHelper<?> entity = followedEntity;
         if (entity != null) {
             if (shouldRemove || !entity.isReallyAlive()) {
