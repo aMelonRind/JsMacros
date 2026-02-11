@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.library.impl;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.toast.ToastManager;
@@ -25,6 +24,8 @@ import xyz.wagyourtail.jsmacros.core.library.Library;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Functions for interacting with chat.
  * <p>
@@ -35,7 +36,6 @@ import java.util.regex.Pattern;
 @Library("Chat")
 @SuppressWarnings("unused")
 public class FChat extends BaseLibrary {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public FChat(Core<?, ?> runner) {
         super(runner);
@@ -125,7 +125,6 @@ public class FChat extends BaseLibrary {
     }
 
     private static void logInternal(TextHelper text) {
-        MinecraftClient mc = MinecraftClient.getInstance();
         ((IChatHud) mc.inGameHud.getChatHud()).jsmacros_addMessageBypass(text.getRaw());
     }
 

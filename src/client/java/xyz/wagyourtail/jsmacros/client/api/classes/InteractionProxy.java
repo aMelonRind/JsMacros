@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.classes;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -11,7 +10,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.wagyourtail.doclet.DocletDeclareType;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockPosHelper;
@@ -20,13 +18,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * A class that can override crosshair target, handle breaking block and long interact.
  * @author aMelonRind
  * @since 1.9.0
  */
 public class InteractionProxy {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public static void reset() {
         Target.resetChecks();

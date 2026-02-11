@@ -1,15 +1,11 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.inventory;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.RecipeBookScreen;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.display.SlotDisplayContexts;
 import net.minecraft.registry.Registries;
-import net.minecraft.screen.AbstractRecipeScreenHandler;
-import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
 import java.util.ArrayList;
@@ -18,13 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  * @since 1.3.1
  */
 @SuppressWarnings("unused")
 public class RecipeHelper extends BaseHelper<RecipeDisplayEntry> {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
     protected int syncId;
 
     public RecipeHelper(RecipeDisplayEntry base, int syncId) {
@@ -71,7 +68,6 @@ public class RecipeHelper extends BaseHelper<RecipeDisplayEntry> {
      * @since 1.3.1
      */
     public RecipeHelper craft(boolean craftAll) {
-        MinecraftClient mc = MinecraftClient.getInstance();
         assert mc.player != null;
         if ((mc.currentScreen instanceof HandledScreen && ((HandledScreen<?>) mc.currentScreen).getScreenHandler().syncId == syncId) ||
                 (mc.currentScreen == null && syncId == mc.player.playerScreenHandler.syncId)) {

@@ -16,6 +16,7 @@ import xyz.wagyourtail.jsmacros.client.api.helper.TextHelper;
 import java.util.Arrays;
 
 import static net.minecraft.text.Text.literal;
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon

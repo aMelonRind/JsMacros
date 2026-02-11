@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.gui.screens;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -41,6 +40,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 public class EditorScreen extends BaseScreen {
     private static final OrderedText ellipses = Text.literal("...").formatted(Formatting.DARK_GRAY).asOrderedText();
@@ -132,7 +133,6 @@ public class EditorScreen extends BaseScreen {
     }
 
     public static void openAndScrollToIndex(@NotNull File file, int startIndex, int endIndex) {
-        MinecraftClient mc = MinecraftClient.getInstance();
         int finalEndIndex = endIndex == -1 ? startIndex : endIndex;
         mc.execute(() -> {
             EditorScreen screen;
@@ -153,7 +153,6 @@ public class EditorScreen extends BaseScreen {
     }
 
     public static void openAndScrollToLine(@NotNull File file, int line, int col, int endCol) {
-        MinecraftClient mc = MinecraftClient.getInstance();
         mc.execute(() -> {
             EditorScreen screen;
             try {

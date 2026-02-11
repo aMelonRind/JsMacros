@@ -6,7 +6,6 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.command.CommandSource;
 import xyz.wagyourtail.jsmacros.client.api.helper.CommandNodeHelper;
@@ -16,19 +15,20 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @since 1.7.0
  */
 public abstract class CommandManager {
     public static CommandManager instance;
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     /**
      * @return list of commands
      * @since 1.7.0
      */
     public List<String> getValidCommands() {
-        ClientPlayNetworkHandler nh = MinecraftClient.getInstance().getNetworkHandler();
+        ClientPlayNetworkHandler nh = mc.getNetworkHandler();
         if (nh == null) {
             return ImmutableList.of();
         }

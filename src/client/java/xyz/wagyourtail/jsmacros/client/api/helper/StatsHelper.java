@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.helper;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -21,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 @SuppressWarnings("unused")
 public class StatsHelper extends BaseHelper<StatHandler> {
@@ -193,7 +194,6 @@ public class StatsHelper extends BaseHelper<StatHandler> {
      * @since 1.8.4
      */
     public StatsHelper updateStatistics() {
-        MinecraftClient mc = MinecraftClient.getInstance();
         assert mc.getNetworkHandler() != null;
         mc.getNetworkHandler().sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS));
         return this;

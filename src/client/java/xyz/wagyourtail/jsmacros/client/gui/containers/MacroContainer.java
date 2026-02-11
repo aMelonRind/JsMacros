@@ -1,12 +1,9 @@
 package xyz.wagyourtail.jsmacros.client.gui.containers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
@@ -16,7 +13,6 @@ import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
 import xyz.wagyourtail.jsmacros.client.gui.screens.MacroScreen;
 import xyz.wagyourtail.jsmacros.util.TranslationUtil;
-import xyz.wagyourtail.jsmacros.core.Core;
 import xyz.wagyourtail.jsmacros.core.config.ScriptTrigger;
 import xyz.wagyourtail.jsmacros.core.event.BaseEventRegistry;
 import xyz.wagyourtail.wagyourgui.containers.MultiElementContainer;
@@ -34,7 +30,6 @@ public class MacroContainer extends MultiElementContainer<MacroScreen> {
     private static final Identifier event_tex = Identifier.of(JsMacros.MOD_ID, "resources/event.png");
     private static final Identifier script_fork_tex = Identifier.of(JsMacros.MOD_ID, "resources/script_fork.png");
     private static final Identifier script_join_tex = Identifier.of(JsMacros.MOD_ID, "resources/script_join.png");
-    private final MinecraftClient mc;
     private final ScriptTrigger macro;
     private Button enableBtn;
     private Button keyBtn;
@@ -48,7 +43,6 @@ public class MacroContainer extends MultiElementContainer<MacroScreen> {
     public MacroContainer(int x, int y, int width, int height, TextRenderer textRenderer, ScriptTrigger macro, MacroScreen parent) {
         super(x, y, width, height, textRenderer, parent);
         this.macro = macro;
-        this.mc = MinecraftClient.getInstance();
         init();
     }
 

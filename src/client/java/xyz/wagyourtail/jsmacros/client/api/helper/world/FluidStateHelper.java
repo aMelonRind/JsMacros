@@ -1,9 +1,10 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.Registries;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -72,7 +73,7 @@ public class FluidStateHelper extends StateHelper<FluidState> {
      * @since 1.8.4
      */
     public Pos3D getVelocity(BlockPosHelper pos) {
-        return new Pos3D(base.getVelocity(MinecraftClient.getInstance().world, pos.getRaw()));
+        return new Pos3D(base.getVelocity(mc.world, pos.getRaw()));
     }
 
     /**

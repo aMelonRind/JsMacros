@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.inventory;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.option.HotbarStorage;
@@ -18,6 +17,8 @@ import xyz.wagyourtail.jsmacros.client.mixin.access.MixinCreativeInventoryScreen
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -156,7 +157,7 @@ public class CreativeInventory extends Inventory<CreativeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory destroyAllItems() {
-        ClientPlayerInteractionManager interactionManager = MinecraftClient.getInstance().interactionManager;
+        ClientPlayerInteractionManager interactionManager = mc.interactionManager;
         for (int i = 0; i < getTotalSlots(); i++) {
             interactionManager.clickCreativeStack(ItemStack.EMPTY, i);
         }
@@ -182,7 +183,7 @@ public class CreativeInventory extends Inventory<CreativeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory setStack(int slot, ItemStackHelper stack) {
-        MinecraftClient.getInstance().interactionManager.clickCreativeStack(stack.getRaw(), slot);
+        mc.interactionManager.clickCreativeStack(stack.getRaw(), slot);
         return this;
     }
 
@@ -192,7 +193,7 @@ public class CreativeInventory extends Inventory<CreativeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory saveHotbar(int index) {
-        CreativeInventoryScreen.onHotbarKeyPress(MinecraftClient.getInstance(), index, false, true);
+        CreativeInventoryScreen.onHotbarKeyPress(mc, index, false, true);
         return this;
     }
 
@@ -202,7 +203,7 @@ public class CreativeInventory extends Inventory<CreativeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory restoreHotbar(int index) {
-        CreativeInventoryScreen.onHotbarKeyPress(MinecraftClient.getInstance(), index, true, false);
+        CreativeInventoryScreen.onHotbarKeyPress(mc, index, true, false);
         return this;
     }
 

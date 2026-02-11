@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
@@ -12,13 +11,14 @@ import xyz.wagyourtail.jsmacros.client.api.helper.StyleHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.TextHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.entity.EntityHelper;
-import xyz.wagyourtail.jsmacros.core.Core;
 import xyz.wagyourtail.jsmacros.core.MethodWrapper;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * usage: {@code builder.append("hello,").withColor(0xc).append(" World!").withColor(0x6)}
@@ -211,7 +211,7 @@ public class TextBuilder {
      * @since 1.8.4
      */
     public int getWidth() {
-        return MinecraftClient.getInstance().textRenderer.getWidth(head);
+        return mc.textRenderer.getWidth(head);
     }
 
     /**

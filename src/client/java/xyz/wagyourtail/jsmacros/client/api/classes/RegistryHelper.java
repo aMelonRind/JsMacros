@@ -3,7 +3,6 @@ package xyz.wagyourtail.jsmacros.client.api.classes;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.argument.BlockArgumentParser;
 import net.minecraft.command.argument.ItemStringReader;
 import net.minecraft.entity.EntityType;
@@ -33,13 +32,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
  */
 @SuppressWarnings("unused")
 public class RegistryHelper {
-    MinecraftClient mc = MinecraftClient.getInstance();
     /**
      * implemented in mixins to make this equal to any owner. used by NBT_PASS_OPS
      */
@@ -251,7 +251,7 @@ public class RegistryHelper {
     @DocletReplaceParams("type: E")
     @DocletReplaceReturn("EntityTypeFromId<E>")
     public EntityHelper<?> getEntity(String type) {
-        return EntityHelper.create(Registries.ENTITY_TYPE.get(parseIdentifier(type)).create(MinecraftClient.getInstance().world, SpawnReason.COMMAND));
+        return EntityHelper.create(Registries.ENTITY_TYPE.get(parseIdentifier(type)).create(mc.world, SpawnReason.COMMAND));
     }
 
     /**

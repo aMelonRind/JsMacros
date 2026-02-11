@@ -3,7 +3,6 @@ package xyz.wagyourtail.jsmacros.client.api.helper.world;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Util;
@@ -24,8 +23,6 @@ import java.util.Map.Entry;
  */
 @SuppressWarnings("unused")
 public class BlockDataHelper extends BaseHelper<BlockState> {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
-
     private final Block b;
     private final BlockPos bp;
     private final BlockEntity e;

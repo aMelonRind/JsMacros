@@ -1,11 +1,9 @@
 package xyz.wagyourtail.jsmacros.client.config;
 
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.advancement.AdvancementManager;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.PlacedAdvancement;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.nbt.AbstractNbtList;
@@ -55,8 +53,9 @@ import xyz.wagyourtail.jsmacros.core.language.BaseWrappedException;
 
 import java.util.Arrays;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 public class ClientProfile extends BaseProfile {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public ClientProfile(Core<ClientProfile, ?> runner, Logger logger) {
         super(runner, logger);
@@ -65,7 +64,6 @@ public class ClientProfile extends BaseProfile {
     @Override
     protected boolean loadProfile(String profileName) {
         boolean val = super.loadProfile(profileName);
-        final MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.currentScreen instanceof MacroScreen) {
             mc.execute(() -> ((MacroScreen) mc.currentScreen).reload());
         }
@@ -96,7 +94,6 @@ public class ClientProfile extends BaseProfile {
                 }
             }
         }
-        MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.inGameHud != null) {
             BaseWrappedException<?> e;
             try {

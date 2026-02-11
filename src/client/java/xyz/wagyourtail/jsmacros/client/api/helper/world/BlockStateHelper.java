@@ -1,11 +1,12 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.Registries;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -197,7 +198,7 @@ public class BlockStateHelper extends StateHelper<BlockState> {
      */
     @DocletReplaceParams("pos: BlockPosHelper, entity: CanOmitNamespace<EntityId>")
     public boolean allowsSpawning(BlockPosHelper pos, String entity) {
-        return base.allowsSpawning(MinecraftClient.getInstance().world, pos.getRaw(), Registries.ENTITY_TYPE.get(RegistryHelper.parseIdentifier(entity)));
+        return base.allowsSpawning(mc.world, pos.getRaw(), Registries.ENTITY_TYPE.get(RegistryHelper.parseIdentifier(entity)));
     }
 
     /**
@@ -207,7 +208,7 @@ public class BlockStateHelper extends StateHelper<BlockState> {
      * @since 1.6.5
      */
     public boolean shouldSuffocate(BlockPosHelper pos) {
-        return base.shouldSuffocate(MinecraftClient.getInstance().world, pos.getRaw());
+        return base.shouldSuffocate(mc.world, pos.getRaw());
     }
 
     /**

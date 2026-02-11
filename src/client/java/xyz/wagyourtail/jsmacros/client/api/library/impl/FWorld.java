@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ClientBossBar;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -76,6 +75,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Functions for getting and using world data.
  * <p>
@@ -86,8 +87,6 @@ import java.util.stream.StreamSupport;
 @Library("World")
 @SuppressWarnings("unused")
 public class FWorld extends BaseLibrary {
-
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
     /**
      * Don't modify.
      */

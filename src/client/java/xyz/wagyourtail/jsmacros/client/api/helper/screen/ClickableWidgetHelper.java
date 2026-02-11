@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.screen;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -16,6 +15,8 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Wagyourtail
@@ -264,7 +265,7 @@ public class ClickableWidgetHelper<B extends ClickableWidgetHelper<B, T>, T exte
 
     @Override
     public int getParentWidth() {
-        return MinecraftClient.getInstance().currentScreen.width;
+        return mc.currentScreen.width;
     }
 
     @Override
@@ -274,7 +275,7 @@ public class ClickableWidgetHelper<B extends ClickableWidgetHelper<B, T>, T exte
 
     @Override
     public int getParentHeight() {
-        return MinecraftClient.getInstance().currentScreen.height;
+        return mc.currentScreen.height;
     }
 
     @Override

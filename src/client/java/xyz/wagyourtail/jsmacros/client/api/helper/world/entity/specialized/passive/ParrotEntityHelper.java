@@ -1,8 +1,9 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world.entity.specialized.passive;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.passive.ParrotEntity;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -62,7 +63,7 @@ public class ParrotEntityHelper extends TameableEntityHelper<ParrotEntity> {
      * @since 1.8.4
      */
     public boolean isSittingOnShoulder() {
-        return MinecraftClient.getInstance().world.getPlayers().stream().anyMatch(
+        return mc.world.getPlayers().stream().anyMatch(
                 p -> p.getShoulderEntityLeft().getUuid("UUID").equals(base.getUuid())
                         || p.getShoulderEntityRight().getUuid("UUID").equals(base.getUuid())
         );

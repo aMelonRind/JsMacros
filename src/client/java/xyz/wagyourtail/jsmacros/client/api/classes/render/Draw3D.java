@@ -1,11 +1,8 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 import xyz.wagyourtail.doclet.DocletIgnore;
@@ -18,6 +15,8 @@ import xyz.wagyourtail.jsmacros.client.api.library.impl.FHud;
 import xyz.wagyourtail.jsmacros.core.classes.Registrable;
 
 import java.util.*;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * {@link Draw2D} is cool
@@ -695,8 +694,6 @@ public class Draw3D implements Registrable<Draw3D> {
 
     @DocletIgnore
     public void render(DrawContext drawContext, float tickDelta) {
-        MinecraftClient mc = MinecraftClient.getInstance();
-
         MatrixStack matrixStack = drawContext.getMatrices();
         matrixStack.push();
         //setup

@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world.entity;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.TradeOffer;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
@@ -12,6 +11,8 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 @SuppressWarnings("unused")
 public class TradeOfferHelper extends BaseHelper<TradeOffer> {
@@ -84,7 +85,7 @@ public class TradeOfferHelper extends BaseHelper<TradeOffer> {
      * select trade offer on screen
      */
     public TradeOfferHelper select() {
-        if (inv != null && MinecraftClient.getInstance().currentScreen == inv.getRawContainer()) {
+        if (inv != null && mc.currentScreen == inv.getRawContainer()) {
             inv.selectTrade(index);
         }
         return this;

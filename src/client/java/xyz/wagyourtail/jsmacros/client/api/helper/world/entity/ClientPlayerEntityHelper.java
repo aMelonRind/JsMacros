@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world.entity;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -40,6 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  * @see PlayerEntityHelper
@@ -47,7 +48,6 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unused")
 public class ClientPlayerEntityHelper<T extends ClientPlayerEntity> extends PlayerEntityHelper<T> {
-    protected final MinecraftClient mc = MinecraftClient.getInstance();
 
     public ClientPlayerEntityHelper(T e) {
         super(e);
@@ -236,8 +236,8 @@ public class ClientPlayerEntityHelper<T extends ClientPlayerEntity> extends Play
      * @since 1.8.4
      */
     public boolean tryLookAt(BlockPosHelper pos) {
-        BlockState state = MinecraftClient.getInstance().world.getBlockState(pos.getRaw());
-        VoxelShape shape = state.getOutlineShape(MinecraftClient.getInstance().world, pos.getRaw());
+        BlockState state = mc.world.getBlockState(pos.getRaw());
+        VoxelShape shape = state.getOutlineShape(mc.world, pos.getRaw());
         if (shape.isEmpty()) {
             return false;
         }

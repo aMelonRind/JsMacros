@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.library.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletDeclareType;
@@ -20,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Functions for displaying stuff in 2 to 3 dimensions
  * <p>
@@ -31,8 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Library("Hud")
 @SuppressWarnings("unused")
 public class FHud extends BaseLibrary {
-
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
     /**
      * Don't touch this here
      */

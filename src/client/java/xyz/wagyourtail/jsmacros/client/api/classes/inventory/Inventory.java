@@ -506,7 +506,6 @@ public class Inventory<T extends HandledScreen<?>> {
      * @since 1.1.3
      */
     public int getSlotUnderMouse() {
-        MinecraftClient mc = MinecraftClient.getInstance();
         double x = mc.mouse.getX() * (double) mc.getWindow().getScaledWidth() / (double) mc.getWindow().getWidth();
         double y = mc.mouse.getY() * (double) mc.getWindow().getScaledHeight() / (double) mc.getWindow().getHeight();
         if (this.inventory != mc.currentScreen) {

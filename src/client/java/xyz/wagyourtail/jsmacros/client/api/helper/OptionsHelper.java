@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.helper;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.*;
 import net.minecraft.client.render.ChunkBuilderMode;
 import net.minecraft.client.resource.language.LanguageDefinition;
@@ -34,6 +33,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
@@ -42,7 +43,6 @@ import java.util.stream.Stream;
 public class OptionsHelper extends BaseHelper<GameOptions> {
 
     private static final Map<String, SoundCategory> SOUND_CATEGORY_MAP = Arrays.stream(SoundCategory.values()).collect(Collectors.toMap(SoundCategory::getName, Function.identity()));
-    private final MinecraftClient mc = MinecraftClient.getInstance();
     private final ResourcePackManager rpm = mc.getResourcePackManager();
 
     public final SkinOptionsHelper skin = new SkinOptionsHelper(this);
@@ -186,7 +186,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
      */
     @DocletReplaceParams("languageCode: Locale")
     public OptionsHelper setLanguage(String languageCode) {
-        LanguageManager manager = MinecraftClient.getInstance().getLanguageManager();
+        LanguageManager manager = mc.getLanguageManager();
         LanguageDefinition language = manager.getLanguage(languageCode);
         if (language != null) {
             manager.setLanguage(languageCode);
@@ -194,7 +194,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
             base.write();
             mc.reloadResources();
         }
-        MinecraftClient.getInstance().reloadResources();
+        mc.reloadResources();
         base.write();
         return this;
     }
@@ -229,7 +229,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
      * @since 1.8.4
      */
     public boolean isDifficultyLocked() {
-        return MinecraftClient.getInstance().world.getLevelProperties().isDifficultyLocked();
+        return mc.world.getLevelProperties().isDifficultyLocked();
     }
 
     /**
@@ -237,7 +237,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
      * @since 1.8.4
      */
     public OptionsHelper lockDifficulty() {
-        MinecraftClient.getInstance().getNetworkHandler().sendPacket(new UpdateDifficultyLockC2SPacket(true));
+        mc.getNetworkHandler().sendPacket(new UpdateDifficultyLockC2SPacket(true));
         return this;
     }
 
@@ -248,7 +248,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
      * @since 1.8.4
      */
     public OptionsHelper unlockDifficulty() {
-        MinecraftClient.getInstance().getNetworkHandler().sendPacket(new UpdateDifficultyLockC2SPacket(false));
+        mc.getNetworkHandler().sendPacket(new UpdateDifficultyLockC2SPacket(false));
         return this;
     }
 
@@ -1354,7 +1354,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
                 audioDevice = "";
             }
             base.getSoundDevice().setValue(audioDevice);
-            SoundManager soundManager = MinecraftClient.getInstance().getSoundManager();
+            SoundManager soundManager = mc.getSoundManager();
             soundManager.reloadSounds();
             return this;
         }
@@ -1364,7 +1364,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
          * @since 1.8.4
          */
         public List<String> getAudioDevices() {
-            return Stream.concat(Stream.of(""), MinecraftClient.getInstance().getSoundManager().getSoundDevices().stream()).collect(Collectors.toList());
+            return Stream.concat(Stream.of(""), mc.getSoundManager().getSoundDevices().stream()).collect(Collectors.toList());
         }
 
         /**
@@ -1629,9 +1629,9 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
          * @since 1.8.4
          */
         public Map<String, Map<String, String>> getKeyBindsByCategory() {
-            Map<String, Map<String, String>> entries = new HashMap<>(MinecraftClient.getInstance().options.allKeys.length);
+            Map<String, Map<String, String>> entries = new HashMap<>(mc.options.allKeys.length);
 
-            for (KeyBinding key : MinecraftClient.getInstance().options.allKeys) {
+            for (KeyBinding key : mc.options.allKeys) {
                 Map<String, String> categoryMap;
                 String category = key.getCategory();
                 if (!entries.containsKey(category)) {

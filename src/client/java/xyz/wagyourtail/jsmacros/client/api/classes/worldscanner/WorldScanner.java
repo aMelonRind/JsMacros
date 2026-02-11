@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.classes.worldscanner;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.collection.PaletteStorage;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +25,8 @@ import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockPosHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockStateHelper;
 import xyz.wagyourtail.jsmacros.core.MethodWrapper;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -47,8 +48,6 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("unused")
 public class WorldScanner {
-
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     private final World world;
     private final Map<BlockState, Boolean> cachedFilterStates;

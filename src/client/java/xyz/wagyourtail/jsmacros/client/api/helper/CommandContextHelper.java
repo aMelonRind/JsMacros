@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.pattern.CachedBlockPosition;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.EntitySelector;
 import net.minecraft.command.argument.*;
@@ -30,6 +29,8 @@ import xyz.wagyourtail.jsmacros.core.event.Event;
 
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @since 1.4.2
@@ -71,7 +72,7 @@ public class CommandContextHelper extends BaseEvent {
         Object arg = base.getArgument(name, Object.class);
         ServerCommandSource fakeServerSource = null;
         if (base.getSource() instanceof ClientCommandSource) {
-            fakeServerSource = new FakeServerCommandSource((ClientCommandSource) base.getSource(), MinecraftClient.getInstance().player);
+            fakeServerSource = new FakeServerCommandSource((ClientCommandSource) base.getSource(), mc.player);
         }
         if (arg instanceof BlockStateArgument) {
             arg = new BlockStateHelper(((BlockStateArgument) arg).getBlockState());
@@ -92,7 +93,7 @@ public class CommandContextHelper extends BaseEvent {
             arg = (Predicate<ItemStackHelper>) item -> itemPredicate.test(item.getRaw());
         } else if (arg instanceof BlockPredicateArgumentType.BlockPredicate) {
             BlockPredicateArgumentType.BlockPredicate blockPredicate = (BlockPredicateArgumentType.BlockPredicate) arg;
-            arg = (Predicate<BlockPosHelper>) block -> blockPredicate.test(new CachedBlockPosition(MinecraftClient.getInstance().world, block.getRaw(), false));
+            arg = (Predicate<BlockPosHelper>) block -> blockPredicate.test(new CachedBlockPosition(mc.world, block.getRaw(), false));
         } else if (arg instanceof PosArgument) {
             arg = new BlockPosHelper(((PosArgument) arg).toAbsoluteBlockPos(fakeServerSource));
         } else if (arg instanceof RegistryEntry<?>) {

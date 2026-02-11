@@ -1,7 +1,6 @@
 package xyz.wagyourtail.wagyourgui.elements;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -12,6 +11,8 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Consumer;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -102,7 +103,7 @@ public class Slider extends ClickableWidget {
 
     @Override
     public void onRelease(double mouseX, double mouseY) {
-        super.playDownSound(MinecraftClient.getInstance().getSoundManager());
+        super.playDownSound(mc.getSoundManager());
     }
 
     @Override

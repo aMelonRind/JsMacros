@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.Identifier;
@@ -15,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -44,7 +45,7 @@ public class CustomImage {
         this.name = name;
         this.texture = createTexture(image);
         identifier = Identifier.of(PREFIX + name);
-        MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, texture);
+        mc.getTextureManager().registerTexture(identifier, texture);
         update();
         currentId++;
         IMAGES.put(identifier.toString(), this);

@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.helper;
 
 import net.minecraft.block.pattern.CachedBlockPosition;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.predicate.BlockPredicate;
 import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
@@ -11,11 +10,12 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
 import java.util.List;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @since 1.9.1
  */
 public class BlockPredicateHelper extends BaseHelper<BlockPredicate> {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public BlockPredicateHelper(BlockPredicate base) {
         super(base);

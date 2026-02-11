@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.gui.settings.settingfields;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -9,12 +8,13 @@ import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
 import xyz.wagyourtail.jsmacros.client.gui.overlays.FileChooser;
 import xyz.wagyourtail.jsmacros.client.gui.settings.SettingsOverlay;
 import xyz.wagyourtail.jsmacros.client.gui.settings.settingcontainer.AbstractSettingContainer;
-import xyz.wagyourtail.jsmacros.core.Core;
 import xyz.wagyourtail.wagyourgui.BaseScreen;
 import xyz.wagyourtail.wagyourgui.elements.Button;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 public class FileField extends AbstractSettingField<String> {
 
@@ -27,7 +27,7 @@ public class FileField extends AbstractSettingField<String> {
             if (option.startsWith("topLevel=")) {
                 switch (option.replace("topLevel=", "")) {
                     case "MC":
-                        return MinecraftClient.getInstance().runDirectory;
+                        return mc.runDirectory;
                     case "CONFIG":
                         return JsMacrosClient.clientCore.config.configFolder;
                     case "MACRO":

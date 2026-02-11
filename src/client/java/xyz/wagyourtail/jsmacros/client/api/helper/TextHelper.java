@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import xyz.wagyourtail.jsmacros.core.MethodWrapper;
 import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
@@ -9,14 +8,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  * @since 1.0.8
  */
 @SuppressWarnings("unused")
 public class TextHelper extends BaseHelper<Text> {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
-
     public static final Pattern STRIP_FORMATTING_PATTERN = Pattern.compile("\u00a7[0-9A-FK-OR]", Pattern.CASE_INSENSITIVE);
 
     private TextHelper(Text t) {
@@ -108,7 +107,7 @@ public class TextHelper extends BaseHelper<Text> {
      * @since 1.8.4
      */
     public int getWidth() {
-        return MinecraftClient.getInstance().textRenderer.getWidth(base);
+        return mc.textRenderer.getWidth(base);
     }
 
     /**

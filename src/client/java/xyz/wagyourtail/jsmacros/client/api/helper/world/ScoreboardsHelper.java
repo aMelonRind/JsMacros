@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
@@ -15,6 +14,8 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Wagyourtail
@@ -72,7 +73,7 @@ public class ScoreboardsHelper extends BaseHelper<Scoreboard> {
      * @since 1.6.5
      */
     public int getPlayerTeamColorIndex() {
-        return getPlayerTeamColorIndex(MinecraftClient.getInstance().player);
+        return getPlayerTeamColorIndex(mc.player);
     }
 
     /**
@@ -82,7 +83,7 @@ public class ScoreboardsHelper extends BaseHelper<Scoreboard> {
      */
     @Nullable
     public FormattingHelper getTeamColorFormatting() {
-        Formatting team = getPlayerTeamColor(MinecraftClient.getInstance().player);
+        Formatting team = getPlayerTeamColor(mc.player);
         return team == null ? null : new FormattingHelper(team);
     }
 
@@ -113,7 +114,7 @@ public class ScoreboardsHelper extends BaseHelper<Scoreboard> {
      * @since 1.8.4
      */
     public int getTeamColor() {
-        Formatting team = getPlayerTeamColor(MinecraftClient.getInstance().player);
+        Formatting team = getPlayerTeamColor(mc.player);
         return team == null || team.getColorValue() == null ? -1 : team.getColorValue();
     }
 
@@ -135,7 +136,7 @@ public class ScoreboardsHelper extends BaseHelper<Scoreboard> {
      */
     @Nullable
     public String getTeamColorName() {
-        Formatting team = getPlayerTeamColor(MinecraftClient.getInstance().player);
+        Formatting team = getPlayerTeamColor(mc.player);
         return team == null ? null : team.getName();
     }
 
@@ -161,7 +162,7 @@ public class ScoreboardsHelper extends BaseHelper<Scoreboard> {
      * @since 1.6.5
      */
     public TeamHelper getPlayerTeam() {
-        return new TeamHelper(getPlayerTeam(MinecraftClient.getInstance().player));
+        return new TeamHelper(getPlayerTeam(mc.player));
     }
 
     /**
@@ -204,7 +205,6 @@ public class ScoreboardsHelper extends BaseHelper<Scoreboard> {
      */
     @Nullable
     public ScoreboardObjectiveHelper getCurrentScoreboard() {
-        MinecraftClient mc = MinecraftClient.getInstance();
         int color = getPlayerTeamColorIndex(mc.player);
         ScoreboardObjectiveHelper h = getObjectiveForTeamColorIndex(color);
         if (h == null) {

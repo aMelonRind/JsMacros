@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render.components3d;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import org.jetbrains.annotations.Nullable;
@@ -270,7 +269,7 @@ public class Surface extends Draw2D implements RenderElement, RenderElement3D<Su
         matrixStack.translate(pos.x, pos.y, pos.z);
 
         if (rotateToPlayer) {
-            Vector3f rot = toEulerDegrees(MinecraftClient.getInstance().gameRenderer.getCamera().getRotation());
+            Vector3f rot = toEulerDegrees(mc.gameRenderer.getCamera().getRotation());
             rotations.x = rot.x();
             rotations.y = rot.y();
             rotations.z = 0;

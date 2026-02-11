@@ -1,8 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render.components;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
@@ -21,9 +19,6 @@ import xyz.wagyourtail.jsmacros.client.api.classes.render.IDraw2D;
  */
 @SuppressWarnings("unused")
 public class Image implements RenderElement, Alignable<Image> {
-
-    private static MinecraftClient mc = MinecraftClient.getInstance();
-
     private Identifier imageid;
     @Nullable
     public IDraw2D<?> parent;
