@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.core.registries.Registries;
@@ -116,7 +115,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static xyz.wagyourtail.jsmacros.client.api.classes.render.components.RenderElement.mc;
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Wagyourtail
@@ -520,7 +519,7 @@ public class EntityHelper<T extends Entity> extends BaseHelper<T> {
      */
     @DocletReplaceReturn("Biome")
     public String getBiome() {
-        return Minecraft.getInstance().level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(Minecraft.getInstance().level.getBiome(base.blockPosition()).value()).toString();
+        return mc.level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(mc.level.getBiome(base.blockPosition()).value()).toString();
     }
 
     @Override
@@ -806,11 +805,10 @@ public class EntityHelper<T extends Entity> extends BaseHelper<T> {
      */
     @Nullable
     public EntityHelper<?> asServerEntity() {
-        Minecraft client = Minecraft.getInstance();
-        if (!client.hasSingleplayerServer()) {
+        if (!mc.hasSingleplayerServer()) {
             return null;
         }
-        Entity entity = client.getSingleplayerServer().getPlayerList().getPlayer(client.player.getUUID()).level().getEntity(base.getUUID());
+        Entity entity = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID()).level().getEntity(base.getUUID());
         if (entity == null) {
             return null;
         } else {

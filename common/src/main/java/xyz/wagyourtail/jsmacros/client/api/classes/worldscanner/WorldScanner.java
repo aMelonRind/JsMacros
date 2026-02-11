@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.classes.worldscanner;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.util.BitStorage;
 import net.minecraft.core.BlockPos;
@@ -36,6 +35,8 @@ import java.util.function.IntConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * A class to scan the world for certain blocks. The results of the filters are cached,
  * so it's a good idea to reuse an instance of this if possible.
@@ -47,8 +48,6 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("unused")
 public class WorldScanner {
-
-    private static final Minecraft mc = Minecraft.getInstance();
 
     private final Level world;
     private final Map<BlockState, Boolean> cachedFilterStates;

@@ -63,7 +63,7 @@ public class ParrotEntityHelper extends TameableEntityHelper<Parrot> {
     public boolean isSittingOnShoulder() {
         if (!isSitting()) return false;
         // TODO: Lots of this changed in 1.21.9/1.21.10, need to fix
-//        return Minecraft.getInstance().level.players().stream()
+//        return mc.level.players().stream()
 //            .flatMap(e -> {
 //                return Stream.of(e.getEntityData().get(e.DATA_SHOULDER_PARROT_LEFT), e.getEntityData().get(e.DATA_SHOULDER_PARROT_RIGHT));
 //            })

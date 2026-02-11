@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render.components;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
@@ -18,9 +17,6 @@ import xyz.wagyourtail.jsmacros.client.util.ColorUtil;
  */
 @SuppressWarnings("unused")
 public class Image implements RenderElement, Alignable<Image> {
-
-    private static final Minecraft mc = Minecraft.getInstance();
-
     private Identifier imageid;
     @Nullable
     public IDraw2D<?> parent;

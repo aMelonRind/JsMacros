@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IChatHud;
@@ -15,7 +14,6 @@ import java.util.List;
  * @since 1.6.0
  */
 public class ChatHistoryManager {
-    private static final Minecraft mc = Minecraft.getInstance();
     private final ChatComponent hud;
 
     public ChatHistoryManager(ChatComponent hud) {

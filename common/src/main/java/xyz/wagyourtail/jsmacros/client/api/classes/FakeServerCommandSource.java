@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.classes;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.RegistryAccess;
@@ -18,6 +17,8 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -85,7 +86,7 @@ public class FakeServerCommandSource extends CommandSourceStack {
 
     @Override
     public void sendSuccess(Supplier<Component> feedbackSupplier, boolean broadcastToOps) {
-        Minecraft.getInstance().player.displayClientMessage(feedbackSupplier.get(), false);
+        mc.player.displayClientMessage(feedbackSupplier.get(), false);
     }
 
 }

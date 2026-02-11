@@ -6,7 +6,6 @@ import com.mojang.blaze3d.framegraph.FrameGraphBuilder;
 import com.mojang.blaze3d.framegraph.FramePass;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LevelTargetBundle;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,6 +22,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
 import xyz.wagyourtail.jsmacros.client.api.library.impl.FHud;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 @Mixin(value = LevelRenderer.class)
 public class MixinWorldRenderer {
@@ -50,7 +51,7 @@ public class MixinWorldRenderer {
             try {
                 MultiBufferSource.BufferSource consumers = renderBuffers.crumblingBufferSource();
 
-                float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
+                float tickDelta = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
 
                 PoseStack matrixStack = new PoseStack();
                 matrixStack.pushPose();

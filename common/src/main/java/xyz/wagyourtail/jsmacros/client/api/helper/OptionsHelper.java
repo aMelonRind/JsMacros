@@ -33,15 +33,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
  */
 @SuppressWarnings("unused")
 public class OptionsHelper extends BaseHelper<Options> {
-
     private static final Map<String, SoundSource> SOUND_CATEGORY_MAP = Arrays.stream(SoundSource.values()).collect(Collectors.toMap(SoundSource::getName, Function.identity()));
-    private final Minecraft mc = Minecraft.getInstance();
     private final PackRepository rpm = mc.getResourcePackRepository();
 
     public final SkinOptionsHelper skin = new SkinOptionsHelper(this);
@@ -185,7 +185,7 @@ public class OptionsHelper extends BaseHelper<Options> {
      */
     @DocletReplaceParams("languageCode: Locale")
     public OptionsHelper setLanguage(String languageCode) {
-        LanguageManager manager = Minecraft.getInstance().getLanguageManager();
+        LanguageManager manager = mc.getLanguageManager();
         LanguageInfo language = manager.getLanguage(languageCode);
         if (language != null) {
             manager.setSelected(languageCode);
@@ -193,7 +193,7 @@ public class OptionsHelper extends BaseHelper<Options> {
             base.save();
             mc.reloadResourcePacks();
         }
-        Minecraft.getInstance().reloadResourcePacks();
+        mc.reloadResourcePacks();
         base.save();
         return this;
     }
@@ -228,7 +228,7 @@ public class OptionsHelper extends BaseHelper<Options> {
      * @since 1.8.4
      */
     public boolean isDifficultyLocked() {
-        return Minecraft.getInstance().level.getLevelData().isDifficultyLocked();
+        return mc.level.getLevelData().isDifficultyLocked();
     }
 
     /**
@@ -236,7 +236,7 @@ public class OptionsHelper extends BaseHelper<Options> {
      * @since 1.8.4
      */
     public OptionsHelper lockDifficulty() {
-        Minecraft.getInstance().getConnection().send(new ServerboundLockDifficultyPacket(true));
+        mc.getConnection().send(new ServerboundLockDifficultyPacket(true));
         return this;
     }
 
@@ -247,7 +247,7 @@ public class OptionsHelper extends BaseHelper<Options> {
      * @since 1.8.4
      */
     public OptionsHelper unlockDifficulty() {
-        Minecraft.getInstance().getConnection().send(new ServerboundLockDifficultyPacket(false));
+        mc.getConnection().send(new ServerboundLockDifficultyPacket(false));
         return this;
     }
 
@@ -1353,7 +1353,7 @@ public class OptionsHelper extends BaseHelper<Options> {
                 audioDevice = "";
             }
             base.soundDevice().set(audioDevice);
-            SoundManager soundManager = Minecraft.getInstance().getSoundManager();
+            SoundManager soundManager = mc.getSoundManager();
             soundManager.reload();
             return this;
         }
@@ -1363,7 +1363,7 @@ public class OptionsHelper extends BaseHelper<Options> {
          * @since 1.8.4
          */
         public List<String> getAudioDevices() {
-            return Stream.concat(Stream.of(""), Minecraft.getInstance().getSoundManager().getAvailableSoundDevices().stream()).collect(Collectors.toList());
+            return Stream.concat(Stream.of(""), mc.getSoundManager().getAvailableSoundDevices().stream()).collect(Collectors.toList());
         }
 
         /**
@@ -1633,9 +1633,9 @@ public class OptionsHelper extends BaseHelper<Options> {
          * @since 1.8.4
          */
         public Map<String, Map<String, String>> getKeyBindsByCategory() {
-            Map<String, Map<String, String>> entries = new HashMap<>(Minecraft.getInstance().options.keyMappings.length);
+            Map<String, Map<String, String>> entries = new HashMap<>(mc.options.keyMappings.length);
 
-            for (KeyMapping key : Minecraft.getInstance().options.keyMappings) {
+            for (KeyMapping key : mc.options.keyMappings) {
                 Map<String, String> categoryMap;
                 String category = key.getCategory().id().toLanguageKey();
                 if (!entries.containsKey(category)) {

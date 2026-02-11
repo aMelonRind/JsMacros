@@ -4,7 +4,6 @@ import net.minecraft.util.Util;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.core.BlockPos;
@@ -24,8 +23,6 @@ import java.util.Map.Entry;
  */
 @SuppressWarnings("unused")
 public class BlockDataHelper extends BaseHelper<BlockState> {
-    private static final Minecraft mc = Minecraft.getInstance();
-
     private final Block b;
     private final BlockPos bp;
     private final BlockEntity e;

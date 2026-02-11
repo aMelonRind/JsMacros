@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.world.item.ItemStack;
@@ -15,13 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  * @since 1.3.1
  */
 @SuppressWarnings("unused")
 public class RecipeHelper extends BaseHelper<RecipeDisplayEntry> {
-    private static final Minecraft mc = Minecraft.getInstance();
     protected int syncId;
 
     public RecipeHelper(RecipeDisplayEntry base, int syncId) {
@@ -68,7 +68,6 @@ public class RecipeHelper extends BaseHelper<RecipeDisplayEntry> {
      * @since 1.3.1
      */
     public RecipeHelper craft(boolean craftAll) {
-        Minecraft mc = Minecraft.getInstance();
         assert mc.player != null;
         if ((mc.screen instanceof AbstractContainerScreen && ((AbstractContainerScreen<?>) mc.screen).getMenu().containerId == syncId) ||
                 (mc.screen == null && syncId == mc.player.inventoryMenu.containerId)) {

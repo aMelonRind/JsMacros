@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.library.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -66,6 +65,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Functions for getting and using world data.
  * <p>
@@ -76,8 +77,6 @@ import java.util.stream.StreamSupport;
 @Library("World")
 @SuppressWarnings("unused")
 public class FWorld extends BaseLibrary {
-
-    private static final Minecraft mc = Minecraft.getInstance();
     /**
      * Don't modify.
      */

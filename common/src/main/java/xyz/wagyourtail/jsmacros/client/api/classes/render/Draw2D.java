@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +18,8 @@ import xyz.wagyourtail.jsmacros.core.classes.Registrable;
 import java.util.*;
 import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Wagyourtail
@@ -48,10 +49,7 @@ public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
     @Nullable
     public MethodWrapper<String, Object, Object, ?> catchInit;
 
-    protected final Minecraft mc;
-
     public Draw2D() {
-        this.mc = Minecraft.getInstance();
         this.widthSupplier = () -> mc.getWindow().getGuiScaledWidth();
         this.heightSupplier = () -> mc.getWindow().getGuiScaledHeight();
     }

@@ -505,7 +505,6 @@ public class Inventory<T extends AbstractContainerScreen<?>> {
      * @since 1.1.3
      */
     public int getSlotUnderMouse() {
-        Minecraft mc = Minecraft.getInstance();
         double x = mc.mouseHandler.xpos() * (double) mc.getWindow().getGuiScaledWidth() / (double) mc.getWindow().getScreenWidth();
         double y = mc.mouseHandler.ypos() * (double) mc.getWindow().getGuiScaledHeight() / (double) mc.getWindow().getScreenHeight();
         if (this.inventory != mc.screen) {

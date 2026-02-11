@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.gui.editor.highlighting.scriptimpl;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
@@ -18,6 +17,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Wagyourtail
@@ -37,7 +38,7 @@ public class ScriptCodeCompiler extends AbstractRenderCodeCompiler {
     public void recompileRenderedText(@NotNull String text) {
         CodeCompileEvent compileEvent = new CodeCompileEvent(text, language, screen);
         EventContainer<?> t = JsMacrosClient.clientCore.exec(scriptTrigger, compileEvent, null, (ex) -> {
-            Font renderer = Minecraft.getInstance().font;
+            Font renderer = mc.font;
             StringWriter st = new StringWriter();
             ex.printStackTrace(new PrintWriter(st));
             Component error = Component.literal(st.toString().replaceAll("\r", "").replaceAll("\t", "    ")).setStyle(EditorScreen.defaultStyle);

@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.config;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
 import xyz.wagyourtail.jsmacros.client.access.IFontManager;
@@ -16,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 public class ClientConfigV2 {
     @Option(translationKey = "jsmacros.sort", group = "jsmacros.settings.gui")
@@ -63,7 +64,7 @@ public class ClientConfigV2 {
 
     @SuppressWarnings("resource")
     public List<String> getFonts() {
-        return ((IFontManager) Minecraft.getInstance().fontManager).jsmacros_getFontList().stream().map(Identifier::toString).collect(Collectors.toList());
+        return ((IFontManager) mc.fontManager).jsmacros_getFontList().stream().map(Identifier::toString).collect(Collectors.toList());
     }
 
     public Map<String, short[]> getThemeData() {

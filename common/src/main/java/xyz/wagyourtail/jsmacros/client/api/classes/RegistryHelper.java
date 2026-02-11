@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.classes;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.commands.arguments.item.ItemParser;
@@ -12,7 +11,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -34,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
@@ -41,15 +41,12 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class RegistryHelper {
 
-    private final Minecraft mc = Minecraft.getInstance();
-
     /**
      * Create a registry-aware NBT ops backed by the current client's registry access.
      * Use this instead of NbtOps.INSTANCE when encoding anything that may contain
      * registry-backed components (enchantments, trims, etc).
      */
     public static RegistryOps<Tag> getNbtOps() {
-        Minecraft mc = Minecraft.getInstance();
         ClientPacketListener connection = mc.getConnection();
         if (connection == null) {
             throw new IllegalStateException("No client connection; registry access is unavailable.");
@@ -63,7 +60,6 @@ public class RegistryHelper {
      * and call createSerializationContext / getOps() on it.
      */
     public static HolderLookup.Provider getWrapperLookup() {
-        Minecraft mc = Minecraft.getInstance();
         ClientPacketListener connection = mc.getConnection();
         if (connection == null) {
             throw new IllegalStateException("No client connection; registry access is unavailable.");
@@ -237,7 +233,7 @@ public class RegistryHelper {
     @DocletReplaceParams("type: E")
     @DocletReplaceReturn("EntityTypeFromId<E>")
     public EntityHelper<?> getEntity(String type) {
-        return EntityHelper.create(BuiltInRegistries.ENTITY_TYPE.getValue(parseIdentifier(type)).create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND));
+        return EntityHelper.create(BuiltInRegistries.ENTITY_TYPE.getValue(parseIdentifier(type)).create(mc.level, EntitySpawnReason.COMMAND));
     }
 
     /**

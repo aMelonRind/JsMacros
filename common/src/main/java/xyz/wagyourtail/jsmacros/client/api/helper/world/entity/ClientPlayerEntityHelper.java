@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.helper.world.entity;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,6 +43,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  * @see PlayerEntityHelper
@@ -51,7 +52,6 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unused")
 public class ClientPlayerEntityHelper<T extends LocalPlayer> extends PlayerEntityHelper<T> {
-    protected final Minecraft mc = Minecraft.getInstance();
 
     public ClientPlayerEntityHelper(T e) {
         super(e);
@@ -240,8 +240,8 @@ public class ClientPlayerEntityHelper<T extends LocalPlayer> extends PlayerEntit
      * @since 1.8.4
      */
     public boolean tryLookAt(BlockPosHelper pos) {
-        BlockState state = Minecraft.getInstance().level.getBlockState(pos.getRaw());
-        VoxelShape shape = state.getShape(Minecraft.getInstance().level, pos.getRaw());
+        BlockState state = mc.level.getBlockState(pos.getRaw());
+        VoxelShape shape = state.getShape(mc.level, pos.getRaw());
         if (shape.isEmpty()) {
             return false;
         }

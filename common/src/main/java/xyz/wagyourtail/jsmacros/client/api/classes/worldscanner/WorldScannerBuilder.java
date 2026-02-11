@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.worldscanner;
 
-import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.jsmacros.client.api.classes.worldscanner.filter.api.IAdvancedFilter;
 import xyz.wagyourtail.jsmacros.client.api.classes.worldscanner.filter.api.IFilter;
@@ -11,6 +10,8 @@ import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockStateHelper;
 import xyz.wagyourtail.jsmacros.client.api.library.impl.FWorld;
 import xyz.wagyourtail.jsmacros.core.MethodWrapper;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * The builder can be used to create a world scanner with native java functions. This is especially useful for languages like javascript that
@@ -279,7 +280,7 @@ public final class WorldScannerBuilder {
     }
 
     public WorldScanner build() {
-        return new WorldScanner(Minecraft.getInstance().level, blockFilter, stateFilter);
+        return new WorldScanner(mc.level, blockFilter, stateFilter);
     }
 
     private enum Operation {

@@ -50,6 +50,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Functions that interact with minecraft that don't fit into their own module.
  * <p>
@@ -61,7 +63,6 @@ import java.util.stream.Collectors;
 @Library("Client")
 @SuppressWarnings("unused")
 public class FClient extends PerExecLibrary {
-    private static final Minecraft mc = Minecraft.getInstance();
     /**
      * Don't touch this plz xd.
      */

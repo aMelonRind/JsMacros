@@ -1,9 +1,7 @@
 package xyz.wagyourtail.wagyourgui.elements;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -11,6 +9,8 @@ import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Consumer;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 public class TextInput extends Button {
     public Consumer<String> onChange;
@@ -90,7 +90,6 @@ public class TextInput extends Button {
             if (selEndIndex < selStartIndex) {
                 swapStartEnd();
             }
-            Minecraft mc = Minecraft.getInstance();
             if (keyEvent.isSelectAll()) {
                 this.updateSelStart(0);
                 this.updateSelEnd(content.length());

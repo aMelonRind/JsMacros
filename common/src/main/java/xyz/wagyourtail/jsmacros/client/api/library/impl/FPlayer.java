@@ -3,7 +3,6 @@ package xyz.wagyourtail.jsmacros.client.api.library.impl;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.debug.DebugRenderer;
@@ -39,6 +38,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Functions for getting and modifying the player's state.
  * <p>
@@ -49,7 +50,6 @@ import java.util.function.Consumer;
 @Library("Player")
 @SuppressWarnings("unused")
 public class FPlayer extends BaseLibrary {
-    private static final Minecraft mc = Minecraft.getInstance();
 
     public FPlayer(Core<?, ?> runner) {
         super(runner);

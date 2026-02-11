@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.helper.inventory;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,13 +19,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
  */
 @SuppressWarnings("unused")
 public class ItemHelper extends BaseHelper<Item> {
-    private static final Minecraft mc = Minecraft.getInstance();
 
     public ItemHelper(Item base) {
         super(base);

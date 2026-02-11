@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.AngleArgument;
@@ -35,6 +34,8 @@ import xyz.wagyourtail.jsmacros.core.event.Event;
 
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @since 1.4.2
@@ -76,7 +77,7 @@ public class CommandContextHelper extends BaseEvent {
         Object arg = base.getArgument(name, Object.class);
         CommandSourceStack fakeServerSource = null;
         if (base.getSource() instanceof ClientSuggestionProvider) {
-            fakeServerSource = new FakeServerCommandSource((ClientSuggestionProvider) base.getSource(), Minecraft.getInstance().player);
+            fakeServerSource = new FakeServerCommandSource((ClientSuggestionProvider) base.getSource(), mc.player);
         }
         if (arg instanceof BlockInput) {
             arg = new BlockStateHelper(((BlockInput) arg).getState());
@@ -97,7 +98,7 @@ public class CommandContextHelper extends BaseEvent {
             arg = (Predicate<ItemStackHelper>) item -> itemPredicate.test(item.getRaw());
         } else if (arg instanceof BlockPredicateArgument.Result) {
             BlockPredicateArgument.Result blockPredicate = (BlockPredicateArgument.Result) arg;
-            arg = (Predicate<BlockPosHelper>) block -> blockPredicate.test(new BlockInWorld(Minecraft.getInstance().level, block.getRaw(), false));
+            arg = (Predicate<BlockPosHelper>) block -> blockPredicate.test(new BlockInWorld(mc.level, block.getRaw(), false));
         } else if (arg instanceof Coordinates) {
             arg = new BlockPosHelper(((Coordinates) arg).getBlockPos(fakeServerSource));
         } else if (arg instanceof Holder<?>) {

@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.helper;
 
 import com.mojang.serialization.JsonOps;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import xyz.wagyourtail.jsmacros.client.api.library.impl.FChat;
@@ -12,14 +11,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  * @since 1.0.8
  */
 @SuppressWarnings("unused")
 public class TextHelper extends BaseHelper<Component> {
-    private static final Minecraft mc = Minecraft.getInstance();
-
     public static final Pattern STRIP_FORMATTING_PATTERN = Pattern.compile("\u00a7[0-9A-FK-OR]", Pattern.CASE_INSENSITIVE);
 
     private TextHelper(Component t) {
@@ -111,7 +110,7 @@ public class TextHelper extends BaseHelper<Component> {
      * @since 1.8.4
      */
     public int getWidth() {
-        return Minecraft.getInstance().font.width(base);
+        return mc.font.width(base);
     }
 
     /**

@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.StonecutterScreen;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
@@ -43,7 +42,7 @@ public class StoneCutterInventory extends Inventory<StonecutterScreen> {
     public StoneCutterInventory selectRecipe(int idx) {
         if (idx >= 0 && idx < inventory.getMenu().getNumberOfVisibleRecipes()) {
             inventory.getMenu().clickMenuButton(mc.player, idx);
-            Minecraft.getInstance().gameMode.handleInventoryButtonClick(getCurrentSyncId(), idx);
+            mc.gameMode.handleInventoryButtonClick(getCurrentSyncId(), idx);
         }
         return this;
     }

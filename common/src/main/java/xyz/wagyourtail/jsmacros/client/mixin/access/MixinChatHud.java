@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.mixin.access;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
@@ -17,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import xyz.wagyourtail.jsmacros.client.access.IChatHud;
 
 import java.util.List;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 @Mixin(ChatComponent.class)
 public abstract class MixinChatHud implements IChatHud {
@@ -34,7 +35,7 @@ public abstract class MixinChatHud implements IChatHud {
         if (RenderSystem.isOnRenderThread()) {
             addMessage(message, null, GuiMessageTag.system());
         } else {
-            Minecraft.getInstance().execute(() -> {
+            mc.execute(() -> {
                 addMessage(message, null, GuiMessageTag.system());
             });
         }

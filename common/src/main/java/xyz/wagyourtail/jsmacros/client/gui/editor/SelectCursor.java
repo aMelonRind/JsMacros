@@ -1,14 +1,14 @@
 package xyz.wagyourtail.jsmacros.client.gui.editor;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 import java.util.function.Consumer;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 public class SelectCursor {
-    private final Minecraft mc = Minecraft.getInstance();
     public Consumer<SelectCursor> onChange;
     public Style defaultStyle;
     public int startLine = 0;

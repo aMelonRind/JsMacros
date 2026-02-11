@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.event.impl.player;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
@@ -11,6 +10,8 @@ import xyz.wagyourtail.jsmacros.core.event.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Wagyourtail
@@ -24,8 +25,8 @@ public class EventDeath extends BaseEvent {
 
     public EventDeath() {
         super(JsMacrosClient.clientCore);
-        this.deathPos = new BlockPosHelper(Minecraft.getInstance().player.blockPosition());
-        Inventory inv = Minecraft.getInstance().player.getInventory();
+        this.deathPos = new BlockPosHelper(mc.player.blockPosition());
+        Inventory inv = mc.player.getInventory();
         inventory = new ArrayList<>();
         for (int i = 0; i < inv.getContainerSize(); i++) {
             this.inventory.add(new ItemStackHelper(inv.getItem(i)));
@@ -38,7 +39,7 @@ public class EventDeath extends BaseEvent {
      * @since 1.8.4
      */
     public void respawn() {
-        LocalPlayer player = Minecraft.getInstance().player;
+        LocalPlayer player = mc.player;
         if (!player.isAlive()) {
             player.respawn();
         }

@@ -3,7 +3,6 @@ package xyz.wagyourtail.jsmacros.client.api.helper;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementTree;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
@@ -17,6 +16,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -119,12 +120,12 @@ public class AdvancementManagerHelper extends BaseHelper<AdvancementTree> {
      */
     @DocletReplaceParams("identifier: CanOmitNamespace<AdvancementId>")
     public AdvancementProgressHelper getAdvancementProgress(String identifier) {
-        assert Minecraft.getInstance().player != null;
-        return new AdvancementProgressHelper(((MixinClientAdvancementManager) Minecraft.getInstance().player.connection.getAdvancements()).getAdvancementProgresses().get(base.get(RegistryHelper.parseIdentifier(identifier)).holder()));
+        assert mc.player != null;
+        return new AdvancementProgressHelper(((MixinClientAdvancementManager) mc.player.connection.getAdvancements()).getAdvancementProgresses().get(base.get(RegistryHelper.parseIdentifier(identifier)).holder()));
     }
 
     private Stream<Map.Entry<AdvancementHolder, AdvancementProgress>> getProgressStream() {
-        LocalPlayer player = Minecraft.getInstance().player;
+        LocalPlayer player = mc.player;
         assert player != null;
         return ((MixinClientAdvancementManager) player.connection.getAdvancements()).getAdvancementProgresses().entrySet().stream();
     }

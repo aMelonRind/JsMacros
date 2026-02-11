@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.helper.world;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -19,6 +18,8 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -113,7 +114,7 @@ public class ChunkHelper extends BaseHelper<ChunkAccess> {
      */
     @DocletReplaceReturn("Biome")
     public String getBiome(int xOffset, int y, int zOffset) {
-        return Minecraft.getInstance().level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(Minecraft.getInstance().level.getBiome(base.getPos().getBlockAt(xOffset, y, zOffset)).value()).toString();
+        return mc.level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(mc.level.getBiome(base.getPos().getBlockAt(xOffset, y, zOffset)).value()).toString();
     }
 
     /**
@@ -133,7 +134,7 @@ public class ChunkHelper extends BaseHelper<ChunkAccess> {
      * @since 1.8.4
      */
     public List<? extends EntityHelper<?>> getEntities() {
-        return StreamSupport.stream(Minecraft.getInstance().level.entitiesForRendering().spliterator(), false).
+        return StreamSupport.stream(mc.level.entitiesForRendering().spliterator(), false).
                 filter(entity -> entity.chunkPosition().equals(base.getPos())).map(EntityHelper::create).collect(Collectors.toList());
     }
 

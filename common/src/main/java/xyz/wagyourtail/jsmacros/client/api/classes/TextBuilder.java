@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.api.classes;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.*;
@@ -20,6 +19,8 @@ import xyz.wagyourtail.jsmacros.core.MethodWrapper;
 
 import java.net.URI;
 import java.util.*;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * usage: {@code builder.append("hello,").withColor(0xc).append(" World!").withColor(0x6)}
@@ -199,9 +200,7 @@ public class TextBuilder {
     @DocletReplaceParams("action: TextClickAction, value: string")
     public TextBuilder withClickEvent(String action, String value) {
         ClickEvent.Action clickAction = ClickEvent.Action.valueOf(action.toUpperCase(Locale.ROOT));
-        HolderLookup.Provider lookup = Objects
-                .requireNonNull(Minecraft.getInstance().getConnection())
-                .registryAccess();
+        HolderLookup.Provider lookup = Objects.requireNonNull(mc.getConnection()).registryAccess();
         self.withStyle(style -> style.withClickEvent(switch (clickAction) {
             case OPEN_URL -> new ClickEvent.OpenUrl(URI.create(value));
             case OPEN_FILE -> new ClickEvent.OpenFile(value);
@@ -230,7 +229,7 @@ public class TextBuilder {
      * @since 1.8.4
      */
     public int getWidth() {
-        return Minecraft.getInstance().font.width(head);
+        return mc.font.width(head);
     }
 
     /**

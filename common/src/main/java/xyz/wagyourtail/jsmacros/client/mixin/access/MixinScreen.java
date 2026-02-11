@@ -40,6 +40,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(Screen.class)
 @Implements(@Interface(iface = IScreen.class, prefix = "soft$"))
@@ -956,7 +958,6 @@ public abstract class MixinScreen extends AbstractContainerEventHandler implemen
 
         if (hoverText != null) {
             Style style = TextUtil.componentStyleAtWidth(font, hoverText.text, (int) mouseX - hoverText.x);
-            Minecraft mc = Minecraft.getInstance();
             if (style != null) {
                 ClickEvent ce = style.getClickEvent();
 

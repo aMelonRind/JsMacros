@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.event.impl;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.components.EditBox;
@@ -18,13 +17,14 @@ import xyz.wagyourtail.wagyourgui.BaseScreen;
 import java.util.HashSet;
 import java.util.Set;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  * @since 1.2.7
  */
 @Event(value = "Key", oldName = "KEY", cancellable = true)
 public class EventKey extends BaseEvent {
-    static final Minecraft mc = Minecraft.getInstance();
     public final int action;
 
     @DocletReplaceReturn("globalThis.Key")

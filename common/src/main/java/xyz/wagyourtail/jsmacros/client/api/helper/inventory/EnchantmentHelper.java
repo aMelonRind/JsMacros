@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Holder;
@@ -16,14 +15,14 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 import java.util.List;
 import java.util.Objects;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
  */
 @SuppressWarnings("unused")
 public class EnchantmentHelper extends BaseHelper<Holder<Enchantment>> {
-    private static final Minecraft mc = Minecraft.getInstance();
-
     private final int level;
 
     public EnchantmentHelper(Holder<Enchantment> base) {

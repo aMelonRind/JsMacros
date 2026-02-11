@@ -7,7 +7,6 @@ import net.minecraft.advancements.AdvancementNode;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.NbtPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.Options;
 import net.minecraft.nbt.CollectionTag;
@@ -19,7 +18,6 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.ChatFormatting;
 import org.slf4j.Logger;
@@ -48,8 +46,9 @@ import xyz.wagyourtail.jsmacros.core.language.BaseWrappedException;
 
 import java.util.Arrays;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 public class ClientProfile extends BaseProfile {
-    private static final Minecraft mc = Minecraft.getInstance();
 
     public ClientProfile(Core<ClientProfile, ?> runner, Logger logger) {
         super(runner, logger);
@@ -58,7 +57,6 @@ public class ClientProfile extends BaseProfile {
     @Override
     protected boolean loadProfile(String profileName) {
         boolean val = super.loadProfile(profileName);
-        final Minecraft mc = Minecraft.getInstance();
         if (mc.screen instanceof MacroScreen) {
             mc.execute(() -> ((MacroScreen) mc.screen).reload());
         }
@@ -89,7 +87,6 @@ public class ClientProfile extends BaseProfile {
                 }
             }
         }
-        Minecraft mc = Minecraft.getInstance();
         if (mc.gui != null) {
             BaseWrappedException<?> e;
             try {

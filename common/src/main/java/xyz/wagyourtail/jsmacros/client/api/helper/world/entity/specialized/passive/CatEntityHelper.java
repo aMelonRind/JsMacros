@@ -1,9 +1,10 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.world.entity.specialized.passive;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.animal.feline.Cat;
 import xyz.wagyourtail.jsmacros.client.api.helper.DyeColorHelper;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -11,7 +12,6 @@ import xyz.wagyourtail.jsmacros.client.api.helper.DyeColorHelper;
  */
 @SuppressWarnings("unused")
 public class CatEntityHelper extends TameableEntityHelper<Cat> {
-    private static final Minecraft mc = Minecraft.getInstance();
 
     public CatEntityHelper(Cat base) {
         super(base);

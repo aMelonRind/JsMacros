@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.gui.settings.settingfields;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -15,6 +14,8 @@ import xyz.wagyourtail.wagyourgui.elements.Button;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 public class FileField extends AbstractSettingField<String> {
 
     public FileField(int x, int y, int width, Font textRenderer, AbstractSettingContainer parent, SettingsOverlay.SettingField<String> field) {
@@ -26,7 +27,7 @@ public class FileField extends AbstractSettingField<String> {
             if (option.startsWith("topLevel=")) {
                 switch (option.replace("topLevel=", "")) {
                     case "MC":
-                        return Minecraft.getInstance().gameDirectory;
+                        return mc.gameDirectory;
                     case "CONFIG":
                         return JsMacrosClient.clientCore.config.configFolder;
                     case "MACRO":

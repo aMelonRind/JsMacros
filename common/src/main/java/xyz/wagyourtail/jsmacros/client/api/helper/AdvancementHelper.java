@@ -1,12 +1,9 @@
 package xyz.wagyourtail.jsmacros.client.api.helper;
 
-import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementNode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -18,14 +15,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
  */
 @SuppressWarnings("unused")
 public class AdvancementHelper extends BaseHelper<AdvancementNode> {
-    private static final Minecraft mc = Minecraft.getInstance();
-
 
     public AdvancementHelper(AdvancementNode base) {
         super(base);
@@ -110,7 +107,7 @@ public class AdvancementHelper extends BaseHelper<AdvancementNode> {
      * @since 1.8.4
      */
     public AdvancementProgressHelper getProgress() {
-        LocalPlayer player = Minecraft.getInstance().player;
+        LocalPlayer player = mc.player;
         assert player != null;
         return new AdvancementProgressHelper(((MixinClientAdvancementManager) player.connection.getAdvancements()).getAdvancementProgresses().get(base.holder()));
     }

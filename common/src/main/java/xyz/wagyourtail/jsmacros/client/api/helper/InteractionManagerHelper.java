@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
@@ -29,6 +28,8 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 import java.util.Locale;
 import java.util.concurrent.Semaphore;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Helper for ClientPlayerInteractionManager
  * it accesses interaction manager from {@code mc} instead of {@code base}, to avoid issues
@@ -37,7 +38,6 @@ import java.util.concurrent.Semaphore;
  */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class InteractionManagerHelper extends BaseHelper<MultiPlayerGameMode> {
-    protected final Minecraft mc = Minecraft.getInstance();
 
     /**
      * indicates if the helper should auto update the base manager, default is true<br>

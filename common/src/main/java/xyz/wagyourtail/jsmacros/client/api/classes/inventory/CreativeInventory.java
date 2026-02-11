@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.HotbarManager;
@@ -18,6 +17,8 @@ import xyz.wagyourtail.jsmacros.client.mixin.access.MixinCreativeInventoryScreen
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -156,7 +157,7 @@ public class CreativeInventory extends Inventory<CreativeModeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory destroyAllItems() {
-        MultiPlayerGameMode interactionManager = Minecraft.getInstance().gameMode;
+        MultiPlayerGameMode interactionManager = mc.gameMode;
         for (int i = 0; i < getTotalSlots(); i++) {
             interactionManager.handleCreativeModeItemAdd(ItemStack.EMPTY, i);
         }
@@ -182,7 +183,7 @@ public class CreativeInventory extends Inventory<CreativeModeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory setStack(int slot, ItemStackHelper stack) {
-        Minecraft.getInstance().gameMode.handleCreativeModeItemAdd(stack.getRaw(), slot);
+        mc.gameMode.handleCreativeModeItemAdd(stack.getRaw(), slot);
         return this;
     }
 
@@ -192,7 +193,7 @@ public class CreativeInventory extends Inventory<CreativeModeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory saveHotbar(int index) {
-        CreativeModeInventoryScreen.handleHotbarLoadOrSave(Minecraft.getInstance(), index, false, true);
+        CreativeModeInventoryScreen.handleHotbarLoadOrSave(mc, index, false, true);
         return this;
     }
 
@@ -202,7 +203,7 @@ public class CreativeInventory extends Inventory<CreativeModeInventoryScreen> {
      * @since 1.8.4
      */
     public CreativeInventory restoreHotbar(int index) {
-        CreativeModeInventoryScreen.handleHotbarLoadOrSave(Minecraft.getInstance(), index, true, false);
+        CreativeModeInventoryScreen.handleHotbarLoadOrSave(mc, index, true, false);
         return this;
     }
 

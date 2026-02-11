@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.helper;
 
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockHelper;
@@ -11,11 +10,12 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
 import java.util.List;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @since 1.9.1
  */
 public class BlockPredicateHelper extends BaseHelper<BlockPredicate> {
-    private static final Minecraft mc = Minecraft.getInstance();
 
     public BlockPredicateHelper(BlockPredicate base) {
         super(base);

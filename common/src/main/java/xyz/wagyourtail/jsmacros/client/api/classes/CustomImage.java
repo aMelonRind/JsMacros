@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes;
 
-import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
@@ -15,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -44,7 +45,7 @@ public class CustomImage {
         this.name = name;
         this.texture = createTexture(image, PREFIX + name);
         identifier = Identifier.parse(PREFIX + name);
-        Minecraft.getInstance().getTextureManager().register(identifier, texture);
+        mc.getTextureManager().register(identifier, texture);
         update();
         currentId++;
         IMAGES.put(identifier.toString(), this);

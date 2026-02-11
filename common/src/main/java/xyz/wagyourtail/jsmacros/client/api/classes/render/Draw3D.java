@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -17,6 +16,8 @@ import xyz.wagyourtail.jsmacros.core.classes.Registrable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * {@link Draw2D} is cool
@@ -694,7 +695,7 @@ public class Draw3D implements Registrable<Draw3D> {
 
     @DocletIgnore
     public void render(PoseStack poseStack, MultiBufferSource consumers, float tickDelta) {
-        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Camera camera = mc.gameRenderer.getMainCamera();
         Vec3 cameraPos = camera.position();
 
         poseStack.pushPose();

@@ -2,7 +2,6 @@ package xyz.wagyourtail.jsmacros.client.api.library.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.Key;
@@ -18,6 +17,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * Functions for getting and modifying key pressed states.
  * <p>
@@ -28,7 +29,6 @@ import java.util.Set;
 @Library("KeyBind")
 @SuppressWarnings("unused")
 public class FKeyBind extends BaseLibrary {
-    private static final Minecraft mc = Minecraft.getInstance();
 
     public FKeyBind(Core<?, ?> runner) {
         super(runner);
@@ -120,7 +120,7 @@ public class FKeyBind extends BaseLibrary {
      * @param keyState
      */
     protected void key(Key keyBind, boolean keyState) {
-        if (Minecraft.getInstance().screen != null) return;
+        if (mc.screen != null) return;
         KeyMapping.set(keyBind, keyState);
         if (keyState) {
             KeyMapping.click(keyBind);
@@ -145,7 +145,7 @@ public class FKeyBind extends BaseLibrary {
      */
     @DocletReplaceParams("keyBind: Bind, keyState: boolean")
     public void keyBind(String keyBind, boolean keyState) {
-        if (Minecraft.getInstance().screen != null) return;
+        if (mc.screen != null) return;
         for (KeyMapping key : mc.options.keyMappings) {
             if (key.getName().equals(keyBind)) {
                 key.setDown(keyState);
@@ -193,7 +193,7 @@ public class FKeyBind extends BaseLibrary {
      * @param keyState
      */
     protected void key(KeyMapping keyBind, boolean keyState) {
-        if (Minecraft.getInstance().screen != null) return;
+        if (mc.screen != null) return;
         keyBind.setDown(keyState);
         if (keyState) {
             KeyMapping.click(InputConstants.getKey(keyBind.saveString()));

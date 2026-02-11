@@ -1,16 +1,16 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render.components3d;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockPosHelper;
 
 import java.util.Objects;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author aMelonRind
@@ -100,7 +100,7 @@ public class TraceLine implements RenderElement3D<TraceLine> {
 
     @Override
     public void render(PoseStack matrixStack, MultiBufferSource consumers, float tickDelta) {
-        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Camera camera = mc.gameRenderer.getMainCamera();
         Vec3 p1 = camera.position().add(Vec3.directionFromRotation(camera.xRot(), camera.yRot()).normalize().multiply(5.0, 5.0, 5.0));
 
         render.setPos(p1.x, p1.y, p1.z, render.pos.x2, render.pos.y2, render.pos.z2);

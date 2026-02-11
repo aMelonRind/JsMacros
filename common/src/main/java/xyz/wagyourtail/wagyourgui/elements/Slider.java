@@ -1,6 +1,5 @@
 package xyz.wagyourtail.wagyourgui.elements;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -13,6 +12,8 @@ import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Consumer;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 /**
  * @author Etheradon
@@ -103,7 +104,7 @@ public class Slider extends AbstractWidget {
 
     @Override
     public void onRelease(MouseButtonEvent event) {
-        super.playDownSound(Minecraft.getInstance().getSoundManager());
+        super.playDownSound(mc.getSoundManager());
     }
 
     @Override

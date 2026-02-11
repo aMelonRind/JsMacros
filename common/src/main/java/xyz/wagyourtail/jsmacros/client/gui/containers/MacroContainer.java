@@ -1,7 +1,6 @@
 package xyz.wagyourtail.jsmacros.client.gui.containers;
 
 import com.mojang.blaze3d.opengl.GlStateManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,7 +29,6 @@ public class MacroContainer extends MultiElementContainer<MacroScreen> {
     private static final Identifier event_tex = Identifier.fromNamespaceAndPath(JsMacros.MOD_ID, "resources/event.png");
     private static final Identifier script_fork_tex = Identifier.fromNamespaceAndPath(JsMacros.MOD_ID, "resources/script_fork.png");
     private static final Identifier script_join_tex = Identifier.fromNamespaceAndPath(JsMacros.MOD_ID, "resources/script_join.png");
-    private final Minecraft mc;
     private final ScriptTrigger macro;
     private Button enableBtn;
     private Button keyBtn;
@@ -44,7 +42,6 @@ public class MacroContainer extends MultiElementContainer<MacroScreen> {
     public MacroContainer(int x, int y, int width, int height, Font textRenderer, ScriptTrigger macro, MacroScreen parent) {
         super(x, y, width, height, textRenderer, parent);
         this.macro = macro;
-        this.mc = Minecraft.getInstance();
         init();
     }
 

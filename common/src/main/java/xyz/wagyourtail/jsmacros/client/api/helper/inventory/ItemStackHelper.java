@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.api.helper.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -40,13 +39,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Wagyourtail
  */
 @SuppressWarnings("unused")
 public class ItemStackHelper extends BaseHelper<ItemStack> {
     private static final Style LORE_STYLE = Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE).withItalic(true);
-    protected static final Minecraft mc = Minecraft.getInstance();
 
     @DocletReplaceParams("id: CanOmitNamespace<ItemId>, count: int")
     public ItemStackHelper(String id, int count) {
@@ -448,7 +448,7 @@ public class ItemStackHelper extends BaseHelper<ItemStack> {
      * @since 1.6.5
      */
     public boolean isOnCooldown() {
-        return Minecraft.getInstance().player.getCooldowns().isOnCooldown(base);
+        return mc.player.getCooldowns().isOnCooldown(base);
     }
 
     /**

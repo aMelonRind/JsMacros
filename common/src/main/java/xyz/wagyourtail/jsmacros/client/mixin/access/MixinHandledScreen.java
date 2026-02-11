@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.mixin.access;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -16,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
 import xyz.wagyourtail.jsmacros.client.access.IInventory;
 import xyz.wagyourtail.jsmacros.client.config.ClientConfigV2;
+
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 @Mixin(AbstractContainerScreen.class)
 public class MixinHandledScreen<T extends AbstractContainerMenu> extends Screen implements IInventory {
@@ -61,7 +62,7 @@ public class MixinHandledScreen<T extends AbstractContainerMenu> extends Screen 
         if (!slot.isActive()) return;
 
         int index = menu.slots.indexOf(slot);
-        guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(index), slot.x, slot.y, 0xCCFFFFFF, false);
+        guiGraphics.drawString(mc.font, String.valueOf(index), slot.x, slot.y, 0xCCFFFFFF, false);
     }
 
 }

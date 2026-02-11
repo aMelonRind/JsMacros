@@ -12,7 +12,6 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -49,14 +48,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
+
 /**
  * @author Etheradon
  * @since 1.8.4
  */
 @SuppressWarnings("unused")
 public class PacketByteBufferHelper extends BaseHelper<FriendlyByteBuf> {
-    private static final Minecraft mc = Minecraft.getInstance();
-
     /**
      * Don't touch this here!
      */
@@ -184,7 +183,7 @@ public class PacketByteBufferHelper extends BaseHelper<FriendlyByteBuf> {
      */
     public PacketByteBufferHelper sendPacket() {
         if (packet != null) {
-            Minecraft.getInstance().getConnection().send(toPacket());
+            mc.getConnection().send(toPacket());
         }
         return this;
     }
@@ -206,7 +205,7 @@ public class PacketByteBufferHelper extends BaseHelper<FriendlyByteBuf> {
      * @since 1.8.4
      */
     public PacketByteBufferHelper sendPacket(Class<? extends Packet<?>> clazz) {
-        Minecraft.getInstance().getConnection().send(toPacket(clazz));
+        mc.getConnection().send(toPacket(clazz));
         return this;
     }
 
@@ -216,7 +215,7 @@ public class PacketByteBufferHelper extends BaseHelper<FriendlyByteBuf> {
      */
     public PacketByteBufferHelper receivePacket() {
         if (packet != null) {
-            ((Packet<ClientGamePacketListener>) packet).handle(Minecraft.getInstance().getConnection());
+            ((Packet<ClientGamePacketListener>) packet).handle(mc.getConnection());
         }
         return this;
     }
@@ -230,7 +229,7 @@ public class PacketByteBufferHelper extends BaseHelper<FriendlyByteBuf> {
     @DocletReplaceParams("packetName: PacketName")
     public PacketByteBufferHelper receivePacket(String packetName) {
         if (packet != null) {
-            ((Packet<ClientGamePacketListener>) toPacket(packetName)).handle(Minecraft.getInstance().getConnection());
+            ((Packet<ClientGamePacketListener>) toPacket(packetName)).handle(mc.getConnection());
         }
         return this;
     }
@@ -242,7 +241,7 @@ public class PacketByteBufferHelper extends BaseHelper<FriendlyByteBuf> {
      */
     public PacketByteBufferHelper receivePacket(Class<? extends Packet> clazz) {
         if (packet != null) {
-            ((Packet<ClientGamePacketListener>) toPacket(clazz)).handle(Minecraft.getInstance().getConnection());
+            ((Packet<ClientGamePacketListener>) toPacket(clazz)).handle(mc.getConnection());
         }
         return this;
     }
@@ -558,8 +557,8 @@ public class PacketByteBufferHelper extends BaseHelper<FriendlyByteBuf> {
     @Nullable
     public ChunkHelper readChunkHelper() {
         ChunkPos pos = base.readChunkPos();
-        assert Minecraft.getInstance().level != null;
-        ChunkAccess chunk = Minecraft.getInstance().level.getChunk(pos.x, pos.z);
+        assert mc.level != null;
+        ChunkAccess chunk = mc.level.getChunk(pos.x, pos.z);
         return chunk == null ? null : new ChunkHelper(chunk);
     }
 
