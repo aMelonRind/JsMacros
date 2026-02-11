@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
-import xyz.wagyourtail.jsmacros.client.api.event.filterer.FiltererRecvPacket;
 import xyz.wagyourtail.jsmacros.client.api.helper.PacketByteBufferHelper;
 import xyz.wagyourtail.jsmacros.core.event.BaseEvent;
 import xyz.wagyourtail.jsmacros.core.event.Event;
@@ -14,7 +13,7 @@ import xyz.wagyourtail.jsmacros.core.event.Event;
  * @author Etheradon
  * @since 1.8.4
  */
-@Event(value = "RecvPacket", cancellable = true, filterer = FiltererRecvPacket.class)
+@Event(value = "RecvPacket", cancellable = true)
 @SuppressWarnings("unused")
 public class EventRecvPacket extends BaseEvent {
     @Nullable

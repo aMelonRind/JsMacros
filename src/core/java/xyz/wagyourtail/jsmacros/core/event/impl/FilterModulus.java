@@ -1,24 +1,19 @@
 package xyz.wagyourtail.jsmacros.core.event.impl;
 
 import xyz.wagyourtail.jsmacros.core.event.BaseEvent;
-import xyz.wagyourtail.jsmacros.core.event.EventFilterer;
+import xyz.wagyourtail.jsmacros.core.event.EventFilter;
 
 /**
  * @author aMelonRind
  * @since 1.9.1
  */
 @SuppressWarnings("unused")
-public class FiltererModulus implements EventFilterer {
+public class FilterModulus implements EventFilter {
     public int quotient;
     public int count = 0;
 
-    public FiltererModulus(int quotient) {
+    public FilterModulus(int quotient) {
         this.quotient = Math.abs(quotient);
-    }
-
-    @Override
-    public boolean canFilter(String event) {
-        return true;
     }
 
     @Override
@@ -30,7 +25,7 @@ public class FiltererModulus implements EventFilterer {
         return false;
     }
 
-    public FiltererModulus setQuotient(int quotient) {
+    public FilterModulus setQuotient(int quotient) {
         this.quotient = Math.abs(quotient);
         return this;
     }

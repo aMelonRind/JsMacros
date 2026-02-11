@@ -14,6 +14,4 @@ public @interface Event {
 
     boolean joinable() default false;
 
-    Class<? extends EventFilterer> filterer() default EventFilterer.class;
-
 }
