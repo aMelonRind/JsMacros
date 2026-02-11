@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IChatHud;
 
 import java.util.List;
@@ -26,7 +27,13 @@ public abstract class MixinChatHud implements IChatHud {
 
     @Override
     public void jsmacros_addMessageBypass(Text message) {
-        addMessage(message, null, MessageIndicator.system());
+        try {
+            //noinspection UnusedAssignment
+            McUtil.isBypassingChat = true;
+            addMessage(message, null, MessageIndicator.system());
+        } finally {
+            McUtil.isBypassingChat = false;
+        }
     }
 
     @Unique
@@ -35,7 +42,13 @@ public abstract class MixinChatHud implements IChatHud {
     @Override
     public void jsmacros_addMessageAtIndexBypass(Text message, int index, int time) {
         jsmacros$positionOverride.set(index);
-        addMessage(message, null, MessageIndicator.system());
+        try {
+            //noinspection UnusedAssignment
+            McUtil.isBypassingChat = true;
+            addMessage(message, null, MessageIndicator.system());
+        } finally {
+            McUtil.isBypassingChat = false;
+        }
         jsmacros$positionOverride.set(0);
     }
 

@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.event.impl.EventRecvMessage;
 import xyz.wagyourtail.jsmacros.client.api.helper.TextHelper;
 
@@ -29,11 +30,18 @@ class MixinChatHud {
             cancellable = true
     )
     private void onAddMessage1(Text message, MessageSignatureData signature, MessageIndicator indicator, CallbackInfo ci) {
+        if (McUtil.isBypassingChat) return;
+        EventRecvMessage event = new EventRecvMessage(message, signature, indicator);
+        // in case of the trigger throws
         jsmacros$originalMessage = message;
-        jsmacros$eventRecvMessage = new EventRecvMessage(message, signature, indicator);
-        jsmacros$eventRecvMessage.trigger();
-        if (jsmacros$eventRecvMessage.isCanceled()) {
+        jsmacros$eventRecvMessage = event;
+        event.trigger();
+        if (event.isCanceled()) {
             ci.cancel();
+        } else {
+            // in case of recursive happens
+            jsmacros$originalMessage = message;
+            jsmacros$eventRecvMessage = event;
         }
     }
 
@@ -46,6 +54,7 @@ class MixinChatHud {
             argsOnly = true
     )
     private Text modifyChatMessage(Text text) {
+        if (McUtil.isBypassingChat) return text;
         jsmacros$modifiedEventRecieve = false;
         if (text == null) {
             return null;
@@ -71,6 +80,7 @@ class MixinChatHud {
             argsOnly = true
     )
     private MessageIndicator modifyChatMessageSignature(MessageIndicator signature) {
+        if (McUtil.isBypassingChat) return signature;
         if (jsmacros$modifiedEventRecieve) {
             MutableText text2 = Text.empty().append(MODIFIED_TEXT).append(ScreenTexts.LINE_BREAK);
             if (signature != null && signature.text() != null) {

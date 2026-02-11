@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 public class McUtil {
     public static final MinecraftClient mc = MinecraftClient.getInstance();
 
+    public static boolean isBypassingChat = false;
+
     public static void runOnMain(Runnable runnable) {
         runOnMain(true, runnable);
     }
