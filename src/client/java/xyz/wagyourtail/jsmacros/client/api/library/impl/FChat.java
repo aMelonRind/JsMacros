@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.wagyourtail.jsmacros.client.JsMacros;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IChatHud;
 import xyz.wagyourtail.jsmacros.client.api.classes.TextBuilder;
 import xyz.wagyourtail.jsmacros.client.api.classes.inventory.ChatHistoryManager;
@@ -21,7 +22,6 @@ import xyz.wagyourtail.jsmacros.core.MethodWrapper;
 import xyz.wagyourtail.jsmacros.core.library.BaseLibrary;
 import xyz.wagyourtail.jsmacros.core.library.Library;
 
-import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,41 +47,28 @@ public class FChat extends BaseLibrary {
      * @param message
      * @since 1.1.3
      */
-    public void log(@Nullable Object message) throws InterruptedException {
+    public void log(@Nullable Object message) {
         log(message, false);
     }
 
     /**
      * @param message
      * @param await   should wait for message to actually be sent to chat to continue.
-     * @throws InterruptedException
      */
-    public void log(@Nullable Object message, boolean await) throws InterruptedException {
+    public void log(@Nullable Object message, boolean await) {
         if (message == null) {
             return;
         }
         final Object message2 = message instanceof TextHelper ? message :
-                message instanceof TextBuilder ? ((TextBuilder) message).build() :
-                        message.toString();
+                message instanceof TextBuilder tb ? tb.build() : message.toString();
 
-        if (runner.profile.checkJoinedThreadStack()) {
-            if (message2 instanceof TextHelper) {
-                logInternal((TextHelper) message2);
+        McUtil.runOnMain(await, () -> {
+            if (message2 instanceof TextHelper th) {
+                logInternal(th);
             } else {
                 logInternal((String) message2);
             }
-        } else {
-            final Semaphore semaphore = new Semaphore(await ? 0 : 1);
-            mc.execute(() -> {
-                if (message2 instanceof TextHelper) {
-                    logInternal((TextHelper) message2);
-                } else {
-                    logInternal((String) message2);
-                }
-                semaphore.release();
-            });
-            semaphore.acquire();
-        }
+        });
     }
 
     /**
@@ -90,10 +77,9 @@ public class FChat extends BaseLibrary {
      *
      * @param message the message to format and log
      * @param args    the arguments used to format the message
-     * @throws InterruptedException
      * @since 1.8.4
      */
-    public void logf(String message, Object... args) throws InterruptedException {
+    public void logf(String message, Object... args) {
         log(String.format(message, args), false);
     }
 
@@ -104,10 +90,9 @@ public class FChat extends BaseLibrary {
      * @param message the message to format and log
      * @param await   whether to wait for message to be sent to chat before continuing
      * @param args    the arguments used to format the message
-     * @throws InterruptedException
      * @since 1.8.4
      */
-    public void logf(String message, boolean await, Object... args) throws InterruptedException {
+    public void logf(String message, boolean await, Object... args) {
         log(String.format(message, args), await);
     }
 
@@ -116,9 +101,8 @@ public class FChat extends BaseLibrary {
      *
      * @since 1.9.0
      * @param message
-     * @throws InterruptedException
      */
-    public void logColor(String message) throws InterruptedException {
+    public void logColor(String message) {
         log(ampersandToSectionSymbol(message), false);
     }
 
@@ -128,9 +112,8 @@ public class FChat extends BaseLibrary {
      * @since 1.9.0
      * @param message
      * @param await
-     * @throws InterruptedException
      */
-    public void logColor(String message, boolean await) throws InterruptedException {
+    public void logColor(String message, boolean await) {
         log(ampersandToSectionSymbol(message), await);
     }
 
@@ -152,7 +135,7 @@ public class FChat extends BaseLibrary {
      * @param message
      * @since 1.0.0
      */
-    public void say(@Nullable String message) throws InterruptedException {
+    public void say(@Nullable String message) {
         say(message, false);
     }
 
@@ -161,25 +144,13 @@ public class FChat extends BaseLibrary {
      *
      * @param message
      * @param await
-     * @throws InterruptedException
      * @since 1.3.1
      */
-    public void say(@Nullable String message, boolean await) throws InterruptedException {
+    public void say(@Nullable String message, boolean await) {
         if (message == null) {
             return;
         }
-        if (runner.profile.checkJoinedThreadStack()) {
-            assert mc.player != null;
-            sayInternal(message);
-        } else {
-            final Semaphore semaphore = new Semaphore(await ? 0 : 1);
-            mc.execute(() -> {
-                assert mc.player != null;
-                sayInternal(message);
-                semaphore.release();
-            });
-            semaphore.acquire();
-        }
+        McUtil.runOnMain(await, () -> sayInternal(message));
     }
 
     private void sayInternal(String message) {
@@ -196,10 +167,9 @@ public class FChat extends BaseLibrary {
      *
      * @param message the message to format and send to the server
      * @param args    the arguments used to format the message
-     * @throws InterruptedException
      * @since 1.8.4
      */
-    public void sayf(String message, Object... args) throws InterruptedException {
+    public void sayf(String message, Object... args) {
         say(String.format(message, args), false);
     }
 
@@ -210,10 +180,9 @@ public class FChat extends BaseLibrary {
      * @param message the message to format and send to the server
      * @param await   whether to wait for message to be sent to chat before continuing
      * @param args    the arguments used to format the message
-     * @throws InterruptedException
      * @since 1.8.4
      */
-    public void sayf(String message, boolean await, Object... args) throws InterruptedException {
+    public void sayf(String message, boolean await, Object... args) {
         say(String.format(message, args), await);
     }
 
@@ -223,7 +192,7 @@ public class FChat extends BaseLibrary {
      * @param message the message to start the chat screen with
      * @since 1.6.4
      */
-    public void open(@Nullable String message) throws InterruptedException {
+    public void open(@Nullable String message) {
         open(message, false);
     }
 
@@ -237,7 +206,7 @@ public class FChat extends BaseLibrary {
      * @param await
      * @since 1.6.4
      */
-    public void open(@Nullable String message, boolean await) throws InterruptedException {
+    public void open(@Nullable String message, boolean await) {
         if (message == null) {
             message = "";
         }
@@ -245,12 +214,7 @@ public class FChat extends BaseLibrary {
             throw new UnsupportedOperationException("Cannot open a screen while joined to the main thread");
         } else {
             String finalMessage = message;
-            final Semaphore semaphore = new Semaphore(await ? 0 : 1);
-            mc.execute(() -> {
-                mc.setScreen(new ChatScreen(finalMessage));
-                semaphore.release();
-            });
-            semaphore.acquire();
+            McUtil.runOnMain(await, () -> mc.setScreen(new ChatScreen(finalMessage)));
         }
     }
 

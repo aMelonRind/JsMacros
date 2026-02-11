@@ -24,6 +24,7 @@ import org.lwjgl.glfw.GLFW;
 import xyz.wagyourtail.doclet.DocletDeclareType;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IResourcePackManager;
 import xyz.wagyourtail.jsmacros.client.mixin.access.MixinSimpleOption;
 import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
@@ -803,7 +804,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
          */
         public VideoOptionsHelper setGuiScale(int scale) {
             base.getGuiScale().setValue(scale);
-            mc.execute(mc::onResolutionChanged);
+            McUtil.runOnMain(false, mc::onResolutionChanged);
             return this;
         }
 
@@ -2482,7 +2483,7 @@ public class OptionsHelper extends BaseHelper<GameOptions> {
     @Deprecated
     public OptionsHelper setGuiScale(int scale) {
         base.getGuiScale().setValue(scale);
-        mc.execute(mc::onResolutionChanged);
+        McUtil.runOnMain(false, mc::onResolutionChanged);
         return this;
     }
 

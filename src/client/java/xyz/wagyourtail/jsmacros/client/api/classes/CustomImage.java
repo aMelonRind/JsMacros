@@ -6,6 +6,7 @@ import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Etheradon
@@ -109,17 +108,10 @@ public class CustomImage {
      * @since 1.8.4
      */
     public CustomImage update() {
-        try {
-            final Semaphore semaphore = new Semaphore(0);
-            MinecraftClient.getInstance().execute(() -> {
-                texture.bindTexture();
-                updateTexture();
-                semaphore.release();
-            });
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            JsMacrosClient.clientCore.profile.logError(e);
-        }
+        McUtil.runOnMain(() -> {
+            texture.bindTexture();
+            updateTexture();
+        });
         return this;
     }
 
@@ -607,18 +599,7 @@ public class CustomImage {
     }
 
     private static NativeImageBackedTexture createTexture(BufferedImage image) {
-        AtomicReference<NativeImageBackedTexture> texture = new AtomicReference<>();
-        try {
-            final Semaphore semaphore = new Semaphore(0);
-            MinecraftClient.getInstance().execute(() -> {
-                texture.set(new NativeImageBackedTexture(image.getWidth(), image.getHeight(), true));
-                semaphore.release();
-            });
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            JsMacrosClient.clientCore.profile.logError(e);
-        }
-        return texture.get();
+        return McUtil.fetchOnMain(() -> new NativeImageBackedTexture(image.getWidth(), image.getHeight(), true));
     }
 
     public static CustomImage createWidget(int width, int height, String name) {

@@ -5,19 +5,16 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
-import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
-import xyz.wagyourtail.jsmacros.client.access.IInventory;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.TextBuilder;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.IScreen;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components.Alignable;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components.RenderElement;
 import xyz.wagyourtail.jsmacros.client.api.helper.TextHelper;
-import xyz.wagyourtail.jsmacros.core.Core;
 import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
 /**
@@ -161,7 +158,7 @@ public class ClickableWidgetHelper<B extends ClickableWidgetHelper<B, T>, T exte
      *
      * @since 1.3.1
      */
-    public B click() throws InterruptedException {
+    public B click() {
         click(true);
         return (B) this;
     }
@@ -172,19 +169,12 @@ public class ClickableWidgetHelper<B extends ClickableWidgetHelper<B, T>, T exte
      * @param await should wait for button to finish clicking.
      * @since 1.3.1
      */
-    public B click(boolean await) throws InterruptedException {
-        if (JsMacrosClient.clientCore.profile.checkJoinedThreadStack()) {
+    public B click(boolean await) {
+        McUtil.runOnMain(await, () -> {
             base.mouseClicked(base.getX(), base.getY(), 0);
             base.mouseReleased(base.getX(), base.getY(), 0);
-        } else {
-            final Semaphore waiter = new Semaphore(await ? 0 : 1);
-            MinecraftClient.getInstance().execute(() -> {
-                base.mouseClicked(base.getX(), base.getY(), 0);
-                base.mouseReleased(base.getX(), base.getY(), 0);
-                waiter.release();
-            });
-            waiter.acquire();
-        }
+        });
+        //noinspection unchecked
         return (B) this;
     }
 

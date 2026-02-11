@@ -7,8 +7,8 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletDeclareType;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
-import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.CustomImage;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.*;
 import xyz.wagyourtail.jsmacros.core.Core;
@@ -66,7 +66,7 @@ public class FHud extends BaseLibrary {
      */
     public void openScreen(@Nullable IScreen s) {
         net.minecraft.client.gui.screen.Screen screen = (net.minecraft.client.gui.screen.Screen) s;
-        mc.execute(() -> mc.setScreen(screen));
+        McUtil.runOnMain(false, () -> mc.setScreen(screen));
     }
 
     /**

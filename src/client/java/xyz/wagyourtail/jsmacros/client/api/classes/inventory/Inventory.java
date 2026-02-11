@@ -24,6 +24,7 @@ import xyz.wagyourtail.doclet.DocletReplaceTypeParams;
 import xyz.wagyourtail.jsmacros.api.math.Pos2D;
 import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IHorseScreen;
 import xyz.wagyourtail.jsmacros.client.access.IInventory;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
@@ -343,7 +344,7 @@ public class Inventory<T extends HandledScreen<?>> {
      * Closes the inventory, and open gui if applicable.
      */
     public void close() {
-        mc.execute(player::closeHandledScreen);
+        McUtil.runOnMain(false, player::closeHandledScreen);
         this.inventory = null;
         this.handler = null;
     }
@@ -497,7 +498,7 @@ public class Inventory<T extends HandledScreen<?>> {
      * @since 1.2.8
      */
     public void openGui() {
-        mc.execute(() -> mc.setScreen(this.inventory));
+        McUtil.runOnMain(false, () -> mc.setScreen(this.inventory));
     }
 
     /**

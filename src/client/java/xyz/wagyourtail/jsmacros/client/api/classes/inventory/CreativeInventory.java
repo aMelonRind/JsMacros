@@ -9,6 +9,7 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.math.MathHelper;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.TextHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
@@ -133,7 +134,7 @@ public class CreativeInventory extends Inventory<CreativeInventoryScreen> {
     }
 
     private CreativeInventory selectTab(ItemGroup group) {
-        mc.execute(() -> ((MixinCreativeInventoryScreen) inventory).invokeSetSelectedTab(group));
+        McUtil.runOnMain(false, () -> ((MixinCreativeInventoryScreen) inventory).invokeSetSelectedTab(group));
         return this;
     }
 
