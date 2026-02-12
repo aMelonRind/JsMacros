@@ -264,7 +264,7 @@ public class Text implements RenderElement, Alignable<Text> {
         Matrix3x2fStack matrices = drawContext.pose();
         matrices.pushMatrix();
         setupMatrix(matrices, x, y, (float) scale, rotation, getWidth(), getHeight(), rotateCenter);
-        drawContext.drawString(mc.font, text, 0, 0, color, shadow);
+        drawContext.drawString(mc.font, text, x, y, color, shadow);
         matrices.popMatrix();
     }
 
