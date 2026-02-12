@@ -88,7 +88,7 @@ public abstract class MixinScreen extends AbstractContainerEventHandler implemen
 
     // TODO: (1.21.11) This was moved from handleComponentClicked, I'm unsure if it's the same
     // TODO: switch to enum extension with mixin 9.0 or whenever Mumfrey gets around to it
-    @Inject(method = "defaultHandleGameClickEvent", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "defaultHandleClickEvent", at = @At("HEAD"), cancellable = true)
     private static void onHandleTextClick(ClickEvent clickEvent, Minecraft minecraft, Screen screen, CallbackInfo ci) {
         if (clickEvent instanceof CustomClickEvent) {
             ((CustomClickEvent) clickEvent).event().run();
@@ -111,6 +111,12 @@ public abstract class MixinScreen extends AbstractContainerEventHandler implemen
     @Shadow
     @Final
     private List<GuiEventListener> children;
+
+    @Shadow
+    protected static void defaultHandleGameClickEvent(ClickEvent clickEvent, Minecraft minecraft, @org.jspecify.annotations.Nullable Screen screen) {}
+
+    @Shadow
+    protected static void defaultHandleClickEvent(ClickEvent clickEvent, Minecraft minecraft, @org.jspecify.annotations.Nullable Screen screen) {}
 
     @Override
     public int getWidth() {
@@ -940,8 +946,7 @@ public abstract class MixinScreen extends AbstractContainerEventHandler implemen
 
         synchronized (elements) {
             for (RenderElement e : elements) {
-                if (e instanceof Text) {
-                    Text t = (Text) e;
+                if (e instanceof Text t) {
                     if (mouseX > t.x && mouseX < t.x + t.width && mouseY > t.y && mouseY < t.y + font.lineHeight) {
                         hoverText = t;
                     }
@@ -950,8 +955,19 @@ public abstract class MixinScreen extends AbstractContainerEventHandler implemen
         }
 
         if (hoverText != null) {
-            // TODO: (1.21.11) I think this needs to be injected higher? Or maybe we need to fundamentally rethink it.
-            // handleComponentClicked(TextUtil.componentStyleAtWidth(font, hoverText.text, (int) mouseX - hoverText.x));
+            Style style = TextUtil.componentStyleAtWidth(font, hoverText.text, (int) mouseX - hoverText.x);
+            Minecraft mc = Minecraft.getInstance();
+            if (style != null) {
+                ClickEvent ce = style.getClickEvent();
+
+                if (ce != null) {
+                    if (mc.player != null) {
+                        defaultHandleGameClickEvent(ce, mc, (Screen) (Object) this);
+                    } else {
+                        defaultHandleClickEvent(ce, mc, (Screen) (Object) this);
+                    }
+                }
+            }
         }
     }
 
