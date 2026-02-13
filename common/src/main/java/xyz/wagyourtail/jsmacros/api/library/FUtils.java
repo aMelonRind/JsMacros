@@ -1,19 +1,14 @@
 package xyz.wagyourtail.jsmacros.api.library;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
-import net.minecraft.client.Minecraft;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.MemoryUtil;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.core.Core;
 import xyz.wagyourtail.jsmacros.core.library.BaseLibrary;
 import xyz.wagyourtail.jsmacros.core.library.Library;
 import xyz.wagyourtail.jsmacros.util.NameUtil;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -211,14 +206,6 @@ public class FUtils extends BaseLibrary {
     @DocletReplaceReturn("T & {}")
     public <T> T requireNonNull(T obj, String message) {
         return Objects.requireNonNull(obj, message);
-    }
-
-    public void copyToClipboard(String text) {
-        Minecraft.getInstance().keyboardHandler.setClipboard(text);
-    }
-
-    public String getClipboard() {
-        return Minecraft.getInstance().keyboardHandler.getClipboard();
     }
 
 }
