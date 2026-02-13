@@ -139,6 +139,14 @@ public class LivingEntityHelper<T extends LivingEntity> extends EntityHelper<T> 
     }
 
     /**
+     * Checks if the entity is still alive and in the same world as player, and health > 0.
+     * @since 2.1.0
+     */
+    public boolean isReallyAliveAndHealthy() {
+        return isReallyAlive() && getHealth() > 0;
+    }
+
+    /**
      * @return entity's health
      * @since 1.3.1
      */

@@ -10,6 +10,11 @@ public interface RenderElement3D<T extends RenderElement3D<?>> extends Comparabl
     @DocletIgnore
     void render(PoseStack matrices, MultiBufferSource consumers, float tickDelta);
 
+    @DocletIgnore
+    default boolean shouldRemove() {
+        return false;
+    }
+
     @Override
     default int compareTo(@NotNull RenderElement3D o) {
         int i = this.getClass().getCanonicalName().compareTo(o.getClass().getCanonicalName());

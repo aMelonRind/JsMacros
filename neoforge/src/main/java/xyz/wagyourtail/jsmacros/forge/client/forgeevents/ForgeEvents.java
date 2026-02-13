@@ -75,9 +75,10 @@ public class ForgeEvents {
     }
 
     public static void renderHudListener(GuiGraphics GuiGraphics, DeltaTracker partialTicks) {
-        for (IDraw2D<Draw2D> h : ImmutableSet.copyOf(FHud.overlays).stream().sorted(Comparator.comparingInt(IDraw2D::getZIndex)).collect(Collectors.toList())) {
+        float tickDelta = partialTicks.getGameTimeDeltaPartialTick(true);
+        for (IDraw2D<Draw2D> h : ImmutableSet.copyOf(FHud.overlays).stream().sorted(Comparator.comparingInt(IDraw2D::getZIndex)).toList()) {
             try {
-                h.render(GuiGraphics);
+                h.render(GuiGraphics, tickDelta);
             } catch (Throwable ignored) {
             }
         }
@@ -86,6 +87,8 @@ public class ForgeEvents {
     public static void onRegisterGuiOverlays(RegisterGuiLayersEvent ev) {
         // TODO: This used to be DEBUG_OVERLAY in 1.21.8, removed in 1.21.9 or 1.21.10.
         //  How did this get handled on the fabric side?
+        //
+        // mixins. this is actually duplicate since the mixin moved from fabric to commons.
         ev.registerBelow(VanillaGuiLayers.AFTER_CAMERA_DECORATIONS, Identifier.parse("jsmacros:hud"), ForgeEvents::renderHudListener);
     }
 

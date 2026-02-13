@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.framegraph.FrameGraphBuilder;
 import com.mojang.blaze3d.framegraph.FramePass;
+import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LevelTargetBundle;
@@ -14,6 +16,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,9 +24,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
+import xyz.wagyourtail.jsmacros.client.api.classes.render.components.WorldPosWrapper;
 import xyz.wagyourtail.jsmacros.client.api.library.impl.FHud;
-
-import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 @Mixin(value = LevelRenderer.class)
 public class MixinWorldRenderer {
@@ -34,6 +36,12 @@ public class MixinWorldRenderer {
     @Shadow
     @Final
     private LevelTargetBundle targets;
+
+    @Inject(method = "renderLevel", at = @At("HEAD"))
+    private void onRenderLevel(GraphicsResourceAllocator graphicsResourceAllocator, DeltaTracker deltaTracker, boolean renderBlockOutline, Camera camera, Matrix4f frustumMatrix, Matrix4f projectionMatrix, Matrix4f cullingProjectionMatrix, GpuBufferSlice shaderFog, Vector4f fogColor, boolean renderSky, CallbackInfo ci) {
+        WorldPosWrapper.positionMatrix = frustumMatrix;
+        WorldPosWrapper.projectionMatrix = projectionMatrix;
+    }
 
     // inject at HEAD instead of TAIL to draw gizmo before collecting
     @Inject(method = "addMainPass", at = @At("HEAD"))
@@ -51,7 +59,7 @@ public class MixinWorldRenderer {
             try {
                 MultiBufferSource.BufferSource consumers = renderBuffers.crumblingBufferSource();
 
-                float tickDelta = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
+                float tickDelta = deltaTracker.getGameTimeDeltaPartialTick(true);
 
                 PoseStack matrixStack = new PoseStack();
                 matrixStack.pushPose();

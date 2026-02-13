@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.Renderable;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletIgnore;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
+import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components.*;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components3d.Surface;
@@ -564,6 +565,23 @@ public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
         return this;
     }
 
+    /**
+     * wraps the element, so it renders on screen with projected world position
+     * @since 2.1.0
+     */
+    public WorldPosWrapper addWorldPosWrapped(Pos3D pos, RenderElement base) {
+        removeElement(base);
+        return reAddElement(new WorldPosWrapper(pos, base));
+    }
+
+    /**
+     * wraps the element, so it renders on screen with projected world position
+     * @since 2.1.0
+     */
+    public WorldPosWrapper addWorldPosWrapped(double x, double y, double z, RenderElement base) {
+        return addWorldPosWrapped(new Pos3D(x, y, z), base);
+    }
+
     public void init() {
         synchronized (elements) {
             elements.clear();
@@ -589,7 +607,7 @@ public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
 
     @Override
     @DocletIgnore
-    public void render(GuiGraphics drawContext) {
+    public void render(GuiGraphics drawContext, float tickDelta) {
         if (drawContext == null || !visible) {
             return;
         }
@@ -597,7 +615,7 @@ public class Draw2D implements IDraw2D<Draw2D>, Registrable<Draw2D> {
         synchronized (elements) {
             Iterator<RenderElement> iter = getElementsByZIndex();
             while (iter.hasNext()) {
-                iter.next().render(drawContext, 0, 0, 0);
+                iter.next().render(drawContext, 0, 0, tickDelta);
             }
         }
     }

@@ -27,6 +27,11 @@ import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
  */
 @SuppressWarnings("unused")
 public class Draw3D implements Registrable<Draw3D> {
+    /**
+     * could be set by elements when it should be cleared.
+     */
+    @DocletIgnore
+    public static boolean dirty = false;
     private final List<RenderElement3D<?>> elements = new ArrayList<>();
 
     /**
@@ -612,6 +617,18 @@ public class Draw3D implements Registrable<Draw3D> {
     }
 
     /**
+     * @since 2.1.0
+     */
+    public EntityFollowWrapper addEntityFollower(RenderElement3D<?> base, EntityHelper<?> entity) {
+        synchronized (elements) {
+            this.elements.remove(base);
+        }
+        EntityFollowWrapper wrapper = new EntityFollowWrapper(base, entity);
+        reAddElement(wrapper);
+        return wrapper;
+    }
+
+    /**
      * @return a new {@link Box.Builder} instance.
      * @since 1.8.4
      */
@@ -701,7 +718,7 @@ public class Draw3D implements Registrable<Draw3D> {
         poseStack.pushPose();
         poseStack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
 
-        EntityTraceLine.dirty = false;
+        dirty = false;
 
         synchronized (elements) {
             Collections.sort(elements);
@@ -711,9 +728,9 @@ public class Draw3D implements Registrable<Draw3D> {
             }
         }
 
-        if (EntityTraceLine.dirty) {
+        if (dirty) {
             synchronized (elements) {
-                elements.removeIf(e -> e instanceof EntityTraceLine etl && etl.shouldRemove);
+                elements.removeIf(RenderElement3D::shouldRemove);
             }
         }
 

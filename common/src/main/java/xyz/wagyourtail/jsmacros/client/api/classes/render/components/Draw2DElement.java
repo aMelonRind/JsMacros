@@ -233,7 +233,7 @@ public class Draw2DElement implements RenderElement, Alignable<Draw2DElement> {
             matrices.translate(-width.getAsInt() / 2f, -height.getAsInt() / 2f);
         }
         //don't translate back
-        draw2D.render(drawContext);
+        draw2D.render(drawContext, delta);
         matrices.popMatrix();
     }
 

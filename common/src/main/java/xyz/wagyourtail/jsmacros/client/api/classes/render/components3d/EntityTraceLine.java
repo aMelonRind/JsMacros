@@ -2,13 +2,10 @@ package xyz.wagyourtail.jsmacros.client.api.classes.render.components3d;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.entity.EntityHelper;
-
-import static xyz.wagyourtail.jsmacros.client.api.classes.render.components.RenderElement.mc;
 
 /**
  * @author aMelonRind
@@ -16,10 +13,8 @@ import static xyz.wagyourtail.jsmacros.client.api.classes.render.components.Rend
  */
 @SuppressWarnings("unused")
 public class EntityTraceLine extends TraceLine {
-    public static boolean dirty = false;
-
     @Nullable
-    public Entity entity;
+    public EntityHelper<?> entity;
     public double yOffset = 0.5;
     public boolean shouldRemove = false;
 
@@ -39,7 +34,7 @@ public class EntityTraceLine extends TraceLine {
      */
     public EntityTraceLine setEntity(@Nullable EntityHelper<?> entity) {
         if (entity == null) return this;
-        this.entity = entity.getRaw();
+        this.entity = entity;
         shouldRemove = false;
         return this;
     }
@@ -54,14 +49,19 @@ public class EntityTraceLine extends TraceLine {
     }
 
     @Override
+    public boolean shouldRemove() {
+        return shouldRemove;
+    }
+
+    @Override
     public void render(PoseStack matrixStack, MultiBufferSource consumers, float tickDelta) {
-        if (shouldRemove || entity == null || entity.isRemoved() || entity.level() != mc.level) {
+        if (shouldRemove || entity == null || !entity.isReallyAlive()) {
             shouldRemove = true;
-            dirty = true;
+            Draw3D.dirty = true;
             return;
         }
 
-        Vec3 vec = entity.getPosition(tickDelta);
+        Vec3 vec = entity.getRaw().getPosition(tickDelta);
         setPos(vec.x, vec.y + yOffset, vec.z);
         super.render(matrixStack, consumers, tickDelta);
     }

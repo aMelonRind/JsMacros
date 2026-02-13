@@ -16,8 +16,9 @@ public class MixinInGameHud {
     @Inject(method = "render", at = @At("TAIL"))
     private void onRenderHud(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
         if (!FHud.overlays.isEmpty()) {
+            float tickDelta = tickCounter.getGameTimeDeltaPartialTick(true);
             for (IDraw2D<Draw2D> overlay : FHud.overlays) {
-                overlay.render(context);
+                overlay.render(context, tickDelta);
             }
         }
     }

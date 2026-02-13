@@ -768,7 +768,7 @@ public interface IDraw2D<T> {
      * @param drawContext
      */
     @DocletIgnore
-    void render(GuiGraphics drawContext);
+    void render(GuiGraphics drawContext, float tickDelta);
 
     /**
      * @param zIndex
