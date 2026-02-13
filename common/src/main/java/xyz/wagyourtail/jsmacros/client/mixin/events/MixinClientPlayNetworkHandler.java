@@ -220,7 +220,14 @@ public abstract class MixinClientPlayNetworkHandler extends ClientCommonPacketLi
         }
     }
 
-
+    @Inject(at = @At("HEAD"), method = "handleParticleEvent", cancellable = true)
+    public void onParticle(ClientboundLevelParticlesPacket packet, CallbackInfo ci) {
+        EventParticle event = new EventParticle(packet);
+        event.trigger();
+        if (event.isCanceled()) {
+            ci.cancel();
+        }
+    }
 
     protected MixinClientPlayNetworkHandler(Minecraft arg, Connection arg2, CommonListenerCookie arg3) {
         super(arg, arg2, arg3);
