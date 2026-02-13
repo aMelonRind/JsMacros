@@ -139,8 +139,9 @@ public abstract class BaseProfile {
         if (macroListener instanceof FJsMacros.ScriptEventListener sel) {
             BaseScriptContext<?> ctx = sel.getCtx();
             if (ctx != null && ctx.getBoundThreads().contains(Thread.currentThread()) && !ctx.isMultiThreaded()) {
-                if (sel.getFilter().shouldStopJoinTriggering()) return;
-                throw new IllegalThreadStateException("Cannot join " + macroListener + " on same context as it's creation.");
+//                if (sel.getFilter().shouldStopJoinTriggering()) return;
+//                throw new IllegalThreadStateException("Cannot join " + macroListener + " on same context as it's creation.");
+                return;
             }
         }
         EventContainer<?> t = macroListener.trigger(event);

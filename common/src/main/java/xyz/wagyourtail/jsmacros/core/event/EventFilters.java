@@ -20,17 +20,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class EventFilters {
     public static final EventFilter CONSTANT_TRUE = event -> true;
-    private static final EventFilter NO_JOIN_TRIGGERING = new EventFilter() {
-        @Override
-        public boolean test(BaseEvent event) {
-            return true;
-        }
-
-        @Override
-        public boolean shouldStopJoinTriggering() {
-            return true;
-        }
-    };
     private static final Map<String, Compiled> compiledGenericCache = new HashMap<>();
     private static final Map<Pair<String, String>, Compiled> compiledCache = new HashMap<>();
     private static CtClass compiledCommons = null;
@@ -91,15 +80,6 @@ public class EventFilters {
      */
     public EventFilter invert(EventFilter base) {
         return FilterInverted.invert(base);
-    }
-
-    /**
-     * A filter that blocks the `Cannot join {} on same context as it's creation.` error.<br>
-     * Works by itself or being in any position of compound, ignoring logic.
-     * @since 2.1.0
-     */
-    public EventFilter noJoinTriggering() {
-        return NO_JOIN_TRIGGERING;
     }
 
     /**

@@ -17,11 +17,6 @@ public interface EventFilter {
 
     boolean test(BaseEvent event);
 
-    // I feel like this is a bit spaghetti but it works
-    default boolean shouldStopJoinTriggering() {
-        return false;
-    }
-
     /**
      * Any filter that contains another filter should implement this interface.
      */
@@ -34,11 +29,6 @@ public interface EventFilter {
             getChildren().forEach(c -> {
                 if (c instanceof Compound fc) fc.checkCyclicRef(base);
             });
-        }
-
-        @Override
-        default boolean shouldStopJoinTriggering() {
-            return getChildren().anyMatch(EventFilter::shouldStopJoinTriggering);
         }
     }
 
