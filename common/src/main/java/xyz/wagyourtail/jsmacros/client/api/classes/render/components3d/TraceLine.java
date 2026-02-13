@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.Draw3D;
@@ -17,12 +18,6 @@ import java.util.Objects;
  */
 @SuppressWarnings("unused")
 public class TraceLine implements RenderElement3D<TraceLine> {
-    /**
-     * this is not meant to be exposed because it works in a poor way<br>
-     * it needs fov and aspect ratio info to render normally when not on center<br>
-     * but for customize availability I just put it here as a field
-     */
-
     private final Line3D render;
 
     public TraceLine(double x, double y, double z, int color) {
@@ -106,7 +101,7 @@ public class TraceLine implements RenderElement3D<TraceLine> {
     @Override
     public void render(PoseStack matrixStack, MultiBufferSource consumers, float tickDelta) {
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        Vec3 p1 = camera.position().add(Vec3.directionFromRotation(camera.xRot(), camera.yRot()));
+        Vec3 p1 = camera.position().add(Vec3.directionFromRotation(camera.xRot(), camera.yRot()).normalize().multiply(5.0, 5.0, 5.0));
 
         render.setPos(p1.x, p1.y, p1.z, render.pos.x2, render.pos.y2, render.pos.z2);
         render.render(matrixStack, consumers, tickDelta);

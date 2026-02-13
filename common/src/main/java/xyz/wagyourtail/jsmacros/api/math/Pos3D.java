@@ -212,6 +212,10 @@ public class Pos3D extends Pos2D {
         return converter.convertToVec3d(this);
     }
 
+    public <T> T convert(Pos3DConverter<T> converter) {
+        return converter.apply(x, y, z);
+    }
+
     /**
      * @deprecated Use {@link #toRawBlockPos(ICoordinateConverter)} with platform-specific converter
      */
@@ -247,5 +251,9 @@ public class Pos3D extends Pos2D {
             i = Double.compare(z, o.z);
         }
         return i;
+    }
+
+    public interface Pos3DConverter<T> {
+        T apply(double x, double y, double z);
     }
 }

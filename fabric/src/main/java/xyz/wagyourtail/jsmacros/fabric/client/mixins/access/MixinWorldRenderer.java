@@ -37,34 +37,34 @@ public class MixinWorldRenderer {
 
     @Inject(method = "addMainPass", at = @At("TAIL"))
     private void onRenderMain(FrameGraphBuilder frameGraphBuilder, Frustum frustum, Matrix4f matrix4f, GpuBufferSlice gpuBufferSlice, boolean bl, LevelRenderState levelRenderState, DeltaTracker deltaTracker, ProfilerFiller profilerFiller, CallbackInfo ci) {
-        if (this.targets == null) {
-            return;
-        }
-        FramePass framePass = frameGraphBuilder.addPass("jsmacros_draw3d");
-        LevelTargetBundle frameBufferSet = this.targets;
-        frameBufferSet.main = framePass.readsAndWrites(frameBufferSet.main);
-
-        framePass.executes(() -> {
-            profilerFiller.push("jsmacros_d3d");
-
-            try {
-                MultiBufferSource.BufferSource consumers = renderBuffers.crumblingBufferSource();
-
-                float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
-
-                PoseStack matrixStack = new PoseStack();
-                matrixStack.pushPose();
-                for (Draw3D d : ImmutableSet.copyOf(FHud.renders)) {
-                    d.render(matrixStack, consumers, tickDelta);
-                }
-                matrixStack.popPose();
-                consumers.endBatch();
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-
-            profilerFiller.pop();
-        });
+//        if (this.targets == null) {
+//            return;
+//        }
+//        FramePass framePass = frameGraphBuilder.addPass("jsmacros_draw3d");
+//        LevelTargetBundle frameBufferSet = this.targets;
+//        frameBufferSet.main = framePass.readsAndWrites(frameBufferSet.main);
+//
+//        framePass.executes(() -> {
+//            profilerFiller.push("jsmacros_d3d");
+//
+//            try {
+//                MultiBufferSource.BufferSource consumers = renderBuffers.crumblingBufferSource();
+//
+//                float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
+//
+//                PoseStack matrixStack = new PoseStack();
+//                matrixStack.pushPose();
+//                for (Draw3D d : ImmutableSet.copyOf(FHud.renders)) {
+//                    d.render(matrixStack, consumers, tickDelta);
+//                }
+//                matrixStack.popPose();
+//                consumers.endBatch();
+//            } catch (Throwable e) {
+//                e.printStackTrace();
+//            }
+//
+//            profilerFiller.pop();
+//        });
     }
 
 }

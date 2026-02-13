@@ -4,7 +4,9 @@ import com.mojang.blaze3d.platform.DepthTestFunction;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.gizmos.GizmoProperties;
+import net.minecraft.gizmos.Gizmos;
+import net.minecraft.world.phys.Vec3;
 import xyz.wagyourtail.doclet.DocletIgnore;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.api.math.Vec3D;
@@ -107,36 +109,10 @@ public class Line3D implements RenderElement3D<Line3D> {
     @Override
     @DocletIgnore
     public void render(PoseStack matrixStack, MultiBufferSource consumers, float tickDelta) {
-        boolean seeThrough = !this.cull;
-        var consumer = consumers.getBuffer(RenderTypes.lines());
-
-        try {
-            if (seeThrough) {
-                lineDepthTestFunction.set(RenderPipelines.LINES, DepthTestFunction.NO_DEPTH_TEST);
-            }
-            PoseStack.Pose entry = matrixStack.last();
-
-            // Draw 3 lines in each of the normals for consistency
-            consumer.addVertex(entry, (float) pos.x1, (float) pos.y1, (float) pos.z1).setColor(color).setNormal(entry, 1, 0, 0);
-            consumer.addVertex(entry, (float) pos.x2, (float) pos.y2, (float) pos.z2).setColor(color).setNormal(entry, 1, 0, 0);
-            consumer.addVertex(entry, (float) pos.x1, (float) pos.y1, (float) pos.z1).setColor(color).setNormal(entry, 0, 1, 0);
-            consumer.addVertex(entry, (float) pos.x2, (float) pos.y2, (float) pos.z2).setColor(color).setNormal(entry, 0, 1, 0);
-            consumer.addVertex(entry, (float) pos.x1, (float) pos.y1, (float) pos.z1).setColor(color).setNormal(entry, 0, 0, 1);
-            consumer.addVertex(entry, (float) pos.x2, (float) pos.y2, (float) pos.z2).setColor(color).setNormal(entry, 0, 0, 1);
-
-          if (seeThrough && consumer instanceof MultiBufferSource.BufferSource immediate) {
-            immediate.endBatch();
-          }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } finally {
-            if (seeThrough) {
-                try {
-                    lineDepthTestFunction.set(RenderPipelines.LINES, oldlineDepthTestFunction);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
+        // TODO probably should implement the same way litematica does
+        GizmoProperties prop = Gizmos.line(pos.getStart().convert(Vec3::new), pos.getEnd().convert(Vec3::new), color, 2.0f);
+        if (!this.cull) {
+            prop.setAlwaysOnTop();
         }
     }
 

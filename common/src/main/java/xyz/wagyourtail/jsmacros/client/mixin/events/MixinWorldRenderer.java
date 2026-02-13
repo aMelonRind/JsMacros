@@ -34,7 +34,8 @@ public class MixinWorldRenderer {
     @Final
     private LevelTargetBundle targets;
 
-    @Inject(method = "addMainPass", at = @At("TAIL"))
+    // inject at HEAD instead of TAIL to draw gizmo before collecting
+    @Inject(method = "addMainPass", at = @At("HEAD"))
     private void onRenderMain(FrameGraphBuilder frameGraphBuilder, Frustum frustum, Matrix4f matrix4f, GpuBufferSlice gpuBufferSlice, boolean bl, LevelRenderState levelRenderState, DeltaTracker deltaTracker, ProfilerFiller profilerFiller, CallbackInfo ci) {
         if (this.targets == null) {
             return;
