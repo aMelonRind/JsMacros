@@ -23,6 +23,7 @@ import org.lwjgl.glfw.GLFW;
 import xyz.wagyourtail.doclet.DocletDeclareType;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IResourcePackManager;
 import xyz.wagyourtail.jsmacros.client.mixin.access.MixinSimpleOption;
 import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
@@ -802,7 +803,7 @@ public class OptionsHelper extends BaseHelper<Options> {
          */
         public VideoOptionsHelper setGuiScale(int scale) {
             base.guiScale().set(scale);
-            mc.execute(mc::resizeDisplay);
+            McUtil.runOnMain(false, mc::resizeDisplay);
             return this;
         }
 
@@ -2486,7 +2487,7 @@ public class OptionsHelper extends BaseHelper<Options> {
     @Deprecated
     public OptionsHelper setGuiScale(int scale) {
         base.guiScale().set(scale);
-        mc.execute(mc::resizeDisplay);
+        McUtil.runOnMain(false, mc::resizeDisplay);
         return this;
     }
 

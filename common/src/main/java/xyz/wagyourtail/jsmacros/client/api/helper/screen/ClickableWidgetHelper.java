@@ -5,8 +5,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
-import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.TextBuilder;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.IScreen;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.components.Alignable;
@@ -16,7 +17,6 @@ import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
 /**
@@ -160,8 +160,9 @@ public class ClickableWidgetHelper<B extends ClickableWidgetHelper<B, T>, T exte
      *
      * @since 1.3.1
      */
-    public B click() throws InterruptedException {
+    public B click() {
         click(true);
+        //noinspection unchecked
         return (B) this;
     }
 
@@ -171,21 +172,13 @@ public class ClickableWidgetHelper<B extends ClickableWidgetHelper<B, T>, T exte
      * @param await should wait for button to finish clicking.
      * @since 1.3.1
      */
-    public B click(boolean await) throws InterruptedException {
-        if (JsMacrosClient.clientCore.profile.checkJoinedThreadStack()) {
-            MouseButtonEvent fakeEvent = new MouseButtonEvent(base.getX(), base.getY(), null);
+    public B click(boolean await) {
+        McUtil.runOnMain(await, () -> {
+            MouseButtonEvent fakeEvent = new MouseButtonEvent(base.getX(), base.getY(), new MouseButtonInfo(0, 0));
             base.mouseClicked(fakeEvent, false);
             base.mouseReleased(fakeEvent);
-        } else {
-            final Semaphore waiter = new Semaphore(await ? 0 : 1);
-            Minecraft.getInstance().execute(() -> {
-                MouseButtonEvent fakeEvent = new MouseButtonEvent(base.getX(), base.getY(), null);
-                base.mouseClicked(fakeEvent, false);
-                base.mouseReleased(fakeEvent);
-                waiter.release();
-            });
-            waiter.acquire();
-        }
+        });
+        //noinspection unchecked
         return (B) this;
     }
 

@@ -9,6 +9,7 @@ import xyz.wagyourtail.jsmacros.client.api.classes.render.*;
 import xyz.wagyourtail.doclet.DocletDeclareType;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.CustomImage;
 import xyz.wagyourtail.jsmacros.client.api.classes.render.*;
 import xyz.wagyourtail.jsmacros.core.Core;
@@ -66,7 +67,7 @@ public class FHud extends BaseLibrary {
      */
     public void openScreen(@Nullable IScreen s) {
         net.minecraft.client.gui.screens.Screen screen = (net.minecraft.client.gui.screens.Screen) s;
-        mc.execute(() -> mc.setScreen(screen));
+        McUtil.runOnMain(false, () -> mc.setScreen(screen));
     }
 
     /**

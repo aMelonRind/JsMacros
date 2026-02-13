@@ -9,6 +9,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.util.Mth;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.TextHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
@@ -133,7 +134,7 @@ public class CreativeInventory extends Inventory<CreativeModeInventoryScreen> {
     }
 
     private CreativeInventory selectTab(CreativeModeTab group) {
-        mc.execute(() -> ((MixinCreativeInventoryScreen) inventory).invokeSetSelectedTab(group));
+        McUtil.runOnMain(false, () -> ((MixinCreativeInventoryScreen) inventory).invokeSetSelectedTab(group));
         return this;
     }
 

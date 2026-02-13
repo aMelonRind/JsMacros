@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Etheradon
@@ -109,17 +108,10 @@ public class CustomImage {
      * @since 1.8.4
      */
     public CustomImage update() {
-        try {
-            final Semaphore semaphore = new Semaphore(0);
-            Minecraft.getInstance().execute(() -> {
-                texture.upload();
-                updateTexture();
-                semaphore.release();
-            });
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            JsMacrosClient.clientCore.profile.logError(e);
-        }
+        McUtil.runOnMain(true, () -> {
+            texture.upload();
+            updateTexture();
+        });
         return this;
     }
 
@@ -607,18 +599,7 @@ public class CustomImage {
     }
 
     private static DynamicTexture createTexture(BufferedImage image, String name) {
-        AtomicReference<DynamicTexture> texture = new AtomicReference<>();
-        try {
-            final Semaphore semaphore = new Semaphore(0);
-            Minecraft.getInstance().execute(() -> {
-                texture.set(new DynamicTexture(name, image.getWidth(), image.getHeight(), true));
-                semaphore.release();
-            });
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            JsMacrosClient.clientCore.profile.logError(e);
-        }
-        return texture.get();
+        return McUtil.fetchOnMain(() -> new DynamicTexture(name, image.getWidth(), image.getHeight(), true));
     }
 
     public static CustomImage createWidget(int width, int height, String name) {

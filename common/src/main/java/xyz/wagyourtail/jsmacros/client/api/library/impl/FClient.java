@@ -23,6 +23,7 @@ import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.api.helper.ModContainerHelper;
 import xyz.wagyourtail.jsmacros.client.JsMacros;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.OptionsHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.PacketByteBufferHelper;
@@ -223,7 +224,7 @@ public class FClient extends PerExecLibrary {
             throw new RuntimeException("Level Not Found!");
         }
 
-        mc.execute(() -> {
+        McUtil.runOnMain(false, () -> {
             boolean bl = mc.isLocalServer();
             if (mc.level != null) {
                 mc.level.disconnect(Component.nullToEmpty(""));
@@ -255,7 +256,7 @@ public class FClient extends PerExecLibrary {
      * @since 1.2.3 (was in the {@code jsmacros} library until 1.2.9)
      */
     public void connect(String ip, int port) {
-        mc.execute(() -> {
+        McUtil.runOnMain(false, () -> {
             boolean bl = mc.isLocalServer();
             if (mc.level != null) {
                 mc.level.disconnect(Component.nullToEmpty(""));
@@ -286,7 +287,7 @@ public class FClient extends PerExecLibrary {
      * {@code callback} defaults to {@code null}
      */
     public void disconnect(@Nullable MethodWrapper<Boolean, Object, Object, ?> callback) {
-        mc.execute(() -> {
+        McUtil.runOnMain(false, () -> {
             boolean isWorld = mc.level != null;
             boolean isInSingleplayer = mc.isLocalServer();
             if (isWorld) {
@@ -325,7 +326,7 @@ public class FClient extends PerExecLibrary {
      */
     @DocletReplaceReturn("never")
     public void shutdown() {
-        mc.execute(mc::stop);
+        McUtil.runOnMain(true, mc::stop);
 
         if (!runner.profile.checkJoinedThreadStack()) {
             // Wait until the game stops

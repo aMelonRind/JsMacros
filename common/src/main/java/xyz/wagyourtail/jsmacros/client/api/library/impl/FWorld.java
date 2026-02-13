@@ -43,6 +43,7 @@ import xyz.wagyourtail.doclet.DocletReplaceTypeParams;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IPlayerListHud;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
 import xyz.wagyourtail.jsmacros.client.api.classes.worldscanner.WorldScanner;
@@ -823,7 +824,7 @@ public class FWorld extends BaseLibrary {
     public void playSound(String id, double volume, double pitch) {
         SoundEvent sound = SoundEvent.createVariableRangeEvent(Identifier.parse(id));
         assert sound != null;
-        mc.execute(() -> mc.getSoundManager().play(SimpleSoundInstance.forUI(sound, (float) pitch, (float) volume)));
+        McUtil.runOnMain(false, () -> mc.getSoundManager().play(SimpleSoundInstance.forUI(sound, (float) pitch, (float) volume)));
     }
 
     /**
@@ -843,7 +844,7 @@ public class FWorld extends BaseLibrary {
         if (world == null) return;
         SoundEvent sound = SoundEvent.createVariableRangeEvent(Identifier.parse(id));
         assert sound != null;
-        mc.execute(() -> world.playLocalSound(x, y, z, sound, SoundSource.MASTER, (float) volume, (float) pitch, true));
+        McUtil.runOnMain(false, () -> world.playLocalSound(x, y, z, sound, SoundSource.MASTER, (float) volume, (float) pitch, true));
     }
 
     /**
@@ -988,7 +989,7 @@ public class FWorld extends BaseLibrary {
         particle = particle != null ? particle : ParticleTypes.CLOUD;
 
         ClientboundLevelParticlesPacket packet = new ClientboundLevelParticlesPacket(particle, force, true, x, y, z, (float) deltaX, (float) deltaY, (float) deltaZ, (float) speed, count);
-        mc.execute(() -> player.connection.handleParticleEvent(packet));
+        McUtil.runOnMain(false, () -> player.connection.handleParticleEvent(packet));
     }
 
     /**
