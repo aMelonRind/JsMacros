@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
-import xyz.wagyourtail.jsmacros.client.api.event.filterer.FiltererSendPacket;
 import xyz.wagyourtail.jsmacros.client.api.helper.PacketByteBufferHelper;
 import xyz.wagyourtail.jsmacros.core.event.BaseEvent;
 import xyz.wagyourtail.jsmacros.core.event.Event;
@@ -15,7 +14,7 @@ import xyz.wagyourtail.jsmacros.core.library.impl.FReflection;
  * @author Etheradon
  * @since 1.8.4
  */
-@Event(value = "SendPacket", cancellable = true, filterer = FiltererSendPacket.class)
+@Event(value = "SendPacket", cancellable = true)
 @SuppressWarnings("unused")
 public class EventSendPacket extends BaseEvent {
 

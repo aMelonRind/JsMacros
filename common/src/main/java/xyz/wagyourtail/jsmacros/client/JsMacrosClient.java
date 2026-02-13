@@ -10,6 +10,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
+import xyz.wagyourtail.jsmacros.client.api.event.CompiledCommons;
 import xyz.wagyourtail.jsmacros.client.api.event.impl.EventQuitGame;
 import xyz.wagyourtail.jsmacros.client.api.helper.PacketByteBufferHelper;
 import xyz.wagyourtail.jsmacros.client.config.ClientConfigV2;
@@ -18,6 +19,7 @@ import xyz.wagyourtail.jsmacros.client.event.EventRegistry;
 import xyz.wagyourtail.jsmacros.client.gui.screens.KeyMacrosScreen;
 import xyz.wagyourtail.jsmacros.client.movement.MovementQueue;
 import xyz.wagyourtail.jsmacros.core.Core;
+import xyz.wagyourtail.jsmacros.core.event.EventFilters;
 import xyz.wagyourtail.wagyourgui.BaseScreen;
 
 import java.io.File;
@@ -38,6 +40,9 @@ public class JsMacrosClient extends JsMacros {
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException | IOException e) {
             e.printStackTrace();
         }
+
+        CompiledCommons.loadLibraries();
+        EventFilters.setCompiledCommons(CompiledCommons.class);
 
         // Init MovementQueue
         MovementQueue.clear();

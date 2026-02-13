@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import xyz.wagyourtail.doclet.DocletDeclareType;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
-import xyz.wagyourtail.jsmacros.client.api.event.filterer.FiltererBlockUpdate;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockDataHelper;
 import xyz.wagyourtail.jsmacros.core.event.BaseEvent;
 import xyz.wagyourtail.jsmacros.core.event.Event;
@@ -15,7 +14,7 @@ import xyz.wagyourtail.jsmacros.core.event.Event;
  * @author Wagyourtail
  * @since 1.2.7
  */
-@Event(value = "BlockUpdate", oldName = "BLOCK_UPDATE", filterer = FiltererBlockUpdate.class)
+@Event(value = "BlockUpdate", oldName = "BLOCK_UPDATE")
 public class EventBlockUpdate extends BaseEvent {
     public final BlockDataHelper block;
     @DocletReplaceReturn("BlockUpdateType")
