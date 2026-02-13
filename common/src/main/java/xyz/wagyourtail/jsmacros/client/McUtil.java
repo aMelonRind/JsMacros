@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 public class McUtil {
     public static final Minecraft mc = Minecraft.getInstance();
 
+    public static boolean isBypassingChat = false;
+
     public static void runOnMain(boolean await, Runnable runnable) {
         if (JsMacrosClient.clientCore.profile.checkJoinedThreadStack()) {
             runnable.run();

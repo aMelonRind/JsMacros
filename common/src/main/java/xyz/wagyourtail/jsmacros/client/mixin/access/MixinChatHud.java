@@ -1,6 +1,5 @@
 package xyz.wagyourtail.jsmacros.client.mixin.access;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
@@ -13,11 +12,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.access.IChatHud;
 
 import java.util.List;
-
-import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
 
 @Mixin(ChatComponent.class)
 public abstract class MixinChatHud implements IChatHud {
@@ -32,13 +30,15 @@ public abstract class MixinChatHud implements IChatHud {
 
     @Override
     public void jsmacros_addMessageBypass(Component message) {
-        if (RenderSystem.isOnRenderThread()) {
-            addMessage(message, null, GuiMessageTag.system());
-        } else {
-            mc.execute(() -> {
+        McUtil.runOnMain(false, () -> {
+            try {
+                //noinspection UnusedAssignment
+                McUtil.isBypassingChat = true;
                 addMessage(message, null, GuiMessageTag.system());
-            });
-        }
+            } finally {
+                McUtil.isBypassingChat = false;
+            }
+        });
     }
 
     @Unique
@@ -47,7 +47,13 @@ public abstract class MixinChatHud implements IChatHud {
     @Override
     public void jsmacros_addMessageAtIndexBypass(Component message, int index, int time) {
         jsmacros$positionOverride.set(index);
-        addMessage(message, null, GuiMessageTag.system());
+        try {
+            //noinspection UnusedAssignment
+            McUtil.isBypassingChat = true;
+            addMessage(message, null, GuiMessageTag.system());
+        } finally {
+            McUtil.isBypassingChat = false;
+        }
         jsmacros$positionOverride.set(0);
     }
 
@@ -56,6 +62,7 @@ public abstract class MixinChatHud implements IChatHud {
     //  position? I can't think of a use for that...
     //
     // it could attach additional info next to the associated message.
+    // and modify/replace past messages. (actually encountered this case)
     @Redirect(method = "addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
     public <E> void overrideMessagePos(List<GuiMessage> instance, E guiMessage) {
         this.allMessages.add(jsmacros$positionOverride.get(), (GuiMessage) guiMessage);
