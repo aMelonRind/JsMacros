@@ -4,10 +4,7 @@ import com.mojang.blaze3d.platform.DepthTestFunction;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.ShapeRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import org.joml.Matrix4f;
 import xyz.wagyourtail.doclet.DocletIgnore;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
@@ -199,108 +196,66 @@ public class Box implements RenderElement3D<Box> {
         float y2 = (float) pos.y2;
         float z2 = (float) pos.z2;
 
-        boolean seeThrough = !this.cull;
-        MultiBufferSource.BufferSource immediate = (MultiBufferSource.BufferSource) consumers;
-        try {
-            if (seeThrough) {
-                lineDepthTestFunction.set(RenderPipelines.LINES, DepthTestFunction.NO_DEPTH_TEST);
-                boxDepthTestFunction.set(RenderPipelines.DEBUG_FILLED_BOX, DepthTestFunction.NO_DEPTH_TEST);
-            }
-            RenderType linesLayer = RenderTypes.lines();
-            RenderType fillLayer = RenderTypes.debugFilledBox();
+        Matrix4f matrix = matrixStack.last().pose();
 
-            if (this.fill) {
-                float fa = ((fillColor >> 24) & 0xFF) / 255.0F;
-                float fr = ((fillColor >> 16) & 0xFF) / 255.0F;
-                float fg = ((fillColor >> 8) & 0xFF) / 255.0F;
-                float fb = (fillColor & 0xFF) / 255.0F;
-                // TODO: (1.21.11) addChainedFilledBoxVertices was removed, I didn't want to find the correct
-                //  solution so stole the old implementation. This should be properly implemented with VoxelShape
-                // ShapeRenderer.addChainedFilledBoxVertices(matrixStack, consumers.getBuffer(fillLayer), x1, y1, z1, x2, y2, z2, fr, fg, fb, fa);
-                VertexConsumer vertexConsumer = consumers.getBuffer(fillLayer);
-                Matrix4f matrix4f = matrixStack.last().pose();
-                vertexConsumer.addVertex(matrix4f, x1, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y1, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y2, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y2, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y2, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y1, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y1, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y1, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y2, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y1, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y1, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y1, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y1, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y2, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y2, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x1, y2, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z1).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z2).setColor(fr, fg, fb, fa);
-                vertexConsumer.addVertex(matrix4f, x2, y2, z2).setColor(fr, fg, fb, fa);
-            }
+        if (this.fill) {
+            VertexConsumer buf = consumers.getBuffer(JsmRenderLayers.triangles(this.cull));
 
-            float r = ((color >> 16) & 0xFF) / 255.0F;
-            float g = ((color >> 8) & 0xFF) / 255.0F;
-            float b = (color & 0xFF) / 255.0F;
-            float a = ((color >> 24) & 0xFF) / 255.0F;
-            // TODO: (1.21.11) addChainedFilledBoxVertices was removed, I didn't want to find the correct
-            //  solution so stole the old implementation. This should be properly implemented with VoxelShape
-            // ShapeRenderer.renderLineBox(matrixStack.last(), consumers.getBuffer(linesLayer), x1, y1, z1, x2, y2, z2, r, g, b, a);
-            VertexConsumer vertexConsumer = consumers.getBuffer(fillLayer);
-            PoseStack.Pose pose = matrixStack.last();
-            vertexConsumer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a).setNormal(pose, 1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y1, z1).setColor(r, g, b, a).setNormal(pose, 1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x1, y2, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, 1.0F);
-            vertexConsumer.addVertex(pose, x1, y1, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, 1.0F);
-            vertexConsumer.addVertex(pose, x2, y1, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y2, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y2, z1).setColor(r, g, b, a).setNormal(pose, -1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x1, y2, z1).setColor(r, g, b, a).setNormal(pose, -1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x1, y2, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, 1.0F);
-            vertexConsumer.addVertex(pose, x1, y2, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, 1.0F);
-            vertexConsumer.addVertex(pose, x1, y2, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, -1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x1, y1, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, -1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x1, y1, z2).setColor(r, g, b, a).setNormal(pose, 1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y1, z2).setColor(r, g, b, a).setNormal(pose, 1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y1, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, -1.0F);
-            vertexConsumer.addVertex(pose, x2, y1, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, -1.0F);
-            vertexConsumer.addVertex(pose, x1, y2, z2).setColor(r, g, b, a).setNormal(pose, 1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a).setNormal(pose, 1.0F, 0.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y1, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, 1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, 1.0F, 0.0F);
-            vertexConsumer.addVertex(pose, x2, y2, z1).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, 1.0F);
-            vertexConsumer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a).setNormal(pose, 0.0F, 0.0F, 1.0F);
-
-            if (seeThrough) {
-                immediate.endBatch();
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } finally {
-
-            if (seeThrough) {
-                try {
-                    lineDepthTestFunction.set(RenderPipelines.LINES, oldlineDepthTestFunction);
-                    boxDepthTestFunction.set(RenderPipelines.DEBUG_FILLED_BOX, oldboxDepthTestFunction);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
+            // draw a cube using triangle strips
+            buf.addVertex(matrix, x2, y2, z1).setColor(fillColor); // Back-top-right
+            buf.addVertex(matrix, x1, y2, z1).setColor(fillColor); // Back-top-left
+            buf.addVertex(matrix, x2, y1, z1).setColor(fillColor); // Back-bottom-right
+            buf.addVertex(matrix, x1, y1, z1).setColor(fillColor); // Back-bottom-left
+            buf.addVertex(matrix, x1, y1, z2).setColor(fillColor); // Front-bottom-left
+            buf.addVertex(matrix, x1, y2, z1).setColor(fillColor); // Back-top-left
+            buf.addVertex(matrix, x1, y2, z2).setColor(fillColor); // Front-top-left
+            buf.addVertex(matrix, x2, y2, z1).setColor(fillColor); // Back-top-right
+            buf.addVertex(matrix, x2, y2, z2).setColor(fillColor); // Front-top-right
+            buf.addVertex(matrix, x2, y1, z1).setColor(fillColor); // Front-bottom-left
+            buf.addVertex(matrix, x2, y1, z2).setColor(fillColor); // Front-bottom-right
+            buf.addVertex(matrix, x1, y1, z2).setColor(fillColor); // Front-bottom-left
+            buf.addVertex(matrix, x2, y2, z2).setColor(fillColor); // Front-top-right
+            buf.addVertex(matrix, x1, y2, z2).setColor(fillColor); // Front-top-left
         }
+
+        VertexConsumer buf = consumers.getBuffer(JsmRenderLayers.lines(this.cull));
+
+        buf.addVertex(matrix, x1, y1, z1).setColor(color).setLineWidth(2.5f);
+        buf.addVertex(matrix, x1, y1, z2).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x2, y1, z2).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x2, y1, z1).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x1, y1, z1).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x1, y2, z1).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x1, y2, z2).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x2, y2, z2).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x2, y2, z1).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x1, y2, z1).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x1, y2, z1).setColor(0).setLineWidth(2.5f);
+        buf.addVertex(matrix, x2, y1, z1).setColor(0).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x2, y1, z1).setColor(color).setLineWidth(2.5f);
+        buf.addVertex(matrix, x2, y2, z1).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x2, y2, z1).setColor(0).setLineWidth(2.5f);
+        buf.addVertex(matrix, x1, y1, z2).setColor(0).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x1, y1, z2).setColor(color).setLineWidth(2.5f);
+        buf.addVertex(matrix, x1, y2, z2).setColor(color).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x1, y2, z2).setColor(0).setLineWidth(2.5f);
+        buf.addVertex(matrix, x2, y1, z2).setColor(0).setLineWidth(2.5f);
+
+        buf.addVertex(matrix, x2, y1, z2).setColor(color).setLineWidth(2.5f);
+        buf.addVertex(matrix, x2, y2, z2).setColor(color).setLineWidth(2.5f);
     }
 
     // ... Builder class is unchanged ...

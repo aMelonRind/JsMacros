@@ -1,12 +1,10 @@
 package xyz.wagyourtail.jsmacros.client.api.classes.render.components3d;
 
 import com.mojang.blaze3d.platform.DepthTestFunction;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.gizmos.GizmoProperties;
-import net.minecraft.gizmos.Gizmos;
-import net.minecraft.world.phys.Vec3;
 import xyz.wagyourtail.doclet.DocletIgnore;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.api.math.Vec3D;
@@ -109,11 +107,11 @@ public class Line3D implements RenderElement3D<Line3D> {
     @Override
     @DocletIgnore
     public void render(PoseStack matrixStack, MultiBufferSource consumers, float tickDelta) {
-        // TODO probably should implement the same way litematica does
-        GizmoProperties prop = Gizmos.line(pos.getStart().convert(Vec3::new), pos.getEnd().convert(Vec3::new), color, 2.0f);
-        if (!this.cull) {
-            prop.setAlwaysOnTop();
-        }
+        VertexConsumer consumer = consumers.getBuffer(JsmRenderLayers.lines(this.cull));
+        PoseStack.Pose pose = matrixStack.last();
+
+        consumer.addVertex(pose, (float) pos.x1, (float) pos.y1, (float) pos.z1).setColor(color).setLineWidth(2.5f);
+        consumer.addVertex(pose, (float) pos.x2, (float) pos.y2, (float) pos.z2).setColor(color).setLineWidth(2.5f);
     }
 
     /**

@@ -43,8 +43,8 @@ public class MixinWorldRenderer {
         WorldPosWrapper.projectionMatrix = projectionMatrix;
     }
 
-    // inject at HEAD instead of TAIL to draw gizmo before collecting
-    @Inject(method = "addMainPass", at = @At("HEAD"))
+    // elements will get drawn behind the world if inject at HEAD
+    @Inject(method = "addMainPass", at = @At("TAIL"))
     private void onRenderMain(FrameGraphBuilder frameGraphBuilder, Frustum frustum, Matrix4f matrix4f, GpuBufferSlice gpuBufferSlice, boolean bl, LevelRenderState levelRenderState, DeltaTracker deltaTracker, ProfilerFiller profilerFiller, CallbackInfo ci) {
         if (this.targets == null) {
             return;
