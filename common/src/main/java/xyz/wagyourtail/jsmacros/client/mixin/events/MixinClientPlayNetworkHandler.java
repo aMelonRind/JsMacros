@@ -1,5 +1,7 @@
 package xyz.wagyourtail.jsmacros.client.mixin.events;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -8,7 +10,12 @@ import net.minecraft.client.multiplayer.CommonListenerCookie;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +25,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Entry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.core.BlockPos;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -226,6 +234,111 @@ public abstract class MixinClientPlayNetworkHandler extends ClientCommonPacketLi
         event.trigger();
         if (event.isCanceled()) {
             ci.cancel();
+        }
+    }
+
+    @WrapOperation(method = "handleSoundEvent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;playSeededSound(Lnet/minecraft/world/entity/Entity;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V"))
+    public void onSound(ClientLevel instance, @Nullable Entity player, double x, double y, double z, Holder<SoundEvent> sound, SoundSource source, float volume, float pitch, long seed, Operation<Void> original) {
+        String id = sound.value().location().toString();
+        String sourceName = source.getName();
+        EventServerSound event = new EventServerSound(id, sourceName, x, y, z, volume, pitch, seed);
+        event.trigger();
+        if (event.isCanceled()) return;
+
+        if (!sourceName.equals(event.source)) {
+            try {
+                source = SoundSource.valueOf(event.source);
+            } catch (Throwable ignore) {}
+        }
+        if (!id.equals(event.sound) && event.sound != null) {
+            try {
+                Holder<SoundEvent> modified = instance.registryAccess()
+                        .getOrThrow(Registries.SOUND_EVENT)
+                        .value()
+                        .get(Identifier.parse(event.sound))
+                        .orElse(null);
+                if (modified != null) {
+                    sound = modified;
+                }
+            } catch (Throwable ignore) {}
+        }
+        if (event.position != null) {
+            x = event.position.getX();
+            y = event.position.getY();
+            z = event.position.getZ();
+        }
+
+        if (event.entity == null) {
+            original.call(
+                    instance,
+                    player,
+                    x, y, z,
+                    sound,
+                    source,
+                    (float) event.volume,
+                    (float) event.pitch,
+                    event.seed
+            );
+        } else {
+            instance.playSeededSound(
+                    player,
+                    event.entity.getRaw(),
+                    sound,
+                    source,
+                    (float) event.volume,
+                    (float) event.pitch,
+                    event.seed
+            );
+        }
+    }
+
+    @WrapOperation(method = "handleSoundEntityEvent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;playSeededSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V"))
+    public void onEntitySound(ClientLevel instance, @Nullable Entity player, Entity entity, Holder<SoundEvent> sound, SoundSource source, float volume, float pitch, long seed, Operation<Void> original) {
+        String id = sound.value().location().toString();
+        String sourceName = source.getName();
+        EventServerSound event = new EventServerSound(id, source.getName(), entity, volume, pitch, seed);
+        event.trigger();
+        if (event.isCanceled()) return;
+
+        if (!sourceName.equals(event.source)) {
+            try {
+                source = SoundSource.valueOf(event.source);
+            } catch (Throwable ignore) {}
+        }
+        if (!id.equals(event.sound) && event.sound != null) {
+            try {
+                Holder<SoundEvent> modified = instance.registryAccess()
+                        .getOrThrow(Registries.SOUND_EVENT)
+                        .value()
+                        .get(Identifier.parse(event.sound))
+                        .orElse(null);
+                if (modified != null) {
+                    sound = modified;
+                }
+            } catch (Throwable ignore) {}
+        }
+
+        if (event.entity != null) {
+            original.call(
+                    instance,
+                    player,
+                    event.entity.getRaw(),
+                    sound,
+                    source,
+                    (float) event.volume,
+                    (float) event.pitch,
+                    event.seed
+            );
+        } else if (event.position != null) {
+            instance.playSeededSound(
+                    player,
+                    event.position.getX(), event.position.getY(), event.position.getZ(),
+                    sound,
+                    source,
+                    (float) event.volume,
+                    (float) event.pitch,
+                    event.seed
+            );
         }
     }
 

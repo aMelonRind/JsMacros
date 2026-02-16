@@ -200,6 +200,7 @@ public class ClientProfile extends BaseProfile {
         runner.eventRegistry.addEvent(EventRiding.class);
         runner.eventRegistry.addEvent(EventSendMessage.class);
         runner.eventRegistry.addEvent(EventSendPacket.class);
+        runner.eventRegistry.addEvent(EventServerSound.class);
         runner.eventRegistry.addEvent(EventSignEdit.class);
         runner.eventRegistry.addEvent(EventSlotUpdate.class);
         runner.eventRegistry.addEvent(EventSound.class);
