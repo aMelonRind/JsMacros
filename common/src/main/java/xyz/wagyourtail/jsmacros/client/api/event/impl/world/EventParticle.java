@@ -8,6 +8,7 @@ import net.minecraft.util.ARGB;
 import org.joml.Vector3f;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
+import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockStateHelper;
@@ -51,6 +52,10 @@ public class EventParticle extends BaseEvent {
 
         Identifier id = BuiltInRegistries.PARTICLE_TYPE.getKey(raw.getParticle().getType());
         type = id == null ? null : id.toString();
+    }
+
+    public Pos3D getPos() {
+        return new Pos3D(x, y, z);
     }
 
     /**
