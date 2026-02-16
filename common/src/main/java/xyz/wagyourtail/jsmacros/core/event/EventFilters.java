@@ -11,8 +11,10 @@ import xyz.wagyourtail.jsmacros.core.event.impl.FilterModulus;
 import xyz.wagyourtail.jsmacros.core.event.impl.FilterInverted;
 import xyz.wagyourtail.jsmacros.core.library.impl.classes.proxypackage.filters.Neighbor;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @since 2.1.0
@@ -146,6 +148,17 @@ public class EventFilters {
         );
         compiledCache.put(pair, compiled);
         return compiled;
+    }
+
+    /**
+     * Same as {@link EventFilters#compile(String, String)}, but accepts an array of conditions instead.
+     * {@code conditions} are joined by {@code conditions.map(c => "(" + c + ")").join("&&")}.
+     */
+    @DocletReplaceParams("event: keyof Events, ...conditions: string[]")
+    public Compiled compile(String event, String... conditions) {
+        return compile(event,
+                Arrays.stream(conditions).map(c -> "(" + c + ")").collect(Collectors.joining("&&"))
+        );
     }
 
     private String completeCode(String code) {
