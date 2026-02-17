@@ -3,6 +3,7 @@ package xyz.wagyourtail.jsmacros.forge.client;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
+import xyz.wagyourtail.jsmacros.client.api.classes.TsIdsAndEnumsGen;
 import xyz.wagyourtail.jsmacros.client.api.classes.inventory.CommandManager;
 import xyz.wagyourtail.jsmacros.forge.client.api.classes.CommandManagerForge;
 import xyz.wagyourtail.jsmacros.forge.client.forgeevents.ForgeEvents;
@@ -47,6 +49,8 @@ public class JsMacrosForge {
     @SubscribeEvent
     public void onInitializeClient(FMLClientSetupEvent event) {
         JsMacrosClient.onInitializeClient();
+        TsIdsAndEnumsGen.setModPathSupplier(() ->
+                ModList.get().getMods().stream().map(m -> m.getOwningFile().getFile().getFilePath()));
     }
 
     @SubscribeEvent

@@ -34,7 +34,7 @@ public class Main implements Doclet {
     public static final Map<String, String> enumTypes = new TreeMap<>();
 
     public static final List<String> includedClassPath = List.of(
-            "xyz.wagyourtail.jsmacros.client.api.helpers.",
+            "xyz.wagyourtail.jsmacros.client.api.helper.",
             "xyz.wagyourtail.jsmacros.client.api.classes.inventory."
     );
 

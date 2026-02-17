@@ -25,6 +25,7 @@ import xyz.wagyourtail.jsmacros.api.helper.ModContainerHelper;
 import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.McUtil;
 import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
+import xyz.wagyourtail.jsmacros.client.api.classes.TsIdsAndEnumsGen;
 import xyz.wagyourtail.jsmacros.client.api.helper.OptionsHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.PacketByteBufferHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemHelper;
@@ -41,6 +42,7 @@ import xyz.wagyourtail.jsmacros.core.language.BaseScriptContext;
 import xyz.wagyourtail.jsmacros.core.language.EventContainer;
 import xyz.wagyourtail.jsmacros.core.library.Library;
 import xyz.wagyourtail.jsmacros.core.library.PerExecLibrary;
+import xyz.wagyourtail.jsmacros.core.library.impl.classes.FileHandler;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -542,6 +544,54 @@ public class FClient extends PerExecLibrary {
      */
     public void setClipboard(String text) {
         mc.keyboardHandler.setClipboard(text);
+    }
+
+    /**
+     * Generates the {@code McIdsAndEnums.d.ts} file as a string.
+     */
+    public String generateTypescriptIdsAndEnums() {
+        return generateTypescriptIdsAndEnums(false);
+    }
+
+    /**
+     * Generates the {@code McIdsAndEnums.d.ts} file as a string.
+     * @param full Also generate screen classes which scans through jars with ASM.
+     */
+    public String generateTypescriptIdsAndEnums(boolean full) {
+        if (full && TsIdsAndEnumsGen.screenClasses.isEmpty()) {
+            TsIdsAndEnumsGen.scanScreenClasses();
+        }
+        StringBuilder builder = new StringBuilder();
+        TsIdsAndEnumsGen.generate(builder::append);
+        return builder.toString();
+    }
+
+    /**
+     * Generates the {@code McIdsAndEnums.d.ts} file.<br>
+     * Does not automatically clear the file. Use {@code file.write("")} before this if you want to.<br>
+     * Example: {@code Client.generateTypescriptIdsAndEnums(FS.open("./McIdsAndEnums.d.ts"))}
+     */
+    public void generateTypescriptIdsAndEnums(FileHandler file) {
+        generateTypescriptIdsAndEnums(file, false);
+    }
+
+    /**
+     * Generates the {@code McIdsAndEnums.d.ts} file.<br>
+     * Does not automatically clear the file. Use {@code file.write("")} before this if you want to.<br>
+     * Example: {@code Client.generateTypescriptIdsAndEnums(FS.open("./McIdsAndEnums.d.ts"))}
+     * @param full Also generate screen classes which scans through jars with ASM.
+     */
+    public void generateTypescriptIdsAndEnums(FileHandler file, boolean full) {
+        if (full && TsIdsAndEnumsGen.screenClasses.isEmpty()) {
+            TsIdsAndEnumsGen.scanScreenClasses();
+        }
+        TsIdsAndEnumsGen.generate(s -> {
+            try {
+                file.append(s);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 }

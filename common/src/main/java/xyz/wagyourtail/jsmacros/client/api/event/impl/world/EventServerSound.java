@@ -21,7 +21,7 @@ import xyz.wagyourtail.jsmacros.core.event.Event;
 public class EventServerSound extends BaseEvent {
     @DocletReplaceReturn("SoundId")
     public String sound;
-    @DocletReplaceReturn("SoundSource")
+    @DocletReplaceReturn("SoundCategory")
     public String source;
     /**
      * If {@code this.entity == null}, this will be truncated to the 8th of an integer.
