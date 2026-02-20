@@ -73,6 +73,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.wagyourtail.jsmacros.api.StringCheckable;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.entity.specialized.mob.*;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.entity.specialized.passive.*;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
@@ -81,7 +82,6 @@ import xyz.wagyourtail.doclet.DocletReplaceTypeParams;
 import xyz.wagyourtail.jsmacros.api.math.Pos2D;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.access.IMixinEntity;
-import xyz.wagyourtail.jsmacros.client.api.classes.RegistryHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.NBTElementHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.TextHelper;
 import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockDataHelper;
@@ -110,9 +110,9 @@ import xyz.wagyourtail.jsmacros.client.api.helper.world.entity.specialized.vehic
 import xyz.wagyourtail.jsmacros.client.api.helper.world.entity.specialized.vehicle.TntMinecartEntityHelper;
 import xyz.wagyourtail.jsmacros.core.helpers.BaseHelper;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
@@ -121,7 +121,7 @@ import static xyz.wagyourtail.jsmacros.client.McUtil.mc;
  * @author Wagyourtail
  */
 @SuppressWarnings("unused")
-public class EntityHelper<T extends Entity> extends BaseHelper<T> {
+public class EntityHelper<T extends Entity> extends BaseHelper<T> implements StringCheckable {
 
     protected EntityHelper(T e) {
         super(e);
@@ -229,8 +229,9 @@ public class EntityHelper<T extends Entity> extends BaseHelper<T> {
     @DocletReplaceTypeParams("E extends CanOmitNamespace<EntityId>")
     @DocletReplaceParams("...anyOf: JavaVarArgs<E>")
     @DocletReplaceReturn("this is EntityTypeFromId<E>")
-    public boolean is(String ...types) {
-        return Arrays.stream(types).map(RegistryHelper::parseNameSpace).anyMatch(getType()::equals);
+    @Override
+    public boolean is(String... types) {
+        return StringCheckable.checkId(types, getType());
     }
 
     /**

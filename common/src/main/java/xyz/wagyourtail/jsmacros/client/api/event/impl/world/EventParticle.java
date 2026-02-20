@@ -8,6 +8,7 @@ import net.minecraft.util.ARGB;
 import org.joml.Vector3f;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
+import xyz.wagyourtail.jsmacros.api.StringCheckable;
 import xyz.wagyourtail.jsmacros.api.math.Pos3D;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
@@ -16,6 +17,7 @@ import xyz.wagyourtail.jsmacros.core.event.BaseEvent;
 import xyz.wagyourtail.jsmacros.core.event.Event;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author aMelonRind
@@ -23,7 +25,7 @@ import java.util.Objects;
  */
 @Event(value = "Particle", cancellable = true)
 @SuppressWarnings("unused")
-public class EventParticle extends BaseEvent {
+public class EventParticle extends BaseEvent implements StringCheckable {
     public final ClientboundLevelParticlesPacket raw;
     @DocletReplaceReturn("ParticleId")
     public final String type;
@@ -61,12 +63,10 @@ public class EventParticle extends BaseEvent {
     /**
      * Checks the particle id.
      */
-    @DocletReplaceParams("id: CanOmitNamespace<ParticleId>")
-    public boolean is(String id) {
-        if (id != null && !id.contains(":")) {
-            id = "minecraft:" + id;
-        }
-        return Objects.equals(type, id);
+    @DocletReplaceParams("...types: JavaVarArgs<CanOmitNamespace<ParticleId>>")
+    @Override
+    public boolean is(String... types) {
+        return StringCheckable.checkId(types, type);
     }
 
     /**

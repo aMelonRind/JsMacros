@@ -20,6 +20,7 @@ import xyz.wagyourtail.doclet.DocletDeclareType;
 import xyz.wagyourtail.doclet.DocletReplaceParams;
 import xyz.wagyourtail.doclet.DocletReplaceReturn;
 import xyz.wagyourtail.doclet.DocletReplaceTypeParams;
+import xyz.wagyourtail.jsmacros.api.StringCheckable;
 import xyz.wagyourtail.jsmacros.api.math.Pos2D;
 import xyz.wagyourtail.jsmacros.client.JsMacros;
 import xyz.wagyourtail.jsmacros.client.JsMacrosClient;
@@ -29,10 +30,7 @@ import xyz.wagyourtail.jsmacros.client.access.IInventory;
 import xyz.wagyourtail.jsmacros.client.api.helper.inventory.ItemStackHelper;
 import xyz.wagyourtail.jsmacros.client.api.library.impl.FClient;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -41,7 +39,7 @@ import java.util.stream.IntStream;
  * @since 1.0.8
  */
 @SuppressWarnings("unused")
-public class Inventory<T extends AbstractContainerScreen<?>> {
+public class Inventory<T extends AbstractContainerScreen<?>> implements StringCheckable {
     protected T inventory;
     protected AbstractContainerMenu handler;
     protected Map<String, int[]> map;
@@ -569,8 +567,9 @@ public class Inventory<T extends AbstractContainerScreen<?>> {
             }
             """
     )
-    public boolean is(String ...types) {
-        return Arrays.asList(types).contains(getType());
+    @Override
+    public boolean is(String... types) {
+        return Set.of(types).contains(getType());
     }
 
     /**
