@@ -1,8 +1,11 @@
 package xyz.wagyourtail.jsmacros.api.math;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import xyz.wagyourtail.doclet.DocletReplaceReturn;
+import xyz.wagyourtail.jsmacros.client.api.helper.world.BlockPosHelper;
 
 import java.util.Objects;
 
@@ -10,6 +13,7 @@ import java.util.Objects;
  * @author Wagyourtail
  * @since 1.2.6 [citation needed]
  */
+@SuppressWarnings("unused")
 public class Pos3D extends Pos2D {
     public static final Pos3D ZERO = new Pos3D(0, 0, 0);
     public double z;
@@ -27,15 +31,30 @@ public class Pos3D extends Pos2D {
         return z;
     }
 
+    @Override
+    public Pos3D withX(double value) {
+        return new Pos3D(value, y, z);
+    }
+
+    @Override
+    public Pos3D withY(double value) {
+        return new Pos3D(x, value, z);
+    }
+
+    public Pos3D withZ(double value) {
+        return new Pos3D(x, y, value);
+    }
+
+    @Override
+    public Pos3D add(double value) {
+        return new Pos3D(x + value, y + value, z + value);
+    }
+
     public Pos3D add(Pos3D pos) {
         return new Pos3D(x + pos.x, y + pos.y, z + pos.z);
     }
 
     /**
-     * @param x
-     * @param y
-     * @param z
-     * @return
      * @since 1.6.3
      */
     public Pos3D add(double x, double y, double z) {
@@ -62,15 +81,16 @@ public class Pos3D extends Pos2D {
         return new Pos3D(this.x - x, this.y - y, this.z - z);
     }
 
+    @Override
+    public Pos3D multiply(double multiplier) {
+        return new Pos3D(x * multiplier, y * multiplier, z * multiplier);
+    }
+
     public Pos3D multiply(Pos3D pos) {
         return new Pos3D(x * pos.x, y * pos.y, z * pos.z);
     }
 
     /**
-     * @param x
-     * @param y
-     * @param z
-     * @return
      * @since 1.6.3
      */
     public Pos3D multiply(double x, double y, double z) {
@@ -97,18 +117,121 @@ public class Pos3D extends Pos2D {
         return new Pos3D(this.x / x, this.y / y, this.z / z);
     }
 
+    @Override
+    public Pos3D modulo(double quotient) {
+        return new Pos3D(x % quotient, y % quotient, z % quotient);
+    }
+
+    public Pos3D modulo(Pos3D pos) {
+        return new Pos3D(x % pos.x, y % pos.y, z % pos.z);
+    }
+
+    public Pos3D modulo(double x, double y, double z) {
+        return new Pos3D(this.x % x, this.y % y, this.z % z);
+    }
+
     /**
-     * @param scale
-     * @return
      * @since 1.6.3
      */
     @Override
     public Pos3D scale(double scale) {
-        return new Pos3D(x * scale, y * scale, z * scale);
+        return multiply(scale);
+    }
+
+    @Override
+    public Pos3D round() {
+        return new Pos3D(Math.round(x), Math.round(y), Math.round(z));
+    }
+
+    @Override
+    public Pos3D ceil() {
+        return new Pos3D(Math.ceil(x), Math.ceil(y), Math.ceil(z));
+    }
+
+    @Override
+    public Pos3D floor() {
+        return new Pos3D(Math.floor(x), Math.floor(y), Math.floor(z));
+    }
+
+    @Override
+    public Pos3D abs() {
+        return new Pos3D(Math.abs(x), Math.abs(y), Math.abs(z));
+    }
+
+    @Override
+    public Pos3D negate() {
+        return new Pos3D(-x, -y, -z);
+    }
+
+    @Override
+    public Pos3D sign() {
+        return new Pos3D(Math.signum(x), Math.signum(y), Math.signum(z));
+    }
+
+    /**
+     * Clamps to between 0.0 and 1.0
+     */
+    @Override
+    public Pos3D clamp() {
+        return new Pos3D(Math.clamp(x, 0.0, 1.0), Math.clamp(y, 0.0, 1.0), Math.clamp(z, 0.0, 1.0));
+    }
+
+    @Override
+    public Pos3D clamp(double min, double max) {
+        return new Pos3D(Math.clamp(x, min, max), Math.clamp(y, min, max), Math.clamp(z, min, max));
+    }
+
+    public Pos3D min(Pos3D other) {
+        return new Pos3D(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z));
+    }
+
+    public Pos3D min(double x, double y, double z) {
+        return new Pos3D(Math.min(this.x, x), Math.min(this.y, y), Math.min(this.z, z));
+    }
+
+    public Pos3D max(Pos3D other) {
+        return new Pos3D(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z));
+    }
+
+    public Pos3D max(double x, double y, double z) {
+        return new Pos3D(Math.max(this.x, x), Math.max(this.y, y), Math.max(this.z, z));
+    }
+
+    public Pos3D lerp(double delta, Pos3D end) {
+        return new Pos3D(Mth.lerp(delta, x, end.x), Mth.lerp(delta, y, end.y), Mth.lerp(delta, z, end.z));
+    }
+
+    public Pos3D lerp(double delta, double endX, double endY, double endZ) {
+        return new Pos3D(Mth.lerp(delta, x, endX), Mth.lerp(delta, y, endY), Mth.lerp(delta, z, endZ));
+    }
+
+    @Override
+    public double length() {
+        return Math.hypot(super.length(), z);
+    }
+
+    @Override
+    public double lengthSq() {
+        return x * x + y * y + z * z;
+    }
+
+    @Override
+    public boolean isFinite() {
+        return Double.isFinite(x) && Double.isFinite(y) && Double.isFinite(z);
+    }
+
+    @Override
+    public Pos3D copy() {
+        return new Pos3D(x, y, z);
     }
 
     public String toString() {
         return String.format("%f, %f, %f", x, y, z);
+    }
+
+    @DocletReplaceReturn("[x: double, y: double, z: double]")
+    public double[] toArray() {
+        return new double[]{ x, y, z };
     }
 
     @Override
@@ -117,8 +240,6 @@ public class Pos3D extends Pos2D {
     }
 
     /**
-     * @param start_pos
-     * @return
      * @since 1.6.4
      */
     @Override
@@ -127,8 +248,6 @@ public class Pos3D extends Pos2D {
     }
 
     /**
-     * @param start_pos
-     * @return
      * @since 1.6.4
      */
     public Vec3D toVector(Pos3D start_pos) {
@@ -136,10 +255,6 @@ public class Pos3D extends Pos2D {
     }
 
     /**
-     * @param start_x
-     * @param start_y
-     * @param start_z
-     * @return
      * @since 1.6.4
      */
     public Vec3D toVector(double start_x, double start_y, double start_z) {
@@ -147,9 +262,9 @@ public class Pos3D extends Pos2D {
     }
 
     /**
-     * @return
      * @since 1.6.4
      */
+    @Override
     public Vec3D toReverseVector() {
         return new Vec3D(this, ZERO);
     }
@@ -160,8 +275,6 @@ public class Pos3D extends Pos2D {
     }
 
     /**
-     * @param end_pos
-     * @return
      * @since 1.6.4
      */
     public Vec3D toReverseVector(Pos3D end_pos) {
@@ -169,26 +282,20 @@ public class Pos3D extends Pos2D {
     }
 
     /**
-     * @param end_x
-     * @param end_y
-     * @param end_z
-     * @return
      * @since 1.6.4
      */
     public Vec3D toReverseVector(double end_x, double end_y, double end_z) {
         return new Vec3D(this, new Pos3D(end_x, end_y, end_z));
     }
 
-//    /**
-//     * @return
-//     * @since 1.8.0
-//     */
-//    public BlockPosHelper toBlockPos() {
-//        return new BlockPosHelper(BlockPos.ofFloored(x, y, z));
-//    }
+    /**
+     * @since 1.8.0
+     */
+    public BlockPosHelper toBlockPos() {
+        return new BlockPosHelper(BlockPos.containing(x, y, z));
+    }
 
     /**
-     * @return
      * @since 1.8.0
      */
     public BlockPos toRawBlockPos() {

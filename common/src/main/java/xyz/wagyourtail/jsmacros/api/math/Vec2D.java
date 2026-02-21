@@ -1,11 +1,14 @@
 package xyz.wagyourtail.jsmacros.api.math;
 
+import xyz.wagyourtail.doclet.DocletReplaceReturn;
+
 import java.util.Objects;
 
 /**
  * @author Wagyourtail
  * @since 1.2.6 [citation needed]
  */
+@SuppressWarnings("unused")
 public class Vec2D {
     public double x1;
     public double y1;
@@ -58,10 +61,13 @@ public class Vec2D {
         return new Pos2D(x2, y2);
     }
 
+    @DocletReplaceReturn("[start: Pos2D, end: Pos2D]")
+    public Pos2D[] getBoth() {
+        return new Pos2D[]{ getStart(), getEnd() };
+    }
+
     public double getMagnitude() {
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        return Math.sqrt(dx * dx + dy * dy);
+        return Math.hypot(x2 - x1, y2 - y1);
     }
 
     /**
@@ -79,11 +85,6 @@ public class Vec2D {
     }
 
     /**
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return
      * @since 1.6.3
      */
     public Vec2D add(double x1, double y1, double x2, double y2) {
@@ -95,11 +96,6 @@ public class Vec2D {
     }
 
     /**
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return
      * @since 1.6.3
      */
     public Vec2D multiply(double x1, double y1, double x2, double y2) {
@@ -107,8 +103,6 @@ public class Vec2D {
     }
 
     /**
-     * @param scale
-     * @return
      * @since 1.6.3
      */
     public Vec2D scale(double scale) {
@@ -138,6 +132,11 @@ public class Vec2D {
 
     public String toString() {
         return String.format("%f, %f -> %f, %f", x1, y1, x2, y2);
+    }
+
+    @DocletReplaceReturn("[x1: double, y1: double, x2: double, y2: double]")
+    public double[] toArray() {
+        return new double[]{ x1, y1, x2, y2 };
     }
 
     public Vec3D to3D() {

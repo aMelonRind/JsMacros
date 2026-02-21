@@ -3,6 +3,7 @@ package xyz.wagyourtail.jsmacros.api.math;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
+import xyz.wagyourtail.doclet.DocletReplaceReturn;
 
 import java.util.Objects;
 
@@ -10,6 +11,7 @@ import java.util.Objects;
  * @author Wagyourtail
  * @since 1.2.6 [citation needed]
  */
+@SuppressWarnings("unused")
 public class Vec3D extends Vec2D {
     public double z1;
     public double z2;
@@ -48,12 +50,15 @@ public class Vec3D extends Vec2D {
         return new Pos3D(x2, y2, z2);
     }
 
+    @DocletReplaceReturn("[start: Pos3D, end: Pos3D]")
+    @Override
+    public Pos3D[] getBoth() {
+        return new Pos3D[]{ getStart(), getEnd() };
+    }
+
     @Override
     public double getMagnitude() {
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        double dz = z2 - z1;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+        return Math.hypot(super.getMagnitude(), z2 - z1);
     }
 
     @Override
@@ -76,8 +81,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @param pos
-     * @return
      * @since 1.6.4
      */
     public Vec3D addStart(Pos3D pos) {
@@ -85,8 +88,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @param pos
-     * @return
      * @since 1.6.4
      */
     public Vec3D addEnd(Pos3D pos) {
@@ -94,10 +95,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @param x
-     * @param y
-     * @param z
-     * @return
      * @since 1.6.4
      */
     public Vec3D addStart(double x, double y, double z) {
@@ -105,10 +102,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @param x
-     * @param y
-     * @param z
-     * @return
      * @since 1.6.4
      */
     public Vec3D addEnd(double x, double y, double z) {
@@ -116,13 +109,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @param x1
-     * @param y1
-     * @param z1
-     * @param x2
-     * @param y2
-     * @param z2
-     * @return
      * @since 1.6.3
      */
     public Vec3D add(double x1, double y1, double z1, double x2, double y2, double z2) {
@@ -141,13 +127,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @param x1
-     * @param y1
-     * @param z1
-     * @param x2
-     * @param y2
-     * @param z2
-     * @return
      * @since 1.6.3
      */
     public Vec3D multiply(double x1, double y1, double z1, double x2, double y2, double z2) {
@@ -155,8 +134,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @param scale
-     * @return
      * @since 1.6.3
      */
     @Override
@@ -165,7 +142,6 @@ public class Vec3D extends Vec2D {
     }
 
     /**
-     * @return
      * @since 1.6.5
      */
     @Override
@@ -209,13 +185,52 @@ public class Vec3D extends Vec2D {
         return new Vec3D(x2, y2, z2, x1, y1, z1);
     }
 
+    /**
+     * Converts to positive vector, not absolute coordinates.
+     */
+    public Vec3D abs() {
+        Vec3D other = copy();
+        if (x2 < x1) {
+            other.x1 = x2;
+            other.x2 = x1;
+        }
+        if (y2 < y1) {
+            other.y1 = y2;
+            other.y2 = y1;
+        }
+        if (z2 < z1) {
+            other.z1 = z2;
+            other.z2 = z1;
+        }
+        return other;
+    }
+
+    public boolean contains(Pos3D pos) {
+        return contains(pos.x, pos.y, pos.z);
+    }
+
+    public boolean contains(double x, double y, double z) {
+        return (x2 >= x1 ? x >= x1 && x <= x2 : x >= x2 && x <= x1)
+            && (y2 >= y1 ? y >= y1 && y <= y2 : y >= y2 && y <= y1)
+            && (z2 >= z1 ? z >= z1 && z <= z2 : z >= z2 && z <= z1);
+    }
+
+    public Vec3D copy() {
+        return new Vec3D(x1, y1, z1, x2, y2, z2);
+    }
+
     @Override
     public String toString() {
         return String.format("%f, %f, %f -> %f, %f, %f", x1, y1, z1, x2, y2, z2);
     }
 
+    @DocletReplaceReturn("[x1: double, y1: double, z1: double, x2: double, y2: double, z2: double]")
+    @Override
+    public double[] toArray() {
+        return new double[]{ x1, y1, z1, x2, y2, z2 };
+    }
+
     /**
-     * @return
      * @since 1.6.5
      */
     public Vector3f toMojangFloatVector() {

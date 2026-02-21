@@ -1,6 +1,8 @@
 package xyz.wagyourtail.jsmacros.api.math;
 
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import xyz.wagyourtail.doclet.DocletReplaceReturn;
 
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ import java.util.Objects;
  * @author Wagyourtail
  * @since 1.2.6 [citation needed]
  */
+@SuppressWarnings("unused")
 public class Pos2D {
     public static final Pos2D ZERO = new Pos2D(0, 0);
     public double x;
@@ -26,14 +29,23 @@ public class Pos2D {
         return y;
     }
 
+    public Pos2D withX(double value) {
+        return new Pos2D(value, y);
+    }
+
+    public Pos2D withY(double value) {
+        return new Pos2D(x, value);
+    }
+
+    public Pos2D add(double value) {
+        return new Pos2D(x + value, y + value);
+    }
+
     public Pos2D add(Pos2D pos) {
         return new Pos2D(x + pos.x, y + pos.y);
     }
 
     /**
-     * @param x
-     * @param y
-     * @return
      * @since 1.6.3
      */
     public Pos2D add(double x, double y) {
@@ -59,14 +71,15 @@ public class Pos2D {
         return new Pos2D(this.x - x, this.y - y);
     }
 
+    public Pos2D multiply(double multiplier) {
+        return new Pos2D(x * multiplier, y * multiplier);
+    }
+
     public Pos2D multiply(Pos2D pos) {
         return new Pos2D(x * pos.x, y * pos.y);
     }
 
     /**
-     * @param x
-     * @param y
-     * @return
      * @since 1.6.3
      */
     public Pos2D multiply(double x, double y) {
@@ -92,17 +105,107 @@ public class Pos2D {
         return new Pos2D(this.x / x, this.y / y);
     }
 
+    public Pos2D modulo(double quotient) {
+        return new Pos2D(x % quotient, y % quotient);
+    }
+
+    public Pos2D modulo(Pos2D pos) {
+        return new Pos2D(x % pos.x, y % pos.y);
+    }
+
+    public Pos2D modulo(double x, double y) {
+        return new Pos2D(this.x % x, this.y % y);
+    }
+
     /**
-     * @param scale
-     * @return
      * @since 1.6.3
      */
     public Pos2D scale(double scale) {
         return new Pos2D(x * scale, y * scale);
     }
 
+    public Pos2D round() {
+        return new Pos2D(Math.round(x), Math.round(y));
+    }
+
+    public Pos2D ceil() {
+        return new Pos2D(Math.ceil(x), Math.ceil(y));
+    }
+
+    public Pos2D floor() {
+        return new Pos2D(Math.floor(x), Math.floor(y));
+    }
+
+    public Pos2D abs() {
+        return new Pos2D(Math.abs(x), Math.abs(y));
+    }
+
+    public Pos2D negate() {
+        return new Pos2D(-x, -y);
+    }
+
+    public Pos2D sign() {
+        return new Pos2D(Math.signum(x), Math.signum(y));
+    }
+
+    /**
+     * Clamps to between 0.0 and 1.0
+     */
+    public Pos2D clamp() {
+        return new Pos2D(Math.clamp(x, 0.0, 1.0), Math.clamp(y, 0.0, 1.0));
+    }
+
+    public Pos2D clamp(double min, double max) {
+        return new Pos2D(Math.clamp(x, min, max), Math.clamp(y, min, max));
+    }
+
+    public Pos2D min(Pos2D other) {
+        return new Pos2D(Math.min(x, other.x), Math.min(y, other.y));
+    }
+
+    public Pos2D min(double x, double y) {
+        return new Pos2D(Math.min(this.x, x), Math.min(this.y, y));
+    }
+
+    public Pos2D max(Pos2D other) {
+        return new Pos2D(Math.max(x, other.x), Math.max(y, other.y));
+    }
+
+    public Pos2D max(double x, double y) {
+        return new Pos2D(Math.max(this.x, x), Math.max(this.y, y));
+    }
+
+    public Pos2D lerp(double delta, Pos2D end) {
+        return new Pos2D(Mth.lerp(delta, x, end.x), Mth.lerp(delta, y, end.y));
+    }
+
+    public Pos2D lerp(double delta, double endX, double endY) {
+        return new Pos2D(Mth.lerp(delta, x, endX), Mth.lerp(delta, y, endY));
+    }
+
+    public double length() {
+        return Math.hypot(x, y);
+    }
+
+    public double lengthSq() {
+        return x * x + y * y;
+    }
+
+    public boolean isFinite() {
+        return Double.isFinite(x) && Double.isFinite(y);
+    }
+
+    public Pos2D copy() {
+        return new Pos2D(x, y);
+    }
+
     public String toString() {
         return String.format("%f, %f", x, y);
+    }
+
+    @DocletReplaceReturn("[x: double, y: double]")
+    public double[] toArray() {
+        return new double[]{ x, y };
     }
 
     public Pos3D to3D() {
@@ -114,8 +217,6 @@ public class Pos2D {
     }
 
     /**
-     * @param start_pos
-     * @return
      * @since 1.6.4
      */
     public Vec2D toVector(Pos2D start_pos) {
@@ -123,9 +224,6 @@ public class Pos2D {
     }
 
     /**
-     * @param start_x
-     * @param start_y
-     * @return
      * @since 1.6.4
      */
     public Vec2D toVector(double start_x, double start_y) {
@@ -133,7 +231,6 @@ public class Pos2D {
     }
 
     /**
-     * @return
      * @since 1.6.4
      */
     public Vec2D toReverseVector() {
@@ -141,8 +238,6 @@ public class Pos2D {
     }
 
     /**
-     * @param end_pos
-     * @return
      * @since 1.6.4
      */
     public Vec2D toReverseVector(Pos2D end_pos) {
@@ -150,9 +245,6 @@ public class Pos2D {
     }
 
     /**
-     * @param end_x
-     * @param end_y
-     * @return
      * @since 1.6.4
      */
     public Vec2D toReverseVector(double end_x, double end_y) {
